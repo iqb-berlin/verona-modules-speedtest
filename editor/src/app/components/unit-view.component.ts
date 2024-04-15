@@ -71,12 +71,13 @@ import { MatCheckbox } from '@angular/material/checkbox';
       <mat-expansion-panel *ngFor="let question of unit.questions; let i = index" [expanded]="i == latestQuestionIndex">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <h2>{{ question.text }}</h2>
+            <h2>{{i+1}}: {{ question.text }}</h2>
           </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div class="expansion-panel-content">
           <div class="question">
+            <h4>Text</h4>
             <div class="question-content">
               <mat-form-field>
                 <mat-label>Frage</mat-label>
@@ -87,6 +88,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
+            <h4>Bild</h4>
             <div class="image-panel">
               <div class="image-panel-buttons">
                 <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
