@@ -1,0 +1,38 @@
+:host {
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.question {
+    flex: 3 1 70%;
+    justify-content: center;
+    font-size: x-large;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+}
+.question img {
+    object-fit: contain;
+}
+.answers {
+    flex: 1 1 30%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 5%;
+}
+.answers button {
+    font-size: larger;
+    padding: 10px 25px;
+    height: fit-content;
+}

@@ -25,30 +25,7 @@ import { MatIcon } from '@angular/material/icon';
       </button>
     </div>
   `,
-  styles: `
-    :host {margin: auto;}
-    .question {
-      font-size: x-large;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-    }
-    .question img {
-      max-height: 100%;
-      object-fit: contain;
-    }
-    .answers {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      /*margin-top: 15%;*/
-    }
-    .answers button {
-      font-size: larger;
-      width: 120px;
-      height: 45px;
-    }
-  `
+  styleUrls: ['unit-view.component.css']
 })
 export class UnitViewComponent {
   @Input() question!: Question;

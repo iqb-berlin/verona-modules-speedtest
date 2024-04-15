@@ -1,0 +1,82 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.csv-import-button {
+    align-self: start;
+}
+fieldset {
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+}
+.add-button {
+    align-self: center;
+    width: 40%;
+    background-color: lightgray !important;
+}
+
+.mat-expansion-panel-header-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mat-expansion-panel-header-title h2 {
+    min-height: 0;
+}
+
+.question-delete-button {
+    margin-left: auto;
+}
+.expansion-panel-content {
+    display: flex;
+    flex-direction: column;
+}
+.question {
+    display: flex;
+    flex-direction: column;
+}
+.question-content {
+    display: flex;
+    flex-direction: row;
+}
+.image-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.image-panel-buttons {
+    display: flex;
+    flex-direction: row;
+}
+.image-panel img {
+    max-height: 200px;
+    object-fit: contain;
+}
+.question mat-form-field {
+    width: 80%;
+}
+
+.inner {
+    display: flex;
+    flex-direction: row;
+}
+
+.inner .mat-mdc-form-field {
+    width: 90%;
+}
+
+.inner button {
+    justify-self: end;
+}
+.answer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 80%;
+}
+.mat-button-toggle-group {
+    align-self: start;
+}
