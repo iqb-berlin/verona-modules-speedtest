@@ -55,7 +55,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
       <legend>Standardwerte</legend>
       <mat-form-field>
         <mat-label>Variablenpräfix</mat-label>
-        <input matInput [value]="unit.defaultVariablePrefix">
+        <input matInput [(ngModel)]="unit.defaultVariablePrefix">
       </mat-form-field>
   
       Ausrichtung
@@ -80,7 +80,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
             <div class="question-content">
               <mat-form-field>
                 <mat-label>Frage</mat-label>
-                <input matInput [value]="question.text">
+                <input matInput [(ngModel)]="question.text">
               </mat-form-field>
               <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
                       (click)="deleteQuestion(i)">
