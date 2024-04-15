@@ -16,6 +16,7 @@ import { FileService } from '../../../../common/services/file.service';
 import { UnitService } from '../services/unit.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'speedtest-unit-view',
@@ -39,7 +40,8 @@ import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-
     NgIf,
     MatIconButton,
     MatButtonToggleGroup,
-    MatButtonToggle
+    MatButtonToggle,
+    MatCheckbox
   ],
   template: `
     <button mat-raised-button class="csv-import-button" (click)="upload.click()">
@@ -61,6 +63,7 @@ import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-
         <mat-button-toggle value="column">Vertikal</mat-button-toggle>
         <mat-button-toggle value="row">Horizontal</mat-button-toggle>
       </mat-button-toggle-group>
+      <mat-checkbox [(ngModel)]="unit.globalLayout">Für alle Fragen setzen</mat-checkbox>
     </fieldset>
 
 
@@ -99,11 +102,13 @@ import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-
               </div>
               <img *ngIf="question.imgSrc" [src]="question.imgSrc">
             </div>
-            <h4>Ausrichtung</h4>
-            <mat-button-toggle-group [(ngModel)]="question.layout">
-              <mat-button-toggle value="column">Vertikal</mat-button-toggle>
-              <mat-button-toggle value="row">Horizontal</mat-button-toggle>
-            </mat-button-toggle-group>
+            <ng-container *ngIf="!unit.globalLayout">
+              <h4>Ausrichtung</h4>
+              <mat-button-toggle-group [(ngModel)]="question.layout">
+                <mat-button-toggle value="column">Vertikal</mat-button-toggle>
+                <mat-button-toggle value="row">Horizontal</mat-button-toggle>
+              </mat-button-toggle-group>
+            </ng-container>
           </div>
 
           <h3>Antworten</h3>
