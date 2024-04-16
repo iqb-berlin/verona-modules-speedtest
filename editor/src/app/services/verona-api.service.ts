@@ -8,9 +8,7 @@ import { VariableInfo } from '@iqb/responses';
 export class VeronaAPIService {
   sessionID: string | undefined;
   resourceURL: string | undefined;
-  // private _voeStartCommand = new Subject<VoeStartCommand>();
   startCommand = new Subject<StartCommand>();
-  // private _voeGetDefinitionRequest = new Subject<VoeGetDefinitionRequest>();
   getDefinitionCommand = new Subject<GetDefinitionCommand>();
 
   private isStandalone = window === window.parent;
@@ -63,7 +61,9 @@ export class VeronaAPIService {
       type: 'voeDefinitionChangedNotification',
       sessionId: this.sessionID as string,
       timeStamp: String(Date.now()),
-      unitDefinition: JSON.stringify(unit)
+      unitDefinition: JSON.stringify(unit),
+      unitDefinitionType: 'speedtest-unit-definition@1.0.0',
+      variables: []
     });
   }
 }
