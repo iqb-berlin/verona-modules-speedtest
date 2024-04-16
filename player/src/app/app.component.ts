@@ -53,6 +53,7 @@ export class AppComponent implements OnInit {
     this.veronaApiService.pageNavCommand
       .subscribe((message: PageNavCommand): void => {
         this.activePageIndex = Number(message.target) - 1;
+        this.veronaApiService.sendState(this.unit!.questions.length, this.activePageIndex, [])
       });
     this.veronaApiService.sendReady();
   }
