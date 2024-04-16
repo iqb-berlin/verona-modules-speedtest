@@ -65,11 +65,11 @@ export class AppComponent implements OnInit {
   sendResponse(answerIndex: number) {
     if (!this.unit?.questions) throw Error();
     this.veronaApiService.sendState(this.unit.questions.length, this.activePageIndex + 1, [{
-      id: this.unit.defaultVariablePrefix + this.activePageIndex,
+      id: 'speedtest_' + this.activePageIndex,
       status: 'VALUE_CHANGED',
       value: answerIndex
     }, {
-      id: `${this.unit.defaultVariablePrefix}-time_${this.activePageIndex}`,
+      id: `speedtest-time_${this.activePageIndex}`,
       status: 'VALUE_CHANGED',
       value: Date.now() - this.activePageStartTime
     }

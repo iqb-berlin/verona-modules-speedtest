@@ -2,7 +2,6 @@ export interface Unit {
   type: string;
   version: string;
   questions: Question[];
-  defaultVariablePrefix: string;
   globalLayout: 'column' | 'row' | undefined;
 }
 

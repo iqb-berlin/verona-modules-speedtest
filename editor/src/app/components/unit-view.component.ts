@@ -52,11 +52,6 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
     
     <fieldset>
       <legend>Standardwerte</legend>
-      <mat-form-field>
-        <mat-label>Variablenpräfix</mat-label>
-        <input matInput [(ngModel)]="unit.defaultVariablePrefix">
-      </mat-form-field>
-  
       Ausrichtung
       <mat-button-toggle-group [value]="defaultLayout" (change)="setDefaultLayout($event)">
         <mat-button-toggle value="column">Vertikal</mat-button-toggle>
@@ -64,7 +59,6 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
       </mat-button-toggle-group>
       <mat-checkbox [checked]="unit.globalLayout !== undefined" (change)="setGlobalLayout($event)">Für alle Fragen setzen</mat-checkbox>
     </fieldset>
-
 
     <mat-accordion multi="true">
       <mat-expansion-panel *ngFor="let question of unit.questions; let i = index" [expanded]="i == latestQuestionIndex">

@@ -11,7 +11,6 @@ export class UnitService {
     type: 'speedtest-unit-defintion',
     version: '0.1',
     questions: [],
-    defaultVariablePrefix: 'speedtest_',
     globalLayout: 'column'
   };
 
@@ -45,7 +44,6 @@ export class UnitService {
     this.unit = {
       type: 'speedtest-unit-defintion',
       version: '0.1',
-      defaultVariablePrefix: 'speedtest_',
       globalLayout: 'column',
       questions: newQuestions
     };
