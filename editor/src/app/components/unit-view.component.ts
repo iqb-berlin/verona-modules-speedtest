@@ -198,6 +198,8 @@ export class UnitViewComponent implements OnInit {
 
   removeImage(i: number) {
     this.unit.questions[i].imgSrc = undefined;
+    this.unitService.updateUnitDef();
+  }
 
   setDefaultLayout(event: MatButtonToggleChange) {
     this.defaultLayout = event.value;
