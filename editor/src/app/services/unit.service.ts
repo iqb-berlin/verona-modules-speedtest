@@ -33,10 +33,13 @@ export class UnitService {
     const newQuestions = loadedUnit.split(/\n/)
       .filter(text => text.trim())
       .map((line: string) => {
+        const items = line.split(';')
         return {
           layout: 'column' as 'column' | 'row',
-          text: line,
-          anwers: []
+          text: items[0],
+          anwers: items
+            .filter((item: string, index: number) => index > 0)
+            .map(item => ({ text: item.trim()}))
         }
       });
     this.unit = {
