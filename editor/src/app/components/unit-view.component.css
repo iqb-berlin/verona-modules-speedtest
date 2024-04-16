@@ -27,6 +27,11 @@ fieldset {
     min-height: 0;
 }
 
+.mat-expansion-panel-header-title img {
+    margin-left: 15px;
+    height: 40px;
+}
+
 .question-delete-button {
     margin-left: auto;
 }

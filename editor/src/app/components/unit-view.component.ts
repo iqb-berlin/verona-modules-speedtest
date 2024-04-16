@@ -71,6 +71,7 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
         <mat-expansion-panel-header>
           <mat-panel-title>
             <h2>{{i+1}}: {{ question.text }}</h2>
+            <img *ngIf="question.imgSrc" [src]="question.imgSrc">
           </mat-panel-title>
         </mat-expansion-panel-header>
 
