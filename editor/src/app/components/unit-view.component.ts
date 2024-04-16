@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import {
   MatAccordion, MatExpansionPanel,
@@ -14,9 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { Unit } from '../../../../common/interfaces/unit';
 import { FileService } from '../../../../common/services/file.service';
 import { UnitService } from '../services/unit.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatButtonToggle, MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'speedtest-unit-view',
@@ -59,11 +58,11 @@ import { MatCheckbox } from '@angular/material/checkbox';
       </mat-form-field>
   
       Ausrichtung
-      <mat-button-toggle-group [(ngModel)]="defaultLayout">
+      <mat-button-toggle-group [value]="defaultLayout" (change)="setDefaultLayout($event)">
         <mat-button-toggle value="column">Vertikal</mat-button-toggle>
         <mat-button-toggle value="row">Horizontal</mat-button-toggle>
       </mat-button-toggle-group>
-      <mat-checkbox [(ngModel)]="unit.globalLayout">Für alle Fragen setzen</mat-checkbox>
+      <mat-checkbox [checked]="unit.globalLayout !== undefined" (change)="setGlobalLayout($event)">Für alle Fragen setzen</mat-checkbox>
     </fieldset>
 
 
@@ -140,12 +139,16 @@ import { MatCheckbox } from '@angular/material/checkbox';
   `,
   styleUrls: ['./unit-view.component.css']
 })
-export class UnitViewComponent {
+export class UnitViewComponent implements OnInit {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
-  defaultLayout: 'column' | 'row' = 'column';
+  defaultLayout!: 'column' | 'row';
 
   constructor(public unitService: UnitService) { }
+
+  ngOnInit(): void {
+    this.defaultLayout = this.unit.globalLayout ? this.unit.globalLayout : 'column';
+  }
 
   addQuestion() {
     this.unit.questions.push({
@@ -194,5 +197,15 @@ export class UnitViewComponent {
 
   removeImage(i: number) {
     this.unit.questions[i].imgSrc = undefined;
+
+  setDefaultLayout(event: MatButtonToggleChange) {
+    this.defaultLayout = event.value;
+    if (this.unit.globalLayout) this.unit.globalLayout = event.value;
+    this.unitService.updateUnitDef();
+  }
+
+  setGlobalLayout(event: MatCheckboxChange) {
+    this.unit.globalLayout = event.checked ? this.defaultLayout : undefined;
+    this.unitService.updateUnitDef();
   }
 }

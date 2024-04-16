@@ -12,7 +12,7 @@ export class UnitService {
     version: '0.1',
     questions: [],
     defaultVariablePrefix: 'speedtest_',
-    globalLayout: true
+    globalLayout: 'column'
   };
 
   constructor(private veronaApiService: VeronaAPIService) { }
@@ -43,7 +43,7 @@ export class UnitService {
       type: 'speedtest-unit-defintion',
       version: '0.1',
       defaultVariablePrefix: 'speedtest_',
-      globalLayout: true,
+      globalLayout: 'column',
       questions: newQuestions
     };
   }

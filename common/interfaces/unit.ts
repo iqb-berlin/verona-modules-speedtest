@@ -3,7 +3,7 @@ export interface Unit {
   version: string;
   questions: Question[];
   defaultVariablePrefix: string;
-  globalLayout: true;
+  globalLayout: 'column' | 'row' | undefined;
 }
 
 export interface Question {
