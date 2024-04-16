@@ -46,9 +46,7 @@ export class AppComponent implements OnInit {
     this.veronaApiService.startCommand
       .subscribe((message: StartCommand): void => {
         this.unit = JSON.parse(message.unitDefinition);
-
-        this.veronaApiService.sendState(this.unit!.questions.length, this.activePageIndex + 1, [])
-
+        this.veronaApiService.sendState(this.unit!.questions.length, this.activePageIndex, [])
       });
     this.veronaApiService.pageNavCommand
       .subscribe((message: PageNavCommand): void => {
