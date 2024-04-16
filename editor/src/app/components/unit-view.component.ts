@@ -75,7 +75,7 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
             <div class="question-content">
               <mat-form-field>
                 <mat-label>Frage</mat-label>
-                <input matInput [(ngModel)]="question.text">
+                <input matInput [(ngModel)]="question.text" (change)="unitService.updateUnitDef()">
               </mat-form-field>
               <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
                       (click)="deleteQuestion(i)">
@@ -100,7 +100,7 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
             </div>
             <ng-container *ngIf="!unit.globalLayout">
               <h4>Ausrichtung</h4>
-              <mat-button-toggle-group [(ngModel)]="question.layout">
+              <mat-button-toggle-group [(ngModel)]="question.layout" (change)="unitService.updateUnitDef()">
                 <mat-button-toggle value="column">Vertikal</mat-button-toggle>
                 <mat-button-toggle value="row">Horizontal</mat-button-toggle>
               </mat-button-toggle-group>
@@ -111,7 +111,7 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
           <div *ngFor="let answer of question.anwers; let j = index" class="inner answer">
             <mat-form-field>
               <mat-label>Antwort {{ j + 1 }}</mat-label>
-              <input matInput [(ngModel)]="answer.text">
+              <input matInput [(ngModel)]="answer.text" (change)="unitService.updateUnitDef()">
             </mat-form-field>
             <button mat-icon-button color="warn" [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(i, j)">
               <mat-icon>delete</mat-icon>
