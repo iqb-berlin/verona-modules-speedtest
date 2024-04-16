@@ -69,7 +69,14 @@ export class VeronaAPIService {
         unitStateDataType: 'iqb-standard@1.0',
         presentationProgress: 'complete',
         responseProgress: responseData.length > 0 ? 'complete' : 'none',
-        dataParts: responseData.length > 0 ? {'main': JSON.stringify(responseData)} : {}
+        dataParts: responseData.length > 0 ? {
+          [`responseData_Page${activePageIndex}`]: JSON.stringify(responseData),
+          'lastSeenPageIndex': JSON.stringify({
+            id: 'lastSeenPageIndex',
+            status: 'VALUE_CHANGED',
+            value: activePageIndex.toString()
+          })
+        } : {}
       },
       playerState: {
         validPages,
