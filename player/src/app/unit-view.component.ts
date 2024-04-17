@@ -15,7 +15,7 @@ import { MatIcon } from '@angular/material/icon';
   ],
   template: `
     <div class="wrapper" [style.flex-direction]="layout">
-      <div class="question" [style.margin]="question.layout == 'column' ? '0 15%' : '0 5%'">
+      <div class="question" [style.margin]="question.layout == 'column' ? '2% 15%' : '2% 5%'">
         <img *ngIf="question.imgSrc" [src]="question.imgSrc">
         <p>{{ question.text }}</p>
       </div>
