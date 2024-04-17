@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Question } from '../../../common/interfaces/unit';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
@@ -29,7 +29,7 @@ import { MatIcon } from '@angular/material/icon';
   `,
   styleUrls: ['unit-view.component.css']
 })
-export class UnitViewComponent implements OnInit {
+export class UnitViewComponent implements OnInit, OnChanges {
   @Input() question!: Question;
   @Input() globalLayout: 'column' | 'row' | undefined;
   @Output() responseGiven = new EventEmitter<number>();
@@ -37,6 +37,10 @@ export class UnitViewComponent implements OnInit {
   layout: 'column' | 'row' | undefined;
 
   ngOnInit(): void {
+    this.layout = this.globalLayout || this.question.layout;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     this.layout = this.globalLayout || this.question.layout;
   }
 }
