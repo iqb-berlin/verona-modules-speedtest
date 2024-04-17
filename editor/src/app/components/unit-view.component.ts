@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import {
   MatAccordion, MatExpansionPanel,
@@ -130,11 +130,10 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
       Neue Frage
       <mat-icon>add</mat-icon>
     </button>
-
   `,
   styleUrls: ['./unit-view.component.css']
 })
-export class UnitViewComponent implements OnInit {
+export class UnitViewComponent implements OnInit, OnChanges {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
   defaultLayout!: 'column' | 'row';
@@ -142,6 +141,10 @@ export class UnitViewComponent implements OnInit {
   constructor(public unitService: UnitService) { }
 
   ngOnInit(): void {
+    this.defaultLayout = this.unit.globalLayout ? this.unit.globalLayout : 'column';
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     this.defaultLayout = this.unit.globalLayout ? this.unit.globalLayout : 'column';
   }
 
