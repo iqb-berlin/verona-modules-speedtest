@@ -3,14 +3,17 @@
     flex-direction: column;
     gap: 15px;
 }
+
 .csv-import-button {
     align-self: start;
 }
+
 fieldset {
     align-self: start;
     display: flex;
     flex-direction: column;
 }
+
 .add-button {
     align-self: center;
     width: 40%;
@@ -35,27 +38,33 @@ fieldset {
 .question-delete-button {
     margin-left: auto;
 }
+
 .expansion-panel-content {
     display: flex;
     flex-direction: column;
 }
+
 .question {
     display: flex;
     flex-direction: column;
 }
+
 .question-content {
     display: flex;
     flex-direction: row;
 }
+
 .image-panel {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
+
 .image-panel-buttons {
     display: flex;
     flex-direction: row;
 }
+
 .image-panel img {
     max-height: 200px;
     object-fit: contain;
@@ -76,12 +85,14 @@ fieldset {
 .inner button {
     justify-self: end;
 }
+
 .answer {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     width: 80%;
 }
+
 .mat-button-toggle-group {
     align-self: start;
 }

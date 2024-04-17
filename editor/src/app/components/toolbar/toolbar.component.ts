@@ -3,7 +3,6 @@ import { MatButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
 import { FileService } from '../../../../../common/services/file.service';
-// TODO
 
 @Component({
   selector: 'speedtest-toolbar',
@@ -42,7 +41,6 @@ export class ToolbarComponent {
 
   async loadUnit(event: any): Promise<void> {
     const unit = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
-    // this.updateModel.emit({ property: 'imageSrc', value: imgSrc });
     this.unitLoaded.emit(unit);
   }
 }

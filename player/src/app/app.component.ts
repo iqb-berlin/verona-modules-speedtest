@@ -18,7 +18,7 @@ import { PageNavCommand, StartCommand, VeronaAPIService } from './verona-api.ser
       <mat-icon>file_upload</mat-icon>
     </button>
     <input type="file" hidden accept=".json, .voud" #upload
-           (change)="loadUnit($event)">
+           (change)="loadUnitFromFile($event)">
 
     <speedtest-player-unit-view *ngIf="unit"
                                 [question]="unit.questions[activePageIndex]"
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
     this.veronaApiService.sendReady();
   }
 
-  async loadUnit(event: any): Promise<void> {
+  async loadUnitFromFile(event: any): Promise<void> {
     const loadedUnit = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
     this.unit = JSON.parse(loadedUnit);
   }
