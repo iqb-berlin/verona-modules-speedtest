@@ -58,6 +58,8 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
         <mat-button-toggle value="row">Horizontal</mat-button-toggle>
       </mat-button-toggle-group>
       <mat-checkbox [checked]="unit.globalLayout !== undefined" (change)="setGlobalLayout($event)">Für alle Fragen setzen</mat-checkbox>
+      Knopffarbe
+      <input matInput type="color" [(ngModel)]="unit.buttonColor">
     </fieldset>
 
     <mat-accordion multi="true">

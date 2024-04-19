@@ -3,6 +3,7 @@ export interface Unit {
   version: string;
   questions: Question[];
   globalLayout: 'column' | 'row' | undefined;
+  buttonColor?: string;
 }
 
 export interface Question {

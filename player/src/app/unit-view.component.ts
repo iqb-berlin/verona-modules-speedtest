@@ -21,6 +21,7 @@ import { MatIcon } from '@angular/material/icon';
       </div>
       <div class="answers" [style.flex-direction]="layout == 'row' ? 'column' : 'row'">
         <button mat-raised-button *ngFor="let answer of question.anwers; let i = index;"
+                [style.background-color]="buttonColor"
                 (click)="responseGiven.emit(i)">
           {{ answer.text }}
         </button>
@@ -32,6 +33,7 @@ import { MatIcon } from '@angular/material/icon';
 export class UnitViewComponent implements OnInit, OnChanges {
   @Input() question!: Question;
   @Input() globalLayout: 'column' | 'row' | undefined;
+  @Input() buttonColor: string | undefined;
   @Output() responseGiven = new EventEmitter<number>();
 
   layout: 'column' | 'row' | undefined;
