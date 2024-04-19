@@ -12,8 +12,22 @@
     align-items: center;
 }
 
-.question {
+.column .question {
+    flex: 1 1 50%;
+    padding-top: 10%;
+}
+.column .answers {
+    flex: 1 1 50%;
+}
+
+.row .question {
     flex: 3 1 70%;
+}
+.row .answers {
+    flex: 3 1 30%;
+}
+
+.question {
     justify-content: center;
     font-size: x-large;
     text-align: center;
@@ -29,10 +43,8 @@
 }
 
 .answers {
-    flex: 1 1 30%;
-    display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 30px;
     margin: 0 5%;
 }
 
@@ -40,4 +52,5 @@
     font-size: larger;
     padding: 10px 25px;
     height: fit-content;
+    justify-content: start;
 }

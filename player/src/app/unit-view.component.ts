@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Question } from '../../../common/interfaces/unit';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
@@ -11,15 +11,17 @@ import { MatIcon } from '@angular/material/icon';
     NgForOf,
     MatButton,
     MatIcon,
-    NgIf
+    NgIf,
+    NgClass
   ],
   template: `
-    <div class="wrapper" [style.flex-direction]="layout">
+    <div class="wrapper" [ngClass]="{'column': layout == 'column', 'row': layout == 'row'}"
+         [style.flex-direction]="layout">
       <div class="question" [style.margin]="question.layout == 'column' ? '2% 15%' : '2% 5%'">
         <img *ngIf="question.imgSrc" [src]="question.imgSrc">
         <p>{{ question.text }}</p>
       </div>
-      <div class="answers" [style.flex-direction]="layout == 'row' ? 'column' : 'row'">
+      <div class="answers" [style.display]="layout == 'row' ? 'grid' : 'flex'" [style.flex-direction]="layout == 'row' ? 'column' : 'row'">
         <button mat-raised-button *ngFor="let answer of question.anwers; let i = index;"
                 [style.background-color]="buttonColor"
                 (click)="responseGiven.emit(i)">
