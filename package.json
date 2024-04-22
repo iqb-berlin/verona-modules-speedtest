@@ -1,8 +1,8 @@
 {
   "name": "verona-modules-speedtest",
   "config": {
-    "player_version": "0.5.0-beta",
-    "editor_version": "0.5.0-beta",
+    "player_version": "0.6.0-beta",
+    "editor_version": "0.6.0-beta",
     "unit_definition_version": "0.2.0"
   },
   "description": "TODO",
