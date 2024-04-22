@@ -35,6 +35,11 @@ fieldset {
     height: 40px;
 }
 
+.text-button-panel {
+    display: flex;
+    flex-direction: row;
+}
+
 .question-delete-button {
     margin-left: auto;
 }

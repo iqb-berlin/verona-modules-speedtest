@@ -9,9 +9,9 @@ import { VeronaAPIService } from './verona-api.service';
 export class UnitService {
   unit: Unit = {
     type: 'speedtest-unit-defintion',
-    version: '0.1',
+    version: '0.2',
     questions: [],
-    globalLayout: 'column'
+    layout: 'column'
   };
 
   constructor(private veronaApiService: VeronaAPIService) { }
@@ -36,15 +36,15 @@ export class UnitService {
         return {
           layout: 'column' as 'column' | 'row',
           text: items[0],
-          anwers: items
+          answers: items
             .filter((item: string, index: number) => index > 0)
-            .map(item => ({ text: item.trim()}))
+            .map(item => (item.trim()))
         }
       });
     this.unit = {
       type: 'speedtest-unit-defintion',
       version: '0.1',
-      globalLayout: 'column',
+      layout: 'column',
       questions: newQuestions
     };
   }

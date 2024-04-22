@@ -22,7 +22,7 @@ import { PageNavCommand, StartCommand, VeronaAPIService } from './verona-api.ser
 
     <speedtest-player-unit-view *ngIf="unit"
                                 [question]="unit.questions[activePageIndex]"
-                                [globalLayout]="unit.globalLayout"
+                                [layout]="unit.layout"
                                 [buttonColor]="unit.buttonColor"
                                 (responseGiven)="sendResponse($event); nextQuestion()">
     </speedtest-player-unit-view>

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import {
   MatAccordion, MatExpansionPanel,
@@ -7,15 +7,14 @@ import {
 } from '@angular/material/expansion';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { Unit } from '../../../../common/interfaces/unit';
 import { FileService } from '../../../../common/services/file.service';
 import { UnitService } from '../services/unit.service';
-import { MatButtonToggle, MatButtonToggleChange, MatButtonToggleGroup } from '@angular/material/button-toggle';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'speedtest-unit-view',
@@ -34,13 +33,11 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
     MatLabel,
     MatTooltip,
     MatFabButton,
-    MatMiniFabButton,
     FormsModule,
     NgIf,
     MatIconButton,
     MatButtonToggleGroup,
-    MatButtonToggle,
-    MatCheckbox
+    MatButtonToggle
   ],
   template: `
     <button mat-raised-button class="csv-import-button" (click)="upload.click()">
@@ -51,15 +48,14 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
            (change)="loadCSV($event)">
     
     <fieldset>
-      <legend>Standardwerte</legend>
+      <legend>Globale Einstellungen</legend>
       Ausrichtung
-      <mat-button-toggle-group [value]="defaultLayout" (change)="setDefaultLayout($event)">
+      <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
         <mat-button-toggle value="column">Vertikal</mat-button-toggle>
         <mat-button-toggle value="row">Horizontal</mat-button-toggle>
       </mat-button-toggle-group>
-      <mat-checkbox [checked]="unit.globalLayout !== undefined" (change)="setGlobalLayout($event)">Für alle Fragen setzen</mat-checkbox>
       Knopffarbe
-      <input matInput type="color" [(ngModel)]="unit.buttonColor">
+      <input matInput type="color" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
     </fieldset>
 
     <mat-accordion multi="true">
@@ -73,11 +69,17 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
         <div class="expansion-panel-content">
           <div class="question">
-            <h4>Text</h4>
+            <div class="text-button-panel">
+              <h4>Text</h4>
+              <button mat-icon-button [matTooltip]="'Text für alle Fragen übernehmen'" [matTooltipPosition]="'above'"
+                      (click)="setQuestionTextForAll(questionText.value)">
+                <mat-icon>copy_all</mat-icon>
+              </button>
+            </div>
             <div class="question-content">
               <mat-form-field>
                 <mat-label>Frage</mat-label>
-                <input matInput [(ngModel)]="question.text" (change)="unitService.updateUnitDef()">
+                <input matInput #questionText [(ngModel)]="question.text" (change)="unitService.updateUnitDef()">
               </mat-form-field>
               <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
                       (click)="deleteQuestion(i)">
@@ -100,20 +102,19 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
               </div>
               <img *ngIf="question.imgSrc" [src]="question.imgSrc">
             </div>
-            <ng-container *ngIf="!unit.globalLayout">
-              <h4>Ausrichtung</h4>
-              <mat-button-toggle-group [(ngModel)]="question.layout" (change)="unitService.updateUnitDef()">
-                <mat-button-toggle value="column">Vertikal</mat-button-toggle>
-                <mat-button-toggle value="row">Horizontal</mat-button-toggle>
-              </mat-button-toggle-group>
-            </ng-container>
           </div>
 
-          <h3>Antworten</h3>
-          <div *ngFor="let answer of question.anwers; let j = index" class="inner answer">
+          <div class="text-button-panel">
+            <h3>Antworten</h3>
+            <button mat-icon-button [matTooltip]="'Antworten für alle Fragen übernehmen'" [matTooltipPosition]="'above'"
+                    (click)="setAnswersForAll(unit.questions[i].answers)">
+              <mat-icon>copy_all</mat-icon>
+            </button>  
+          </div>
+          <div *ngFor="let answer of question.answers; let j = index" class="inner answer">
             <mat-form-field>
               <mat-label>Antwort {{ j + 1 }}</mat-label>
-              <input matInput [(ngModel)]="answer.text" (change)="unitService.updateUnitDef()">
+              <input matInput [value]="answer" (change)="changeAnswerText(i, j, $any($event.target).value)">
             </mat-form-field>
             <button mat-icon-button color="warn" [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(i, j)">
               <mat-icon>delete</mat-icon>
@@ -135,29 +136,17 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
   `,
   styleUrls: ['./unit-view.component.css']
 })
-export class UnitViewComponent implements OnInit, OnChanges {
+export class UnitViewComponent {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
-  defaultLayout!: 'column' | 'row';
 
   constructor(public unitService: UnitService) { }
-
-  ngOnInit(): void {
-    this.defaultLayout = this.unit.globalLayout ? this.unit.globalLayout : 'column';
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.defaultLayout = this.unit.globalLayout ? this.unit.globalLayout : 'column';
-  }
 
   addQuestion() {
     this.unit.questions.push({
       text: `Frage ${this.unit.questions.length + 1}`,
-      layout: this.defaultLayout,
-      anwers: [
-        { text: 'richtig' },
-        { text: 'falsch' }
-      ] })
+      answers: ['richtig', 'falsch']
+    })
     this.latestQuestionIndex = this.unit.questions.length - 1;
     this.unitService.updateUnitDef();
   }
@@ -169,17 +158,17 @@ export class UnitViewComponent implements OnInit, OnChanges {
 
   addAnswer(questionIndex: number) {
     let answerText: string = 'Antwort-Text'
-    switch (this.unit.questions[questionIndex].anwers.length) {
+    switch (this.unit.questions[questionIndex].answers.length) {
       case 0: answerText = 'richtig'; break;
       case 1: answerText = 'falsch'; break;
-      default: answerText = `Antworttext ${this.unit.questions[questionIndex].anwers.length + 1}`; break;
+      default: answerText = `Antworttext ${this.unit.questions[questionIndex].answers.length + 1}`; break;
     }
-    this.unit.questions[questionIndex].anwers.push({ text: answerText });
+    this.unit.questions[questionIndex].answers.push(answerText);
     this.unitService.updateUnitDef();
   }
 
   deleteAnswer(questionIndex: number, answerIndex: number) {
-    this.unit.questions[questionIndex].anwers.splice(answerIndex, 1);
+    this.unit.questions[questionIndex].answers.splice(answerIndex, 1);
     this.unitService.updateUnitDef();
   }
 
@@ -200,14 +189,18 @@ export class UnitViewComponent implements OnInit, OnChanges {
     this.unitService.updateUnitDef();
   }
 
-  setDefaultLayout(event: MatButtonToggleChange) {
-    this.defaultLayout = event.value;
-    if (this.unit.globalLayout) this.unit.globalLayout = event.value;
-    this.unitService.updateUnitDef();
+  changeAnswerText(questionIndex: number, answerIndex: number, newText: string) {
+    this.unit.questions[questionIndex].answers[answerIndex] = newText;
+    this.unitService.updateUnitDef()
   }
 
-  setGlobalLayout(event: MatCheckboxChange) {
-    this.unit.globalLayout = event.checked ? this.defaultLayout : undefined;
-    this.unitService.updateUnitDef();
+  setQuestionTextForAll(text: string) {
+    this.unit.questions.forEach(question => question.text = text);
+    this.unitService.updateUnitDef()
+  }
+
+  setAnswersForAll(answers: string[]) {
+    this.unit.questions.forEach(question => question.answers = [...answers]);
+    this.unitService.updateUnitDef()
   }
 }
