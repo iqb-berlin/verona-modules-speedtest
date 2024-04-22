@@ -1,3 +1,6 @@
+Editor
+======
 ## 0.6.0-beta
-- Knöpfe hin übernehmen von Fragen und Antworten hinzugefügt
+- Knöpfe zum Übernehmen von Fragen und Antworten hinzugefügt
+- individuelle Ausrichtung einzelner Fragen entfernt
 - Neuer Font: Nunito Sans
