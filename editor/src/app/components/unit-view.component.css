@@ -1,103 +1,105 @@
 :host {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .csv-import-button {
-    align-self: start;
+  align-self: start;
 }
 
 fieldset {
-    align-self: start;
-    display: flex;
-    flex-direction: column;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .add-button {
-    align-self: center;
-    width: 40%;
-    background-color: lightgray !important;
+  align-self: center;
+  width: 40%;
+  background-color: lightgray !important;
 }
 
 .mat-expansion-panel-header-title {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mat-expansion-panel-header-title h2 {
-    min-height: 0;
+  min-height: 0;
 }
 
 .mat-expansion-panel-header-title img {
-    margin-left: 15px;
-    height: 40px;
+  margin-left: 15px;
+  height: 40px;
 }
 
 .text-button-panel {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .question-delete-button {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .expansion-panel-content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .question {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .question-content {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .image-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .image-panel-buttons {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .image-panel img {
-    max-height: 200px;
-    object-fit: contain;
+  max-height: 200px;
+  object-fit: contain;
 }
+
 .question mat-form-field {
-    width: 80%;
+  width: 80%;
 }
 
 .inner {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .inner .mat-mdc-form-field {
-    width: 90%;
+  width: 90%;
 }
 
 .inner button {
-    justify-self: end;
+  justify-self: end;
 }
 
 .answer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 80%;
 }
 
 .mat-button-toggle-group {
-    align-self: start;
+  align-self: start;
 }
