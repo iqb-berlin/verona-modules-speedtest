@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Unit } from '../../../../common/interfaces/unit';
-import { FileService } from '../../../../common/services/file.service';
+import { Unit } from 'common/interfaces/unit';
+import { FileService } from 'common/services/file.service';
 import { VeronaAPIService } from './verona-api.service';
 
 @Injectable({
@@ -17,11 +17,7 @@ export class UnitService {
   constructor(private veronaApiService: VeronaAPIService) { }
 
   loadUnitDefinition(unitDefinition: string): void {
-    if (unitDefinition) {
-      this.unit = JSON.parse(unitDefinition);
-    } else {
-      console.log('No unit definition given. Starting with empty unit.');
-    }
+    this.unit = JSON.parse(unitDefinition);
   }
 
   saveUnitToFile(): void {
@@ -32,14 +28,14 @@ export class UnitService {
     const newQuestions = loadedUnit.split(/\n/)
       .filter(text => text.trim())
       .map((line: string) => {
-        const items = line.split(';')
+        const items = line.split(';');
         return {
           layout: 'column' as 'column' | 'row',
           text: items[0],
           answers: items
             .filter((item: string, index: number) => index > 0)
             .map(item => (item.trim()))
-        }
+        };
       });
     this.unit = {
       type: 'speedtest-unit-defintion',

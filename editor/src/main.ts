@@ -1,13 +1,8 @@
-import { bootstrapApplication, createApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
+import 'zone.js';
+import { createApplication } from '@angular/platform-browser';
 import { createCustomElement } from '@angular/elements';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import 'zone.js';
-
-// bootstrapApplication(AppComponent, appConfig)
-  // .catch((err) => console.error(err));
+import { AppComponent } from './app/app.component';
 
 (async () => {
   const app = await createApplication({
@@ -17,4 +12,3 @@ import 'zone.js';
   const editorElement = createCustomElement(AppComponent, { injector: app.injector });
   customElements.define('speedtest-editor', editorElement);
 })();
-

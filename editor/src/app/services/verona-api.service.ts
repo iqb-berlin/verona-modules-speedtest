@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, Observable, Subject } from 'rxjs';
+import { fromEvent, Subject } from 'rxjs';
 import { VariableInfo } from '@iqb/responses';
+import { Unit } from 'common/interfaces/unit';
 
 @Injectable({
   providedIn: 'root'
@@ -43,8 +44,6 @@ export class VeronaAPIService {
     // prevent posts in local (dev) mode
     if (!this.isStandalone) {
       window.parent.postMessage(message, '*');
-    } else {
-      // console.log(`player: ${message.type}`);
     }
   }
 
@@ -56,7 +55,7 @@ export class VeronaAPIService {
     });
   }
 
-  sendVoeDefinitionChangedNotification(unit: any): void {
+  sendVoeDefinitionChangedNotification(unit: Unit): void {
     this.send({
       type: 'voeDefinitionChangedNotification',
       sessionId: this.sessionID as string,

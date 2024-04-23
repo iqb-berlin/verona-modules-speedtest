@@ -1,12 +1,8 @@
-import { bootstrapApplication, createApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
+import 'zone.js';
+import { createApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
-import 'zone.js';
-
-// bootstrapApplication(AppComponent, appConfig)
-//   .catch((err) => console.error(err));
+import { AppComponent } from './app/app.component';
 
 (async () => {
   const app = await createApplication({

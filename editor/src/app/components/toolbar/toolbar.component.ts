@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
-import { FileService } from '../../../../../common/services/file.service';
+import { FileService } from 'common/services/file.service';
 
 @Component({
   selector: 'speedtest-toolbar',
@@ -14,7 +14,7 @@ import { FileService } from '../../../../../common/services/file.service';
         <mat-icon>file_upload</mat-icon>
       </button>
       <input type="file" hidden accept=".json, .voud" #upload
-             (change)="loadUnit($event)">
+             (change)="loadUnit($event.target)">
       <button mat-raised-button (click)="save()">
         Unit speichern
         <mat-icon>file_download</mat-icon>
@@ -39,8 +39,8 @@ export class ToolbarComponent {
     this.saveUnit.emit();
   }
 
-  async loadUnit(event: any): Promise<void> {
-    const unit = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
+  async loadUnit(eventTarget: EventTarget | null): Promise<void> {
+    const unit = await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File);
     this.unitLoaded.emit(unit);
   }
 }

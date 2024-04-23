@@ -37,8 +37,6 @@ export class VeronaAPIService {
     // prevent posts in local (dev) mode
     if (!this.isStandalone) {
       window.parent.postMessage(message, '*');
-    } else {
-      // console.log(`player: ${message.type}`);
     }
   }
 
@@ -59,7 +57,7 @@ export class VeronaAPIService {
   }
 
   sendState(pageCount: number, activePageIndex: number, responseData: Response[]): void {
-    const validPages = this.generateValidPages(pageCount);
+    const validPages = VeronaAPIService.generateValidPages(pageCount);
 
     this.sendMessage({
       type: 'vopStateChangedNotification',
@@ -71,7 +69,7 @@ export class VeronaAPIService {
         responseProgress: responseData.length > 0 ? 'complete' : 'none',
         dataParts: responseData.length > 0 ? {
           [`responseData_Page${activePageIndex}`]: JSON.stringify(responseData),
-          'lastSeenPageIndex': JSON.stringify({
+          lastSeenPageIndex: JSON.stringify({
             id: 'lastSeenPageIndex',
             status: 'VALUE_CHANGED',
             value: activePageIndex.toString()
@@ -86,14 +84,13 @@ export class VeronaAPIService {
   }
 
   /* Creates an object with page indices as keys and values. The keys are incremented by one. */
-  private generateValidPages(pageCount: number): Record<string, string> {
+  private static generateValidPages(pageCount: number): Record<string, string> {
     const validPages: Record<string, string> = {};
     Array.from(Array(pageCount).keys()).forEach(page => validPages[(page + 1).toString()] = (page + 1).toString());
     return validPages;
   }
 
   sendFocusChanged(isFocused: boolean): void {
-    console.log('vopWindowFocusChangedNotification', isFocused);
     this.sendMessage({
       type: 'vopWindowFocusChangedNotification',
       timeStamp: String(Date.now()),
@@ -140,7 +137,7 @@ interface UnitState {
 interface Response {
   id: string;
   status: 'VALUE_CHANGED';
-  value: any;
+  value: number;
 }
 
 interface PlayerState {
