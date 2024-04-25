@@ -19,12 +19,16 @@ import { PageNavCommand, StartCommand, VeronaAPIService } from './verona-api.ser
     <input type="file" hidden accept=".json, .voud" #upload
            (change)="loadUnitFromFile($event.target)">
 
-    <speedtest-player-unit-view *ngIf="unit"
+    <speedtest-player-unit-view *ngIf="unit && !showOutroPage"
                                 [question]="unit.questions[activePageIndex]"
                                 [layout]="unit.layout"
                                 [buttonColor]="unit.buttonColor"
                                 (responseGiven)="sendResponse($event); nextQuestion()">
     </speedtest-player-unit-view>
+
+    <div *ngIf="showOutroPage" class="outro">
+      Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
+    </div>
   `,
   styles: `
     :host {
@@ -33,6 +37,10 @@ import { PageNavCommand, StartCommand, VeronaAPIService } from './verona-api.ser
       align-items: center;
       height: 100vh;
     }
+    .outro {
+      margin: auto;
+      font-size: x-large;
+    }
   `
 })
 export class AppComponent implements OnInit {
@@ -40,6 +48,7 @@ export class AppComponent implements OnInit {
   unit: Unit | undefined;
   activePageIndex: number = 0;
   activePageStartTime: number = Date.now();
+  showOutroPage: boolean = false;
 
   constructor(private veronaApiService: VeronaAPIService) { }
 
@@ -82,6 +91,7 @@ export class AppComponent implements OnInit {
       this.activePageIndex += 1;
       this.activePageStartTime = Date.now();
     } else {
+      this.showOutroPage = true;
       this.veronaApiService.sendNavRequest();
     }
   }
