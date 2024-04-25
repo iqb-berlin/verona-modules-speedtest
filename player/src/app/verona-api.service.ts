@@ -104,6 +104,9 @@ export interface StartCommand {
   type: 'vopStartCommand';
   sessionID: string;
   unitDefinition: string;
+  unitState?: {
+    dataParts: Record<string, string>;
+  }
 }
 
 export interface PageNavCommand {
