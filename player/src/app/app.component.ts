@@ -12,10 +12,11 @@ import { PageNavCommand, StartCommand, VeronaAPIService } from './verona-api.ser
   standalone: true,
   imports: [CommonModule, UnitViewComponent, MatButton, MatIcon, MatButton],
   template: `
-    <button *ngIf="isStandalone" mat-raised-button (click)="upload.click()">
+    <button *ngIf="isStandalone" mat-raised-button class="load-button" (click)="upload.click()">
       Unit laden
       <mat-icon>file_upload</mat-icon>
     </button>
+
     <input type="file" hidden accept=".json, .voud" #upload
            (change)="loadUnitFromFile($event.target)">
 
@@ -36,6 +37,9 @@ import { PageNavCommand, StartCommand, VeronaAPIService } from './verona-api.ser
       flex-direction: column;
       align-items: center;
       height: 100vh;
+    }
+    .load-button {
+      position: absolute;
     }
     .outro {
       margin: auto;

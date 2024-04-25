@@ -17,12 +17,11 @@ import { Question } from 'common/interfaces/unit';
   template: `
     <div class="wrapper" [ngClass]="{'column': layout == 'column', 'row': layout == 'row'}"
          [style.flex-direction]="layout">
-      <div class="question" [style.margin]="layout == 'column' ? '2% 15%' : '2% 5%'">
+      <div class="question">
         <img *ngIf="question.imgSrc" [src]="question.imgSrc" [alt]="question.text">
         <p>{{ question.text }}</p>
       </div>
-      <div class="answers" [style.display]="layout == 'row' ? 'grid' : 'flex'"
-           [style.flex-direction]="layout == 'row' ? 'column' : 'row'">
+      <div class="answers">
         <button mat-raised-button *ngFor="let answer of question.answers; let i = index;"
                 [style.background-color]="buttonColor"
                 (click)="responseGiven.emit(i)">
