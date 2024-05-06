@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { fromEvent } from 'rxjs';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { VeronaAPIService, StartCommand } from './services/verona-api.service';
 import { UnitService } from './services/unit.service';
@@ -20,15 +21,19 @@ import { UnitViewComponent } from './components/unit-view.component';
 export class AppComponent implements OnInit {
   isStandalone = window === window.parent;
 
-  constructor(public unitService: UnitService,
-              private veronaApiService: VeronaAPIService) { }
+  constructor(public unitService: UnitService) {
+    fromEvent(window, 'message')
+      .subscribe((event: Event): void => {
+        VeronaAPIService.handleMessage((event as MessageEvent).data);
+      });
+  }
 
   ngOnInit(): void {
-    this.veronaApiService.startCommand
+    VeronaAPIService.startCommand
       .subscribe((message: StartCommand): void => {
         this.unitService.loadUnitDefinition(message.unitDefinition);
       });
 
-    this.veronaApiService.sendReady();
+    VeronaAPIService.sendReady();
   }
 }

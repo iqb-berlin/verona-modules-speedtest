@@ -1,64 +1,35 @@
-import { Injectable } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { VariableInfo } from '@iqb/responses';
 import { Unit } from 'common/interfaces/unit';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class VeronaAPIService {
-  sessionID: string | undefined;
-  resourceURL: string | undefined;
-  startCommand = new Subject<StartCommand>();
-  getDefinitionCommand = new Subject<GetDefinitionCommand>();
+  static sessionID: string | undefined;
+  static startCommand = new Subject<StartCommand>();
+  static getDefinitionCommand = new Subject<GetDefinitionCommand>();
 
-  private isStandalone = window === window.parent;
-
-  constructor() {
-    fromEvent(window, 'message')
-      .subscribe((event: Event): void => {
-        this.handleMessage((event as MessageEvent).data);
-      });
-  }
-
-  private handleMessage(messageData: GetDefinitionCommand | StartCommand): void {
-    switch (messageData.type) {
-      case 'voeStartCommand':
-        this.sessionID = messageData.sessionId;
-        this.resourceURL = (messageData as StartCommand).editorConfig.directDownloadUrl;
-        this.startCommand.next(messageData as StartCommand);
-        break;
-      case 'voeGetDefinitionRequest': // No longer part of the API. Kept in for compatibility.
-        this.getDefinitionCommand.next(messageData);
-        break;
-      default:
-        console.warn(`editor: got message of unknown type ${messageData}`);
+  static handleMessage(messageData: GetDefinitionCommand | StartCommand): void {
+    if (messageData.type === 'voeStartCommand') {
+      VeronaAPIService.sessionID = messageData.sessionId;
+      VeronaAPIService.startCommand.next(messageData as StartCommand);
     }
   }
 
-  getResourceURL(): string {
-    return this.resourceURL || 'assets';
+  private static sendMessage(message: Record<string, string | VariableInfo[]>): void {
+    window.parent.postMessage(message, '*');
   }
 
-  private send(message: Record<string, string | VariableInfo[]>): void {
-    // prevent posts in local (dev) mode
-    if (!this.isStandalone) {
-      window.parent.postMessage(message, '*');
-    }
-  }
-
-  sendReady(): void {
+  static sendReady(): void {
     const metadata: string | null | undefined = document.getElementById('verona-metadata')?.textContent;
-    this.send({
+    VeronaAPIService.sendMessage({
       type: 'voeReadyNotification',
       metadata: metadata ? JSON.parse(metadata) : {}
     });
   }
 
-  sendVoeDefinitionChangedNotification(unit: Unit): void {
-    this.send({
+  static sendChange(unit: Unit): void {
+    VeronaAPIService.sendMessage({
       type: 'voeDefinitionChangedNotification',
-      sessionId: this.sessionID as string,
+      sessionId: VeronaAPIService.sessionID as string,
       timeStamp: String(Date.now()),
       unitDefinition: JSON.stringify(unit),
       unitDefinitionType: 'speedtest-unit-definition@1.0.0',

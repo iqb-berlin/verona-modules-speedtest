@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { fromEvent } from 'rxjs';
 import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
 import { UnitViewComponent } from './unit-view.component';
@@ -54,10 +55,15 @@ export class AppComponent implements OnInit {
   activePageStartTime: number = Date.now();
   showOutroPage: boolean = false;
 
-  constructor(private veronaApiService: VeronaAPIService) { }
+  constructor() {
+    fromEvent(window, 'message')
+      .subscribe((event: Event): void => {
+        VeronaAPIService.handleMessage((event as MessageEvent).data);
+      });
+  }
 
   ngOnInit(): void {
-    this.veronaApiService.startCommand
+    VeronaAPIService.startCommand
       .subscribe((message: StartCommand): void => {
         if (!message.unitDefinition) return;
 
@@ -66,17 +72,18 @@ export class AppComponent implements OnInit {
         if (message.unitState?.dataParts) {
           const responseData = JSON.parse(message.unitState?.dataParts.lastSeenPageIndex);
           this.activePageIndex = Number(responseData.value);
-          if (this.activePageIndex >= this.unit.questions.length) this.showOutroPage = true;
+          if (this.activePageIndex >= this.unit!.questions.length) this.showOutroPage = true;
         }
 
-        this.veronaApiService.sendState(this.unit!.questions.length, this.activePageIndex, []);
+        VeronaAPIService.sendState(this.unit!.questions.length, this.activePageIndex, []);
       });
-    this.veronaApiService.pageNavCommand
+
+    VeronaAPIService.pageNavCommand
       .subscribe((message: PageNavCommand): void => {
         this.activePageIndex = Number(message.target) - 1;
-        this.veronaApiService.sendState(this.unit!.questions.length, this.activePageIndex, []);
+        VeronaAPIService.sendState(this.unit!.questions.length, this.activePageIndex, []);
       });
-    this.veronaApiService.sendReady();
+    VeronaAPIService.sendReady();
   }
 
   async loadUnitFromFile(eventTarget: EventTarget | null): Promise<void> {
@@ -86,7 +93,7 @@ export class AppComponent implements OnInit {
 
   sendResponse(answerIndex: number) {
     if (!this.unit?.questions) throw Error();
-    this.veronaApiService.sendState(this.unit.questions.length, this.activePageIndex + 1, [{
+    VeronaAPIService.sendState(this.unit.questions.length, this.activePageIndex + 1, [{
       id: `speedtest_${this.activePageIndex}`,
       status: 'VALUE_CHANGED',
       value: answerIndex
@@ -105,17 +112,19 @@ export class AppComponent implements OnInit {
       this.activePageStartTime = Date.now();
     } else {
       this.showOutroPage = true;
-      this.veronaApiService.sendNavRequest();
+      VeronaAPIService.sendNavRequest();
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   @HostListener('window:blur')
   onBlur() {
-    this.veronaApiService.sendFocusChanged(false);
+    VeronaAPIService.sendFocusChanged(false);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   @HostListener('window:focus')
   onFocus() {
-    this.veronaApiService.sendFocusChanged(true);
+    VeronaAPIService.sendFocusChanged(true);
   }
 }

@@ -16,8 +16,6 @@ export class UnitService {
     layout: 'column'
   };
 
-  constructor(private veronaApiService: VeronaAPIService) { }
-
   loadUnitDefinition(unitDefinition: string): void {
     if (unitDefinition) this.unit = JSON.parse(unitDefinition);
   }
@@ -48,6 +46,6 @@ export class UnitService {
   }
 
   updateUnitDef() {
-    this.veronaApiService.sendVoeDefinitionChangedNotification(this.unit);
+    VeronaAPIService.sendChange(this.unit);
   }
 }

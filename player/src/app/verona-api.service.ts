@@ -1,67 +1,49 @@
-import { Injectable } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class VeronaAPIService {
-  sessionID: string | undefined;
-  resourceURL: string | undefined;
-  startCommand = new Subject<StartCommand>();
-  pageNavCommand = new Subject<PageNavCommand>();
+  private static sessionID: string | undefined;
+  static startCommand = new Subject<StartCommand>();
+  static pageNavCommand = new Subject<PageNavCommand>();
 
-  private isStandalone = window === window.parent;
-
-  constructor() {
-    fromEvent(window, 'message')
-      .subscribe((event: Event): void => {
-        this.handleMessage((event as MessageEvent).data);
-      });
-  }
-
-  private handleMessage(messageData: StartCommand | PageNavCommand): void {
+  static handleMessage(messageData: StartCommand | PageNavCommand): void {
     switch (messageData.type) {
       case 'vopStartCommand':
-        this.sessionID = messageData.sessionID;
-        this.startCommand.next(messageData as StartCommand);
+        VeronaAPIService.sessionID = messageData.sessionID;
+        VeronaAPIService.startCommand.next(messageData as StartCommand);
         break;
       case 'vopPageNavigationCommand':
-        this.pageNavCommand.next(messageData as PageNavCommand);
+        VeronaAPIService.pageNavCommand.next(messageData as PageNavCommand);
         break;
-      default:
-        console.warn('player: got message of unknown type: ', messageData);
+      // no default
     }
   }
 
-  private sendMessage(message: ReadyNotification | StateChangeNotification | NavRequestNotification | FocusChangeNotification): void {
-    // prevent posts in local (dev) mode
-    if (!this.isStandalone) {
-      window.parent.postMessage(message, '*');
-    }
+  private static sendMessage(message: ReadyNotification | StateChangeNotification | NavRequestNotification | FocusChangeNotification): void {
+    window.parent.postMessage(message, '*');
   }
 
-  sendReady(): void {
+  static sendReady(): void {
     const metadata: string | null | undefined = document.getElementById('verona-metadata')?.textContent;
-    this.sendMessage({
+    VeronaAPIService.sendMessage({
       type: 'vopReadyNotification',
       metadata: metadata ? JSON.parse(metadata) : {}
     });
   }
 
-  sendNavRequest() {
-    this.sendMessage({
+  static sendNavRequest() {
+    VeronaAPIService.sendMessage({
       type: 'vopUnitNavigationRequestedNotification',
-      sessionId: this.sessionID as string,
+      sessionId: VeronaAPIService.sessionID as string,
       target: 'next'
     });
   }
 
-  sendState(pageCount: number, activePageIndex: number, responseData: Response[]): void {
+  static sendState(pageCount: number, activePageIndex: number, responseData: Response[]): void {
     const validPages = VeronaAPIService.generateValidPages(pageCount);
 
-    this.sendMessage({
+    VeronaAPIService.sendMessage({
       type: 'vopStateChangedNotification',
-      sessionId: this.sessionID as string,
+      sessionId: VeronaAPIService.sessionID as string,
       timeStamp: String(Date.now()),
       unitState: {
         unitStateDataType: 'iqb-standard@1.0',
@@ -90,8 +72,8 @@ export class VeronaAPIService {
     return validPages;
   }
 
-  sendFocusChanged(isFocused: boolean): void {
-    this.sendMessage({
+  static sendFocusChanged(isFocused: boolean): void {
+    VeronaAPIService.sendMessage({
       type: 'vopWindowFocusChangedNotification',
       timeStamp: String(Date.now()),
       hasFocus: isFocused
