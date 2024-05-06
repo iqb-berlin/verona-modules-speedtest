@@ -66,10 +66,9 @@ export class AppComponent implements OnInit {
     VeronaAPIService.startCommand
       .subscribe((message: StartCommand): void => {
         if (!message.unitDefinition) return;
-
         this.unit = JSON.parse(message.unitDefinition) as Unit;
 
-        if (message.unitState?.dataParts) {
+        if (message.unitState?.dataParts.lastSeenPageIndex) {
           const responseData = JSON.parse(message.unitState?.dataParts.lastSeenPageIndex);
           this.activePageIndex = Number(responseData.value);
           if (this.activePageIndex >= this.unit!.questions.length) this.showOutroPage = true;
