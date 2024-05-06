@@ -31,6 +31,9 @@
       ],
       "player/*": [
         "./player/*"
+      ],
+      "packageInfo": [
+        "./package.json"
       ]
     },
     "useDefineForClassFields": false
