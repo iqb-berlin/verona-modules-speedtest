@@ -59,12 +59,14 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.veronaApiService.startCommand
       .subscribe((message: StartCommand): void => {
-        this.unit = JSON.parse(message.unitDefinition);
+        if (!message.unitDefinition) return;
+
+        this.unit = JSON.parse(message.unitDefinition) as Unit;
 
         if (message.unitState?.dataParts) {
           const responseData = JSON.parse(message.unitState?.dataParts.lastSeenPageIndex);
           this.activePageIndex = Number(responseData.value);
-          if (this.activePageIndex >= this.unit!.questions.length) this.showOutroPage = true;
+          if (this.activePageIndex >= this.unit.questions.length) this.showOutroPage = true;
         }
 
         this.veronaApiService.sendState(this.unit!.questions.length, this.activePageIndex, []);
