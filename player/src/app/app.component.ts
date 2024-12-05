@@ -25,7 +25,7 @@ import { StartCommand, VeronaAPIService } from './verona-api.service';
                                 [question]="unit.questions[activePageIndex]"
                                 [layout]="unit.layout"
                                 [buttonColor]="unit.buttonColor"
-                                (responseGiven)="sendResponse($event); nextQuestion()">
+                                (responseGiven)="sendResponse($event); gotoNextPage()">
     </speedtest-player-unit-view>
 
     <div *ngIf="showOutroPage" class="outro">
@@ -69,8 +69,7 @@ export class AppComponent implements OnInit {
         this.unit = JSON.parse(message.unitDefinition) as Unit;
 
         if (message.unitState?.dataParts.lastSeenPageIndex) {
-          const responseData = JSON.parse(message.unitState?.dataParts.lastSeenPageIndex);
-          this.activePageIndex = Number(responseData.value);
+          this.activePageIndex = Number(JSON.parse(message.unitState?.dataParts.lastSeenPageIndex).value) + 1;
           if (this.activePageIndex >= this.unit!.questions.length) this.showOutroPage = true;
         }
 
@@ -100,7 +99,7 @@ export class AppComponent implements OnInit {
     this.activePageIndex);
   }
 
-  nextQuestion(): void {
+  gotoNextPage(): void {
     if (!this.unit) throw Error();
     if (this.unit.questions.length > this.activePageIndex + 1) {
       this.activePageIndex += 1;

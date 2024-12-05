@@ -14,7 +14,8 @@ export class VeronaAPIService {
     }
   }
 
-  private static sendMessage(message: ReadyNotification | StateChangeNotification | NavRequestNotification | FocusChangeNotification): void {
+  private static sendMessage(
+    message: ReadyNotification | StateChangeNotification | NavRequestNotification | FocusChangeNotification): void {
     window.parent.postMessage(message, '*');
   }
 
@@ -44,7 +45,7 @@ export class VeronaAPIService {
         presentationProgress: 'complete',
         responseProgress: responseData.length > 0 ? 'complete' : 'none',
         dataParts: responseData.length > 0 ? {
-          [`responseData_Page${activePageIndex}`]: JSON.stringify(responseData),
+          [`page_${activePageIndex}`]: JSON.stringify(responseData),
           lastSeenPageIndex: JSON.stringify([{
             id: 'lastSeenPageIndex',
             status: 'VALUE_CHANGED',
