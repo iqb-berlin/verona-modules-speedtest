@@ -51,11 +51,11 @@ export class VeronaAPIService {
         responseProgress: responseData.length > 0 ? 'complete' : 'none',
         dataParts: responseData.length > 0 ? {
           [`responseData_Page${activePageIndex}`]: JSON.stringify(responseData),
-          lastSeenPageIndex: JSON.stringify({
+          lastSeenPageIndex: JSON.stringify([{
             id: 'lastSeenPageIndex',
             status: 'VALUE_CHANGED',
             value: activePageIndex.toString()
-          })
+          }])
         } : {}
       },
       playerState: {
