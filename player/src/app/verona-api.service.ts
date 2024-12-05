@@ -3,16 +3,12 @@ import { Subject } from 'rxjs';
 export class VeronaAPIService {
   private static sessionID: string | undefined;
   static startCommand = new Subject<StartCommand>();
-  static pageNavCommand = new Subject<PageNavCommand>();
 
-  static handleMessage(messageData: StartCommand | PageNavCommand): void {
+  static handleMessage(messageData: StartCommand): void {
     switch (messageData.type) {
       case 'vopStartCommand':
         VeronaAPIService.sessionID = messageData.sessionID;
         VeronaAPIService.startCommand.next(messageData as StartCommand);
-        break;
-      case 'vopPageNavigationCommand':
-        VeronaAPIService.pageNavCommand.next(messageData as PageNavCommand);
         break;
       // no default
     }
@@ -38,9 +34,7 @@ export class VeronaAPIService {
     });
   }
 
-  static sendState(pageCount: number, activePageIndex: number, responseData: Response[]): void {
-    const validPages = VeronaAPIService.generateValidPages(pageCount);
-
+  static sendState(responseData: Response[], activePageIndex: number): void {
     VeronaAPIService.sendMessage({
       type: 'vopStateChangedNotification',
       sessionId: VeronaAPIService.sessionID as string,
@@ -57,19 +51,8 @@ export class VeronaAPIService {
             value: activePageIndex.toString()
           }])
         } : {}
-      },
-      playerState: {
-        validPages,
-        currentPage: (activePageIndex + 1).toString()
       }
     });
-  }
-
-  /* Creates an object with page indices as keys and values. The keys are incremented by one. */
-  private static generateValidPages(pageCount: number): Record<string, string> {
-    const validPages: Record<string, string> = {};
-    Array.from(Array(pageCount).keys()).forEach(page => validPages[(page + 1).toString()] = (page + 1).toString());
-    return validPages;
   }
 
   static sendFocusChanged(isFocused: boolean): void {
@@ -91,12 +74,6 @@ export interface StartCommand {
   }
 }
 
-export interface PageNavCommand {
-  type: 'vopPageNavigationCommand';
-  sessionId: string;
-  target: string;
-}
-
 // Outgoing
 export interface ReadyNotification {
   type: 'vopReadyNotification';
@@ -108,7 +85,6 @@ export interface StateChangeNotification {
   sessionId: string;
   timeStamp: string;
   unitState: UnitState;
-  playerState: PlayerState;
   log?: LogEntry[];
 }
 
@@ -123,11 +99,6 @@ interface Response {
   id: string;
   status: 'VALUE_CHANGED';
   value: number;
-}
-
-interface PlayerState {
-  validPages: Record<string, string>;
-  currentPage: string;
 }
 
 interface LogEntry {

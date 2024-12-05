@@ -6,7 +6,7 @@ import { fromEvent } from 'rxjs';
 import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
 import { UnitViewComponent } from './unit-view.component';
-import { PageNavCommand, StartCommand, VeronaAPIService } from './verona-api.service';
+import { StartCommand, VeronaAPIService } from './verona-api.service';
 
 @Component({
   selector: 'speedtest-player',
@@ -74,14 +74,9 @@ export class AppComponent implements OnInit {
           if (this.activePageIndex >= this.unit!.questions.length) this.showOutroPage = true;
         }
 
-        VeronaAPIService.sendState(this.unit!.questions.length, this.activePageIndex, []);
+        VeronaAPIService.sendState([], this.activePageIndex);
       });
 
-    VeronaAPIService.pageNavCommand
-      .subscribe((message: PageNavCommand): void => {
-        this.activePageIndex = Number(message.target) - 1;
-        VeronaAPIService.sendState(this.unit!.questions.length, this.activePageIndex, []);
-      });
     VeronaAPIService.sendReady();
   }
 
@@ -92,16 +87,17 @@ export class AppComponent implements OnInit {
 
   sendResponse(answerIndex: number) {
     if (!this.unit?.questions) throw Error();
-    VeronaAPIService.sendState(this.unit.questions.length, this.activePageIndex + 1, [{
-      id: `speedtest_${this.activePageIndex}`,
+    VeronaAPIService.sendState([{
+      id: `value_${this.activePageIndex}`,
       status: 'VALUE_CHANGED',
       value: answerIndex
     }, {
-      id: `speedtest-time_${this.activePageIndex}`,
+      id: `time_${this.activePageIndex}`,
       status: 'VALUE_CHANGED',
       value: Date.now() - this.activePageStartTime
     }
-    ]);
+    ],
+    this.activePageIndex);
   }
 
   nextQuestion(): void {
