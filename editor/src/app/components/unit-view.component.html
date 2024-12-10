@@ -5,7 +5,7 @@
 <input type="file" hidden accept=".csv" #upload
        (change)="loadCSV($event)">
 
-<fieldset>
+<fieldset class="global-settings-fieldset">
   <legend>Globale Einstellungen</legend>
   Ausrichtung
   <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
@@ -92,7 +92,7 @@
         }
       </div>
 
-      <button mat-raised-button (click)="addAnswer(i)" [matTooltip]="'Antwort hinzu'" class="add-button">
+      <button mat-raised-button class="add-button" [matTooltip]="'Antwort hinzu'" (click)="addAnswer(questionIndex)">
         Neue Antwort
         <mat-icon>add</mat-icon>
       </button>
@@ -100,7 +100,7 @@
   </mat-expansion-panel>
 </mat-accordion>
 
-<button mat-raised-button (click)="addQuestion()" [matTooltip]="'Frage hinzu'" class="add-button">
+<button mat-raised-button class="add-button" [matTooltip]="'Frage hinzu'" (click)="addQuestion()">
   Neue Frage
   <mat-icon>add</mat-icon>
 </button>

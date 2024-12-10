@@ -8,17 +8,26 @@
   align-self: start;
 }
 
-fieldset {
+.global-settings-fieldset {
   align-self: start;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+.global-settings-fieldset .mat-button-toggle-group {
+  align-self: start;
+}
+
 .add-button {
   align-self: center;
   width: 40%;
   background-color: lightgray !important;
+}
+
+.expansion-panel-content .add-button {
+  width: 30%;
+  margin-top: 20px;
 }
 
 .mat-expansion-panel-header-title {
