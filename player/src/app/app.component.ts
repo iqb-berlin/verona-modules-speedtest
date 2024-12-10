@@ -6,7 +6,7 @@ import { fromEvent } from 'rxjs';
 import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
 import { UnitViewComponent } from './unit-view.component';
-import { StartCommand, VeronaAPIService } from './verona-api.service';
+import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
 @Component({
   selector: 'speedtest-player',
@@ -22,10 +22,10 @@ import { StartCommand, VeronaAPIService } from './verona-api.service';
            (change)="loadUnitFromFile($event.target)">
 
     <speedtest-player-unit-view *ngIf="unit && !showOutroPage"
-                                [question]="unit.questions[activePageIndex]"
+                                [question]="unit.questions[activeQuestionIndex]"
                                 [layout]="unit.layout"
                                 [buttonColor]="unit.buttonColor"
-                                (responseGiven)="sendResponse($event); gotoNextPage()">
+                                (responseGiven)="onResponse($event)">
     </speedtest-player-unit-view>
 
     <div *ngIf="showOutroPage" class="outro">
@@ -51,9 +51,11 @@ import { StartCommand, VeronaAPIService } from './verona-api.service';
 export class AppComponent implements OnInit {
   isStandalone = window === window.parent;
   unit: Unit | undefined;
-  activePageIndex: number = 0;
-  activePageStartTime: number = Date.now();
+  activeQuestionIndex: number = 0;
+  activeQuestionStartTime: number = Date.now();
   showOutroPage: boolean = false;
+  sumCorrect: number = 0;
+  sumWrong: number = 0;
 
   constructor() {
     fromEvent(window, 'message')
@@ -68,12 +70,15 @@ export class AppComponent implements OnInit {
         if (!message.unitDefinition) return;
         this.unit = JSON.parse(message.unitDefinition) as Unit;
 
-        if (message.unitState?.dataParts.lastSeenPageIndex) {
-          this.activePageIndex = Number(JSON.parse(message.unitState?.dataParts.lastSeenPageIndex).value) + 1;
-          if (this.activePageIndex >= this.unit!.questions.length) this.showOutroPage = true;
+        if (message.unitState?.dataParts) {
+          // Add 1 because the activeQuestionIndex has already been seen and answered
+          this.activeQuestionIndex = Number(JSON.parse(message.unitState?.dataParts.activeQuestionIndex).value) + 1;
+          this.sumCorrect = Number(JSON.parse(message.unitState?.dataParts.sums).value);
+          this.sumWrong = Number(JSON.parse(message.unitState?.dataParts.activeQuestionIndex).value);
+          if (this.activeQuestionIndex >= this.unit!.questions.length) this.showOutroPage = true;
         }
 
-        VeronaAPIService.sendState([], this.activePageIndex);
+        VeronaAPIService.sendState({});
       });
 
     VeronaAPIService.sendReady();
@@ -84,26 +89,68 @@ export class AppComponent implements OnInit {
     this.unit = JSON.parse(loadedUnit);
   }
 
-  sendResponse(answerIndex: number) {
-    if (!this.unit?.questions) throw Error();
-    VeronaAPIService.sendState([{
-      id: `value_${this.activePageIndex}`,
-      status: 'VALUE_CHANGED',
-      value: answerIndex
-    }, {
-      id: `time_${this.activePageIndex}`,
-      status: 'VALUE_CHANGED',
-      value: Date.now() - this.activePageStartTime
-    }
-    ],
-    this.activePageIndex);
+  onResponse(answerIndex: number) {
+    this.updateResults(answerIndex);
+    VeronaAPIService.sendState(this.createResponseData(answerIndex));
+    this.gotoNextQuestion();
   }
 
-  gotoNextPage(): void {
+  private updateResults(answerIndex: number): void {
+    if (this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== undefined) {
+      this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex === answerIndex ?
+        this.sumCorrect += 1 : this.sumWrong += 1;
+    }
+  }
+
+  private createResponseData(answerIndex: number, isCorrect?: boolean): Record<string, Response[]> {
+    let code;
+    if (isCorrect === undefined) {
+      code = undefined;
+    } else {
+      code = isCorrect ? 1 : 0;
+    }
+
+    return {
+      [`question_${this.activeQuestionIndex}`]: [{
+        id: 'value',
+        status: 'VALUE_CHANGED',
+        value: answerIndex,
+        subform: String(this.activeQuestionIndex),
+        code: code,
+        score: code
+      }, {
+        id: 'time',
+        status: 'VALUE_CHANGED',
+        value: Date.now() - this.activeQuestionStartTime,
+        subform: String(this.activeQuestionIndex)
+      }],
+      sums: [
+        {
+          id: 'correct',
+          status: 'VALUE_CHANGED',
+          value: this.sumCorrect,
+          subform: 'sums'
+        },
+        {
+          id: 'wrong',
+          status: 'VALUE_CHANGED',
+          value: this.sumWrong,
+          subform: 'sums'
+        }
+      ],
+      activeQuestionIndex: [{
+        id: 'activeQuestionIndex',
+        status: 'VALUE_CHANGED',
+        value: this.activeQuestionIndex
+      }]
+    };
+  }
+
+  private gotoNextQuestion(): void {
     if (!this.unit) throw Error();
-    if (this.unit.questions.length > this.activePageIndex + 1) {
-      this.activePageIndex += 1;
-      this.activePageStartTime = Date.now();
+    if (this.unit.questions.length > this.activeQuestionIndex + 1) {
+      this.activeQuestionIndex += 1;
+      this.activeQuestionStartTime = Date.now();
     } else {
       this.showOutroPage = true;
       VeronaAPIService.sendNavRequest();

@@ -35,7 +35,7 @@ export class VeronaAPIService {
     });
   }
 
-  static sendState(responseData: Response[], activePageIndex: number): void {
+  static sendState(responseData: Record<string, Response[]>): void {
     VeronaAPIService.sendMessage({
       type: 'vopStateChangedNotification',
       sessionId: VeronaAPIService.sessionID as string,
@@ -43,17 +43,17 @@ export class VeronaAPIService {
       unitState: {
         unitStateDataType: 'iqb-standard@1.0',
         presentationProgress: 'complete',
-        responseProgress: responseData.length > 0 ? 'complete' : 'none',
-        dataParts: responseData.length > 0 ? {
-          [`page_${activePageIndex}`]: JSON.stringify(responseData),
-          lastSeenPageIndex: JSON.stringify([{
-            id: 'lastSeenPageIndex',
-            status: 'VALUE_CHANGED',
-            value: activePageIndex.toString()
-          }])
-        } : {}
+        responseProgress: Object.keys(responseData).length > 0 ? 'complete' : 'none',
+        dataParts: VeronaAPIService.stringifyAllValues(responseData)
       }
     });
+  }
+
+  private static stringifyAllValues(responseData: Record<string, Response[]>): Record<string, string> {
+    return Object.entries(responseData).reduce((acc: Record<string, string>, [key, value]) => {
+      acc[key] = JSON.stringify(value);
+      return acc;
+    }, {});
   }
 
   static sendFocusChanged(isFocused: boolean): void {
@@ -96,10 +96,13 @@ interface UnitState {
   unitStateDataType: string;
 }
 
-interface Response {
+export interface Response {
   id: string;
   status: 'VALUE_CHANGED';
   value: number;
+  subform?: string;
+  code?: number;
+  score?: number;
 }
 
 interface LogEntry {
