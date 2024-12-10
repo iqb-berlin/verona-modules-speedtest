@@ -80,26 +80,19 @@ fieldset {
   width: 80%;
 }
 
-.inner {
-  display: flex;
-  flex-direction: row;
+.answer-list {
+  display: grid;
+  grid-template-columns: 150px 5fr 1fr;
+  justify-items: center;
+  align-items: center;
+  row-gap: 15px;
 }
 
-.inner .mat-mdc-form-field {
-  width: 90%;
+.answer-list .mat-mdc-form-field {
+  justify-self: stretch;
 }
 
-.inner button {
-  justify-self: end;
-}
-
-.answer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  width: 80%;
-}
-
-.mat-button-toggle-group {
-  align-self: start;
+.answer-list .mat-mdc-mini-fab {
+  justify-self: start;
+  margin-left: 20px;
 }

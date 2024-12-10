@@ -17,10 +17,10 @@
 </fieldset>
 
 <mat-accordion multi="true">
-  <mat-expansion-panel *ngFor="let question of unit.questions; let i = index" [expanded]="i == latestQuestionIndex">
+  <mat-expansion-panel *ngFor="let question of unit.questions; let questionIndex = index" [expanded]="questionIndex == latestQuestionIndex">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <h2>{{i+1}}: {{ question.text }}</h2>
+        <h2>{{questionIndex+1}}: {{ question.text }}</h2>
         <img *ngIf="question.imgSrc" [src]="question.imgSrc" [alt]="question.text">
       </mat-panel-title>
     </mat-expansion-panel-header>
@@ -40,7 +40,7 @@
             <input matInput #questionText [(ngModel)]="question.text" (change)="unitService.updateUnitDef()">
           </mat-form-field>
           <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
-                  (click)="deleteQuestion(i)">
+                  (click)="deleteQuestion(questionIndex)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -52,9 +52,9 @@
             </button>
             <input type="file" hidden accept="image/*"
                    #imageUpload id="button-image-upload"
-                   (change)="loadImage(i, $event.target)">
+                   (change)="loadImage(questionIndex, $event.target)">
             <button *ngIf="question.imgSrc" mat-icon-button [matTooltip]="'Bild entfernen'"
-                    (click)="removeImage(i);">
+                    (click)="removeImage(questionIndex);">
               <mat-icon>backspace</mat-icon>
             </button>
           </div>
@@ -65,18 +65,31 @@
       <div class="text-button-panel">
         <h3>Antworten</h3>
         <button mat-icon-button [matTooltip]="'Antworten für alle Fragen übernehmen'" [matTooltipPosition]="'above'"
-                (click)="setAnswersForAll(unit.questions[i].answers)">
+                (click)="setAnswersForAll(unit.questions[questionIndex].answers)">
           <mat-icon>copy_all</mat-icon>
         </button>
       </div>
-      <div *ngFor="let answer of question.answers; let j = index" class="inner answer">
-        <mat-form-field>
-          <mat-label>Antwort {{ j + 1 }}</mat-label>
-          <input matInput [value]="answer" (change)="changeAnswerText(i, j, $event.target)">
-        </mat-form-field>
-        <button mat-icon-button color="warn" [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(i, j)">
-          <mat-icon>delete</mat-icon>
-        </button>
+
+      <div class="answer-list">
+        <h4 [style]="'grid-row: 1 / 2; grid-column: 1 / 2'">richtige Antwort</h4>
+        <h4 [style]="'grid-row: 1 / 2; grid-column: 2 / 3'">Antworttext</h4>
+
+        @for (answer of question.answers; let answerIndex = $index; track answer) {
+          <mat-checkbox [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3" [style.grid-column]="'1 / 2'"
+                        [disabled]="unit.questions[questionIndex].correctAnswerIndex !== undefined &&
+                                    unit.questions[questionIndex].correctAnswerIndex !== answerIndex"
+                        (change)="setCorrectAnswer(questionIndex, answerIndex, $event.checked)">
+          </mat-checkbox>
+          <mat-form-field subscriptSizing="dynamic"
+                          [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3" [style.grid-column]="'2 / 3'">
+            <input matInput [value]="answer" (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
+          </mat-form-field>
+          <button mat-mini-fab color="warn"
+                  [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3" [style.grid-column]="'3 / 4'"
+                  [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
       </div>
 
       <button mat-raised-button (click)="addAnswer(i)" [matTooltip]="'Antwort hinzu'" class="add-button">

@@ -8,7 +8,10 @@ import {
 } from '@angular/material/expansion';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
+import {
+  MatButton, MatFabButton, MatIconButton, MatMiniFabButton
+} from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
@@ -37,7 +40,9 @@ import { UnitService } from '../services/unit.service';
     NgIf,
     MatIconButton,
     MatButtonToggleGroup,
-    MatButtonToggle
+    MatButtonToggle,
+    MatCheckbox,
+    MatMiniFabButton
   ],
   templateUrl: 'unit-view.component.html',
   styleUrls: ['./unit-view.component.css']
@@ -108,5 +113,13 @@ export class UnitViewComponent {
   setAnswersForAll(answers: string[]) {
     this.unit.questions = this.unit.questions.map(question => ({ ...question, answers: [...answers] }));
     this.unitService.updateUnitDef();
+  }
+
+  setCorrectAnswer(questionIndex: number, answerIndex: number, checked: boolean) {
+    if (checked) {
+      this.unit.questions[questionIndex].correctAnswerIndex = answerIndex;
+    } else {
+      this.unit.questions[questionIndex].correctAnswerIndex = undefined;
+    }
   }
 }
