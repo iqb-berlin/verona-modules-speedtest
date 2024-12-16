@@ -21,7 +21,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
     <input type="file" hidden accept=".json, .voud" #upload
            (change)="loadUnitFromFile($event.target)">
 
-    <speedtest-player-unit-view *ngIf="unit && !showOutroPage"
+    <speedtest-player-unit-view *ngIf="unit && unit.questions.length > 0 && !showOutroPage"
                                 [question]="unit.questions[activeQuestionIndex]"
                                 [layout]="unit.layout"
                                 [buttonColor]="unit.buttonColor"
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
         if (!message.unitDefinition) return;
         this.unit = JSON.parse(message.unitDefinition) as Unit;
 
-        if (message.unitState?.dataParts) {
+        if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
           // Add 1 because the activeQuestionIndex has already been seen and answered
           this.activeQuestionIndex = Number(JSON.parse(message.unitState?.dataParts.activeQuestionIndex).value) + 1;
           this.sumCorrect = Number(JSON.parse(message.unitState?.dataParts.sums).value);
