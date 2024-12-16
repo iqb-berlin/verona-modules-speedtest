@@ -76,6 +76,7 @@
 
         @for (answer of question.answers; let answerIndex = $index; track answer) {
           <mat-checkbox [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3" [style.grid-column]="'1 / 2'"
+                        [checked]="unit.questions[questionIndex].correctAnswerIndex === answerIndex"
                         [disabled]="unit.questions[questionIndex].correctAnswerIndex !== undefined &&
                                     unit.questions[questionIndex].correctAnswerIndex !== answerIndex"
                         (change)="setCorrectAnswer(questionIndex, answerIndex, $event.checked)">
