@@ -5,16 +5,28 @@
 <input type="file" hidden accept=".csv" #upload
        (change)="loadCSV($event)">
 
-<fieldset class="global-settings-fieldset">
-  <legend>Globale Einstellungen</legend>
-  Ausrichtung
-  <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
-    <mat-button-toggle value="column">Vertikal</mat-button-toggle>
-    <mat-button-toggle value="row">Horizontal</mat-button-toggle>
-  </mat-button-toggle-group>
-  Knopffarbe
-  <input matInput type="color" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
-</fieldset>
+<div [style]="'display: flex; flex-direction: row;'">
+  <fieldset class="global-settings-fieldset">
+    <legend>Globale Einstellungen</legend>
+    Ausrichtung
+    <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
+      <mat-button-toggle value="column">Vertikal</mat-button-toggle>
+      <mat-button-toggle value="row">Horizontal</mat-button-toggle>
+    </mat-button-toggle-group>
+    Knopffarbe
+    <input matInput type="color" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
+  </fieldset>
+  <fieldset [style.visibility]="missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
+    <legend>Warnung</legend>
+    <p>Antwortdefinition unvollständig. Es fehlen Antworten für mindestens folgende Fragen:</p>
+    <ul>
+      <li *ngFor="let questionIndex of missingCorrectAnswerIndeces | slice: 0 : 5"
+          [style.color]="'red'">
+        Frageindex: {{questionIndex + 1}}
+      </li>
+    </ul>
+  </fieldset>
+</div>
 
 <mat-accordion multi="true">
   <mat-expansion-panel *ngFor="let question of unit.questions; let questionIndex = index" [expanded]="questionIndex == latestQuestionIndex">

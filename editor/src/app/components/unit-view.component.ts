@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf, SlicePipe } from '@angular/common';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -42,7 +42,8 @@ import { UnitService } from '../services/unit.service';
     MatButtonToggleGroup,
     MatButtonToggle,
     MatCheckbox,
-    MatMiniFabButton
+    MatMiniFabButton,
+    SlicePipe
   ],
   templateUrl: 'unit-view.component.html',
   styleUrls: ['./unit-view.component.css']
@@ -50,6 +51,7 @@ import { UnitService } from '../services/unit.service';
 export class UnitViewComponent {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
+  missingCorrectAnswerIndeces: number[] = [];
 
   constructor(public unitService: UnitService) { }
 
@@ -60,11 +62,13 @@ export class UnitViewComponent {
     });
     this.latestQuestionIndex = this.unit.questions.length - 1;
     this.unitService.updateUnitDef();
+    this.calculateMissingCorrectAnswerIndeces();
   }
 
   deleteQuestion(index: number) {
     this.unit.questions.splice(index, 1);
     this.unitService.updateUnitDef();
+    this.calculateMissingCorrectAnswerIndeces();
   }
 
   addAnswer(questionIndex: number) {
@@ -81,6 +85,7 @@ export class UnitViewComponent {
   deleteAnswer(questionIndex: number, answerIndex: number) {
     this.unit.questions[questionIndex].answers.splice(answerIndex, 1);
     this.unitService.updateUnitDef();
+    this.calculateMissingCorrectAnswerIndeces();
   }
 
   async loadCSV(event: Event) {
@@ -121,5 +126,13 @@ export class UnitViewComponent {
     } else {
       this.unit.questions[questionIndex].correctAnswerIndex = undefined;
     }
+    this.calculateMissingCorrectAnswerIndeces();
+  }
+
+  /* Gets all the question indices with missing correct answers. */
+  calculateMissingCorrectAnswerIndeces(): void {
+    this.missingCorrectAnswerIndeces = this.unit.questions
+      .map((question, index) => (question.correctAnswerIndex === undefined ? index : -1))
+      .filter(index => index !== -1);
   }
 }
