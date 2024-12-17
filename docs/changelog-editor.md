@@ -1,5 +1,9 @@
 Editor
 ======
+## 2.0.0
+# Neue Funktionen
+- Zu jeder Frage kann die richtige Antwort gesetzt werden
+
 ## 1.0.0
 - Fehlermeldung bei neu angelegter Aufgabe im Studio behoben
 
