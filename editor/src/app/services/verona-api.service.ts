@@ -26,14 +26,14 @@ export class VeronaAPIService {
     });
   }
 
-  static sendChange(unit: Unit): void {
+  static sendChange(unit: Unit, variableInfo: VariableInfo[]): void {
     VeronaAPIService.sendMessage({
       type: 'voeDefinitionChangedNotification',
       sessionId: VeronaAPIService.sessionID as string,
       timeStamp: String(Date.now()),
       unitDefinition: JSON.stringify(unit),
       unitDefinitionType: 'speedtest-unit-definition@1.0.0',
-      variables: []
+      variables: variableInfo
     });
   }
 }

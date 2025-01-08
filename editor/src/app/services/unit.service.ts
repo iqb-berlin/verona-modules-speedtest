@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { VariableInfo } from '@iqb/responses';
 import packageInfo from 'packageInfo';
 import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
@@ -46,6 +47,60 @@ export class UnitService {
   }
 
   updateUnitDef() {
-    VeronaAPIService.sendChange(this.unit);
+    VeronaAPIService.sendChange(this.unit, this.getVariableInfo());
+  }
+
+  getVariableInfo(): VariableInfo[] {
+    const allQuestions: VariableInfo[] = this.unit.questions.map((q, i) => ({
+      id: `question_${i}`,
+      alias: `question_${i}`,
+      type: 'integer',
+      format: '',
+      multiple: false,
+      nullable: false,
+      values: q.answers
+        .map((option, j) => ({
+          value: j,
+          label: option
+        })),
+      valuePositionLabels: [],
+      valuesComplete: true
+    }));
+
+    return allQuestions.concat([
+      {
+        id: 'activeQuestionIndex',
+        alias: 'activeQuestionIndex',
+        type: 'no-value',
+        format: '',
+        multiple: false,
+        nullable: false,
+        values: [],
+        valuePositionLabels: [],
+        valuesComplete: true
+      },
+      {
+        id: 'total_correct',
+        alias: 'total_correct',
+        type: 'integer',
+        format: '',
+        multiple: false,
+        nullable: false,
+        values: [],
+        valuePositionLabels: [],
+        valuesComplete: true
+      },
+      {
+        id: 'total_wrong',
+        alias: 'total_wrong',
+        type: 'integer',
+        format: '',
+        multiple: false,
+        nullable: false,
+        values: [],
+        valuePositionLabels: [],
+        valuesComplete: true
+      }
+    ]);
   }
 }
