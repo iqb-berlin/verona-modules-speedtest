@@ -129,12 +129,12 @@ export class AppComponent implements OnInit {
       }],
       sums: [
         {
-          id: 'correct',
+          id: 'total_correct',
           status: 'VALUE_CHANGED',
           value: this.sumCorrect
         },
         {
-          id: 'wrong',
+          id: 'total_wrong',
           status: 'VALUE_CHANGED',
           value: this.sumWrong
         }
