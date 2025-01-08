@@ -91,7 +91,10 @@ export class AppComponent implements OnInit {
 
   onResponse(answerIndex: number) {
     this.updateResults(answerIndex);
-    VeronaAPIService.sendState(this.createResponseData(answerIndex));
+    const isCorrect = this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== undefined ?
+      this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex === answerIndex :
+      undefined;
+    VeronaAPIService.sendState(this.createResponseData(answerIndex, isCorrect));
     this.gotoNextQuestion();
   }
 
