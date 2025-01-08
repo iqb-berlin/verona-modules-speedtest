@@ -1,5 +1,13 @@
 Editor
 ======
+## 2.0.1
+# Neue Funktionen
+- Sendet Variablen-Informationen (nicht für "time")
+
+# Fehlerbehebungen
+- Sendet Änderungen der richtigen Antwort an das Hostsystem
+
+
 ## 2.0.0
 # Neue Funktionen
 - Zu jeder Frage kann die richtige Antwort gesetzt werden

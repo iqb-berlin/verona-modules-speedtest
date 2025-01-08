@@ -1,5 +1,10 @@
 Player
 ======
+## 2.0.1
+# Fehlerbehebungen
+- Auswertung von richtigen Antworten. Diese sind jetzt tatsächlich in den Antwortdaten enthalten.
+- Ungehöriges Attribut "subform" aus Antwortdaten der Summen entfernt
+
 ## 2.0.0
 # Neue Funktionen
 - Antworten enthalten zusätzlich die Summen der richtigen und falschen Antworten
