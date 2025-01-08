@@ -131,14 +131,12 @@ export class AppComponent implements OnInit {
         {
           id: 'correct',
           status: 'VALUE_CHANGED',
-          value: this.sumCorrect,
-          subform: 'sums'
+          value: this.sumCorrect
         },
         {
           id: 'wrong',
           status: 'VALUE_CHANGED',
-          value: this.sumWrong,
-          subform: 'sums'
+          value: this.sumWrong
         }
       ],
       activeQuestionIndex: [{
