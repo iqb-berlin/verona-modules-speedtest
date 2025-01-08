@@ -127,10 +127,11 @@ export class UnitViewComponent {
       this.unit.questions[questionIndex].correctAnswerIndex = undefined;
     }
     this.calculateMissingCorrectAnswerIndeces();
+    this.unitService.updateUnitDef();
   }
 
   /* Gets all the question indices with missing correct answers. */
-  calculateMissingCorrectAnswerIndeces(): void {
+  private calculateMissingCorrectAnswerIndeces(): void {
     this.missingCorrectAnswerIndeces = this.unit.questions
       .map((question, index) => (question.correctAnswerIndex === undefined ? index : -1))
       .filter(index => index !== -1);
