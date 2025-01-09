@@ -1,5 +1,8 @@
 Player
 ======
+## 2.0.2
+- Antwortdaten verwenden subform (hoffentlich) korrekt
+
 ## 2.0.1
 # Fehlerbehebungen
 - Auswertung von richtigen Antworten. Diese sind jetzt tatsächlich in den Antwortdaten enthalten.

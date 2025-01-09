@@ -1,5 +1,8 @@
 Editor
 ======
+## 2.0.2
+- Antwortdaten verwenden subform (hoffentlich) korrekt
+
 ## 2.0.1
 # Neue Funktionen
 - Sendet Variablen-Informationen (nicht für "time")
