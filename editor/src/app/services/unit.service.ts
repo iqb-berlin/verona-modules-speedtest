@@ -51,23 +51,29 @@ export class UnitService {
   }
 
   getVariableInfo(): VariableInfo[] {
-    const allQuestions: VariableInfo[] = this.unit.questions.map((q, i) => ({
-      id: `question_${i}`,
-      alias: `question_${i}`,
-      type: 'integer',
-      format: '',
-      multiple: false,
-      nullable: false,
-      values: q.answers
-        .map((option, j) => ({
-          value: j,
-          label: option
-        })),
-      valuePositionLabels: [],
-      valuesComplete: true
-    }));
-
-    return allQuestions.concat([
+    return [
+      {
+        id: 'value',
+        alias: 'value',
+        type: 'integer',
+        format: '',
+        multiple: false,
+        nullable: false,
+        values: [],
+        valuePositionLabels: [],
+        valuesComplete: true
+      },
+      {
+        id: 'time',
+        alias: 'time',
+        type: 'integer',
+        format: '',
+        multiple: false,
+        nullable: false,
+        values: [],
+        valuePositionLabels: [],
+        valuesComplete: true
+      },
       {
         id: 'activeQuestionIndex',
         alias: 'activeQuestionIndex',
@@ -101,6 +107,6 @@ export class UnitService {
         valuePositionLabels: [],
         valuesComplete: true
       }
-    ]);
+    ];
   }
 }

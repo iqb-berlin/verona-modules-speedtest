@@ -115,8 +115,8 @@ export class AppComponent implements OnInit {
 
     return {
       [`question_${this.activeQuestionIndex}`]: [{
-        id: `question_${this.activeQuestionIndex}`,
-        status: 'VALUE_CHANGED',
+        id: 'value',
+        status: 'CODING_COMPLETE',
         value: answerIndex,
         subform: String(this.activeQuestionIndex),
         code: code,

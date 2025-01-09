@@ -98,7 +98,7 @@ interface UnitState {
 
 export interface Response {
   id: string;
-  status: 'VALUE_CHANGED';
+  status: 'VALUE_CHANGED' | 'CODING_COMPLETE';
   value: number;
   subform?: string;
   code?: number;
