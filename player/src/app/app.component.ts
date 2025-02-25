@@ -98,7 +98,8 @@ export class AppComponent implements OnInit {
   }
 
   private updateResults(answerIndex: number): void {
-    if (this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== undefined) {
+    if (this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== undefined &&
+        this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== null) {
       this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex === answerIndex ?
         this.sumCorrect += 1 : this.sumWrong += 1;
     }
