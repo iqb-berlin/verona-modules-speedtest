@@ -88,20 +88,3 @@
 .question mat-form-field {
   width: 80%;
 }
-
-.answer-list {
-  display: grid;
-  grid-template-columns: 150px 5fr 1fr;
-  justify-items: center;
-  align-items: center;
-  row-gap: 15px;
-}
-
-.answer-list .mat-mdc-form-field {
-  justify-self: stretch;
-}
-
-.answer-list .mat-mdc-mini-fab {
-  justify-self: start;
-  margin-left: 20px;
-}
