@@ -6,7 +6,6 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltip } from '@angular/material/tooltip';
-import { NgIf } from '@angular/common';
 import { FileService } from 'common/services/file.service';
 
 @Component({
@@ -22,54 +21,60 @@ import { FileService } from 'common/services/file.service';
     FormsModule,
     MatTooltip,
     MatMiniFabButton,
-    NgIf,
     MatIconButton
   ],
   template: `
-      @for (answer of answers; let answerIndex = $index; track answer) {
-          <div class="text-answer-list">
-              @if (unitService.unit.answerType === 'text') {
-                  <mat-form-field>
-                      <mat-label>Frage</mat-label>
-                      <input matInput [value]="answer"
-                             (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
-                  </mat-form-field>
-              }
-              @if (unitService.unit.answerType === 'image') {
-                  @if (answer) {
-                    <img [src]="answer">
-                  } @else {
-                    kein Bild definiert
+      @if (unitService.unit.answerType !== 'number') {
+          @for (answer of answers; let answerIndex = $index; track answer) {
+              <div class="text-answer-list">
+                  @if (unitService.unit.answerType === 'text') {
+                      <mat-form-field>
+                          <mat-label>Frage</mat-label>
+                          <input matInput [value]="answer"
+                                 (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
+                      </mat-form-field>
                   }
-                  <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
-                      <mat-icon>image</mat-icon>
+                  @if (unitService.unit.answerType === 'image') {
+                      @if (answer) {
+                          <img [src]="answer">
+                      } @else {
+                          kein Bild definiert
+                      }
+                      <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
+                          <mat-icon>image</mat-icon>
+                      </button>
+                      <input type="file" hidden accept="image/*" #imageUpload
+                             (change)="loadAnswerImage(questionIndex, answerIndex, $event.target)">
+                      <button mat-icon-button [matTooltip]="'Bild entfernen'"
+                              [disabled]="!answer"
+                              (click)="removeAnswerImage(questionIndex, answerIndex);">
+                          <mat-icon>backspace</mat-icon>
+                      </button>
+                  }
+                  <button mat-mini-fab color="warn"
+                          [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
+                      <mat-icon>delete</mat-icon>
                   </button>
-                  <input type="file" hidden accept="image/*" #imageUpload
-                         (change)="loadAnswerImage(questionIndex, answerIndex, $event.target)">
-                  <button mat-icon-button [matTooltip]="'Bild entfernen'"
-                          [disabled]="!answer"
-                          (click)="removeAnswerImage(questionIndex, answerIndex);">
-                      <mat-icon>backspace</mat-icon>
-                  </button>
-              }
-              <button mat-mini-fab color="warn"
-                      [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
-                  <mat-icon>delete</mat-icon>
-              </button>
-          </div>
-      }
+              </div>
+          }
 
-      <button mat-raised-button class="add-button" [matTooltip]="'Antwort hinzu'"
-              (click)="addAnswer()">
-          Neue Antwort
-          <mat-icon>add</mat-icon>
-      </button>
+          <button mat-raised-button class="add-button" [matTooltip]="'Antwort hinzu'"
+                  (click)="addAnswer()">
+              Neue Antwort
+              <mat-icon>add</mat-icon>
+          </button>
+      } @else {
+          <mat-form-field>
+              <mat-label>Antwortlaenge</mat-label>
+              <input matInput type="number" max="5"
+                     [(ngModel)]="unitService.unit.questions[questionIndex].answerLength">
+          </mat-form-field>
+      }
   `,
   styles: `
     .text-answer-list {
       display: flex; flex-direction: row;
     }
-
   `
 })
 export class AnswerPanelComponent {
@@ -86,8 +91,6 @@ export class AnswerPanelComponent {
       default: answerText = `Antworttext ${this.answers.length + 1}`; break;
     }
     this.unitService.addAnswer(this.questionIndex, answerText);
-    // this.unit.questions[questionIndex].answers.push(answerText);
-    // this.unitService.updateUnitDef();
   }
 
   deleteAnswer(questionIndex: number, answerIndex: number) {
@@ -119,10 +122,4 @@ export class AnswerPanelComponent {
     // this.calculateMissingCorrectAnswerIndeces();
     // this.unitService.updateUnitDef();
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  // isImage(str: string): boolean {
-  //   console.log('isImage');
-  //   return str.startsWith('data:image');
-  // }
 }

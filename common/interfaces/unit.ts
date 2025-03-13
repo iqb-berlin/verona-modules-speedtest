@@ -6,20 +6,13 @@ export interface Unit {
   buttonColor?: string;
   instructionText?: string;
   questionType: 'text' | 'image' | 'audio'; // image may also have a subtext
-  answerType: 'text' | 'image';
+  answerType: 'text' | 'image' | 'number';
 }
 
 export interface Question {
   text?: string;
   src?: string;
-  // imgSrc?: string;
-  // audioSrc?: string;
   answers: string[];
-  // answers: Answer[];
   correctAnswerIndex?: number;
+  answerLength?: number;
 }
-
-// export interface Answer {
-//   type: 'text' | 'image';
-//   value: string;
-// }

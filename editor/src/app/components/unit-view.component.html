@@ -23,6 +23,7 @@
             <mat-select required [(ngModel)]="unit.answerType">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
+                <mat-option value="number">Zahl</mat-option>
             </mat-select>
         </mat-form-field>
 
@@ -31,13 +32,18 @@
             <input matInput [(ngModel)]="unit.instructionText">
         </mat-form-field>
 
-        Ausrichtung
-        <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
-            <mat-button-toggle value="column">Vertikal</mat-button-toggle>
-            <mat-button-toggle value="row">Horizontal</mat-button-toggle>
-        </mat-button-toggle-group>
-        Knopffarbe
-        <input matInput type="color" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
+        <label>
+            Ausrichtung
+            <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
+                <mat-button-toggle value="column">Vertikal</mat-button-toggle>
+                <mat-button-toggle value="row">Horizontal</mat-button-toggle>
+            </mat-button-toggle-group>
+        </label>
+
+        <label>
+            Knopffarbe
+            <input matInput type="color" [disabled]="unit.answerType !== 'text'" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
+        </label>
     </fieldset>
     <fieldset [style.visibility]="missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
         <legend>Warnung</legend>

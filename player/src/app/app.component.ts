@@ -25,6 +25,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
                                 [question]="unit.questions[activeQuestionIndex]"
                                 [layout]="unit.layout"
                                 [buttonColor]="unit.buttonColor"
+                                [unit]="unit"
                                 (responseGiven)="onResponse($event)">
     </speedtest-player-unit-view>
 
