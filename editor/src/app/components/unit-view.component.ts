@@ -58,6 +58,7 @@ export class UnitViewComponent {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
   missingCorrectAnswerIndeces: number[] = [];
+  // questionSrcType: '''audio';
 
   constructor(public unitService: UnitService) { }
 
@@ -84,18 +85,18 @@ export class UnitViewComponent {
     // this.unitService.updateUnitDef();
   }
 
-  async loadQuestionImage(questionIndex: number, eventTarget: EventTarget | null): Promise<void> {
+  async loadQuestionSrc(questionIndex: number, eventTarget: EventTarget | null): Promise<void> {
     this.unit.questions[questionIndex].src =
       await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File, true);
     this.unitService.updateUnitDef();
   }
 
-  removeQuestionImage(i: number) {
+  removeQuestionSrc(i: number) {
     this.unit.questions[i].src = undefined;
     this.unitService.updateUnitDef();
   }
 
-  setQuestionTextForAll(text: string) {
+  setQuestionTextForAll(text?: string) {
     this.unit.questions = this.unit.questions.map(question => ({ ...question, text: text }));
     this.unitService.updateUnitDef();
   }
@@ -111,4 +112,10 @@ export class UnitViewComponent {
       .map((question, index) => (question.correctAnswerIndex === undefined ? index : -1))
       .filter(index => index !== -1);
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  // isAudio(str: string): boolean {
+  //   console.log('isAudio');
+  //   return str.startsWith('data:audio');
+  // }
 }

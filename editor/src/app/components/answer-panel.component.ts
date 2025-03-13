@@ -7,6 +7,7 @@ import { MatInput } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltip } from '@angular/material/tooltip';
 import { NgIf } from '@angular/common';
+import { FileService } from 'common/services/file.service';
 
 @Component({
   selector: 'speedtest-answer-panel',
@@ -26,37 +27,36 @@ import { NgIf } from '@angular/common';
   ],
   template: `
       @for (answer of answers; let answerIndex = $index; track answer) {
-          @if (unitService.unit.answerType === 'text') {
-            <div class="text-answer-list">
-                <mat-form-field>
-                    <mat-label>Frage</mat-label>
-                    <input matInput [value]="answer"
-                           (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
-                </mat-form-field>
-                <button mat-mini-fab color="warn"
-                        [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
-          }
-          @if (unitService.unit.answerType === 'image') {
-            <div class="text-answer-list">
-                <img *ngIf="answer" [src]="answer">
-                <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
-                    <mat-icon>image</mat-icon>
-                </button>
-                <input type="file" hidden accept="image/*" #imageUpload
-                       (change)="loadAnswerImage(questionIndex, $event.target)">
-                <button *ngIf="answer" mat-icon-button [matTooltip]="'Bild entfernen'"
-                        (click)="removeAnswerImage(questionIndex);">
-                    <mat-icon>backspace</mat-icon>
-                </button>
-                <button mat-mini-fab color="warn"
-                        [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
-          }
+          <div class="text-answer-list">
+              @if (unitService.unit.answerType === 'text') {
+                  <mat-form-field>
+                      <mat-label>Frage</mat-label>
+                      <input matInput [value]="answer"
+                             (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
+                  </mat-form-field>
+              }
+              @if (unitService.unit.answerType === 'image') {
+                  @if (answer) {
+                    <img [src]="answer">
+                  } @else {
+                    kein Bild definiert
+                  }
+                  <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
+                      <mat-icon>image</mat-icon>
+                  </button>
+                  <input type="file" hidden accept="image/*" #imageUpload
+                         (change)="loadAnswerImage(questionIndex, answerIndex, $event.target)">
+                  <button mat-icon-button [matTooltip]="'Bild entfernen'"
+                          [disabled]="!answer"
+                          (click)="removeAnswerImage(questionIndex, answerIndex);">
+                      <mat-icon>backspace</mat-icon>
+                  </button>
+              }
+              <button mat-mini-fab color="warn"
+                      [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
+                  <mat-icon>delete</mat-icon>
+              </button>
+          </div>
       }
 
       <button mat-raised-button class="add-button" [matTooltip]="'Antwort hinzu'"
@@ -78,10 +78,8 @@ export class AnswerPanelComponent {
 
   constructor(public unitService: UnitService) { }
 
-  // addAnswer(questionIndex: number) {
   addAnswer() {
     let answerText: string;
-    // switch (this.unit.questions[questionIndex].answers.length) {
     switch (this.answers.length) {
       case 0: answerText = 'richtig'; break;
       case 1: answerText = 'falsch'; break;
@@ -101,6 +99,17 @@ export class AnswerPanelComponent {
     this.unitService.updateUnitDef();
   }
 
+  async loadAnswerImage(questionIndex: number, answerIndex: number, eventTarget: EventTarget | null): Promise<void> {
+    this.unitService.unit.questions[questionIndex].answers[answerIndex] =
+      await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File, true);
+    this.unitService.updateUnitDef();
+  }
+
+  removeAnswerImage(questionIndex: number, answerIndex: number) {
+    this.unitService.unit.questions[questionIndex].answers[answerIndex] = '';
+    this.unitService.updateUnitDef();
+  }
+
   setCorrectAnswer(questionIndex: number, answerIndex: number, checked: boolean) {
     // if (checked) {
     //   this.unit.questions[questionIndex].correctAnswerIndex = answerIndex;
@@ -110,4 +119,10 @@ export class AnswerPanelComponent {
     // this.calculateMissingCorrectAnswerIndeces();
     // this.unitService.updateUnitDef();
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  // isImage(str: string): boolean {
+  //   console.log('isImage');
+  //   return str.startsWith('data:image');
+  // }
 }

@@ -19,6 +19,14 @@
         </mat-form-field>
 
         <mat-form-field>
+            <mat-label>Antworttyp</mat-label>
+            <mat-select required [(ngModel)]="unit.answerType">
+                <mat-option value="text">Text</mat-option>
+                <mat-option value="image">Bild</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
             <mat-label>Instruktionstext</mat-label>
             <input matInput [(ngModel)]="unit.instructionText">
         </mat-form-field>
@@ -49,7 +57,6 @@
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <h2>{{ questionIndex + 1 }}: {{ question.text }}</h2>
-<!--                <img *ngIf="question.imgSrc" [src]="question.imgSrc" [alt]="question.text">-->
                 <img *ngIf="unit.questionType === 'image'" [src]="question.src" [alt]="question.text">
                 <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
                         (click)="deleteQuestion(questionIndex)">
@@ -64,7 +71,7 @@
                     <h4>Text</h4>
                     <button mat-icon-button [matTooltip]="'Text für alle Fragen übernehmen'"
                             [matTooltipPosition]="'above'"
-                            (click)="setQuestionTextForAll(questionText.value)">
+                            (click)="setQuestionTextForAll(question.text)">
                         <mat-icon>copy_all</mat-icon>
                     </button>
                 </div>
@@ -75,24 +82,36 @@
                                (change)="unitService.updateUnitDef()">
                     </mat-form-field>
                 </div>
-                <ng-container *ngIf="unit.questionType === 'image'">
+                @if (unit.questionType === 'image') {
                     <h4>Bild</h4>
                     <div class="image-panel">
                         <div class="image-panel-buttons">
                             <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
                                 <mat-icon>image</mat-icon>
                             </button>
-                            <input type="file" hidden accept="image/*"
-                                   #imageUpload id="button-image-upload"
-                                   (change)="loadQuestionImage(questionIndex, $event.target)">
+                            <input type="file" hidden accept="image/*" #imageUpload
+                                   (change)="loadQuestionSrc(questionIndex, $event.target)">
                             <button *ngIf="question.src" mat-icon-button [matTooltip]="'Bild entfernen'"
-                                    (click)="removeQuestionImage(questionIndex);">
+                                    (click)="removeQuestionSrc(questionIndex);">
                                 <mat-icon>backspace</mat-icon>
                             </button>
                         </div>
                         <img *ngIf="question.src" [src]="question.src" [alt]="question.text">
                     </div>
-                </ng-container>
+                }
+                @if (unit.questionType === 'audio') {
+                    <h4>Audio</h4>
+                    <audio *ngIf="question.src" controls [src]=question.src></audio>
+                    <button mat-icon-button [matTooltip]="'Audio hinzufügen/ändern'" (click)="audioUpload.click();">
+                        <mat-icon>volume_up</mat-icon>
+                    </button>
+                    <input type="file" hidden accept="audio/*" #audioUpload
+                           (change)="loadQuestionSrc(questionIndex, $event.target)">
+                    <button *ngIf="question.src" mat-icon-button [matTooltip]="'Audio entfernen'"
+                            (click)="removeQuestionSrc(questionIndex);">
+                        <mat-icon>backspace</mat-icon>
+                    </button>
+                }
             </div>
 
             <div class="text-button-panel">

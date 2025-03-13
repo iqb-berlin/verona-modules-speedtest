@@ -49,6 +49,7 @@ export class UnitService {
   // }
 
   updateUnitDef() {
+    // TODO remove unused fields
     VeronaAPIService.sendChange(this.unit, this.getVariableInfo());
   }
 
