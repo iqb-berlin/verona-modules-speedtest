@@ -67,7 +67,8 @@ import { FileService } from 'common/services/file.service';
           <mat-form-field>
               <mat-label>Antwortlänge</mat-label>
               <input matInput type="number" max="5" required
-                     [(ngModel)]="unitService.unit.questions[questionIndex].answerLength">
+                     [(ngModel)]="unitService.unit.questions[questionIndex].answerLength"
+                     (ngModelChange)="unitService.updateUnitDef()">
           </mat-form-field>
       }
   `,

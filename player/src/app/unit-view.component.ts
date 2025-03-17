@@ -133,7 +133,13 @@ export class UnitViewComponent implements OnInit {
   setAnswer(answerIndex: number) {
     this.responseGiven.emit(answerIndex);
     setTimeout(() => {
-      if (this.unit.answerType === 'number') this.numberAnswer = Array(this.question.answerLength).fill(undefined);
+      this.resetState();
     });
+  }
+
+  resetState(): void {
+    if (this.unit.answerType === 'number') this.numberAnswer = Array(this.question.answerLength).fill(undefined);
+    this.activeNumberIndex = 0;
+    this.isAudioActive = false;
   }
 }

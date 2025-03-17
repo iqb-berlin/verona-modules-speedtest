@@ -8,10 +8,9 @@
 <div [style]="'display: flex; flex-direction: row;'">
     <fieldset class="global-settings-fieldset">
         <legend>Globale Einstellungen</legend>
-
         <mat-form-field>
             <mat-label>Stimulustyp</mat-label>
-            <mat-select required [(ngModel)]="unit.questionType">
+            <mat-select required [(ngModel)]="unit.questionType" (ngModelChange)="unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="audio">Audio</mat-option>
@@ -20,7 +19,7 @@
 
         <mat-form-field>
             <mat-label>Antworttyp</mat-label>
-            <mat-select required [(ngModel)]="unit.answerType">
+            <mat-select required [(ngModel)]="unit.answerType" (ngModelChange)="unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="number">Zahl</mat-option>
@@ -29,12 +28,12 @@
 
         <mat-form-field>
             <mat-label>Instruktionstext</mat-label>
-            <input matInput [(ngModel)]="unit.instructionText">
+            <input matInput [(ngModel)]="unit.instructionText" (ngModelChange)="unitService.updateUnitDef()">
         </mat-form-field>
 
         <label>
             Ausrichtung
-            <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
+            <mat-button-toggle-group [(ngModel)]="unit.layout" (ngModelChange)="unitService.updateUnitDef()">
                 <mat-button-toggle value="column">Vertikal</mat-button-toggle>
                 <mat-button-toggle value="row">Horizontal</mat-button-toggle>
             </mat-button-toggle-group>
@@ -42,7 +41,8 @@
 
         <label>
             Knopffarbe
-            <input matInput type="color" [disabled]="unit.answerType !== 'text'" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
+            <input matInput type="color" [disabled]="unit.answerType !== 'text'" [(ngModel)]="unit.buttonColor"
+                   (change)="unitService.updateUnitDef()">
         </label>
     </fieldset>
     <fieldset [style.visibility]="missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
