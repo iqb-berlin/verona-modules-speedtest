@@ -1,119 +1,169 @@
 <button mat-raised-button class="csv-import-button" (click)="upload.click()">
-  CSV Import
-  <mat-icon>file_upload</mat-icon>
+    CSV Import
+    <mat-icon>file_upload</mat-icon>
 </button>
 <input type="file" hidden accept=".csv" #upload
        (change)="loadCSV($event)">
 
 <div [style]="'display: flex; flex-direction: row;'">
-  <fieldset class="global-settings-fieldset">
-    <legend>Globale Einstellungen</legend>
-    Ausrichtung
-    <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
-      <mat-button-toggle value="column">Vertikal</mat-button-toggle>
-      <mat-button-toggle value="row">Horizontal</mat-button-toggle>
-    </mat-button-toggle-group>
-    Knopffarbe
-    <input matInput type="color" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
-  </fieldset>
-  <fieldset [style.visibility]="missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
-    <legend>Warnung</legend>
-    <p>Antwortdefinition unvollständig. Es fehlen Antworten für mindestens folgende Fragen:</p>
-    <ul>
-      <li *ngFor="let questionIndex of missingCorrectAnswerIndeces | slice: 0 : 5"
-          [style.color]="'red'">
-        Frageindex: {{questionIndex + 1}}
-      </li>
-    </ul>
-  </fieldset>
+    <fieldset class="global-settings-fieldset">
+        <legend>Globale Einstellungen</legend>
+
+        <mat-form-field>
+            <mat-label>Stimulustyp</mat-label>
+            <mat-select required [(ngModel)]="unit.questionType">
+                <mat-option value="text">Text</mat-option>
+                <mat-option value="image">Bild</mat-option>
+                <mat-option value="audio">Audio</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Antworttyp</mat-label>
+            <mat-select required [(ngModel)]="unit.answerType">
+                <mat-option value="text">Text</mat-option>
+                <mat-option value="image">Bild</mat-option>
+                <mat-option value="number">Zahl</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Instruktionstext</mat-label>
+            <input matInput [(ngModel)]="unit.instructionText">
+        </mat-form-field>
+
+        <label>
+            Ausrichtung
+            <mat-button-toggle-group [(ngModel)]="unit.layout" (change)="unitService.updateUnitDef()">
+                <mat-button-toggle value="column">Vertikal</mat-button-toggle>
+                <mat-button-toggle value="row">Horizontal</mat-button-toggle>
+            </mat-button-toggle-group>
+        </label>
+
+        <label>
+            Knopffarbe
+            <input matInput type="color" [disabled]="unit.answerType !== 'text'" [(ngModel)]="unit.buttonColor" (change)="unitService.updateUnitDef()">
+        </label>
+    </fieldset>
+    <fieldset [style.visibility]="missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
+        <legend>Warnung</legend>
+        <p>Antwortdefinition unvollständig. Es fehlen Antworten für mindestens folgende Fragen:</p>
+        <ul>
+            <li *ngFor="let questionIndex of missingCorrectAnswerIndeces | slice: 0 : 5"
+                [style.color]="'red'">
+                Frageindex: {{ questionIndex + 1 }}
+            </li>
+        </ul>
+    </fieldset>
 </div>
 
 <mat-accordion multi="true">
-  <mat-expansion-panel *ngFor="let question of unit.questions; let questionIndex = index" [expanded]="questionIndex == latestQuestionIndex">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h2>{{questionIndex+1}}: {{ question.text }}</h2>
-        <img *ngIf="question.imgSrc" [src]="question.imgSrc" [alt]="question.text">
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+    <mat-expansion-panel *ngFor="let question of unit.questions; let questionIndex = index"
+                         [expanded]="questionIndex == latestQuestionIndex">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <h2>{{ questionIndex + 1 }}: {{ question.text }}</h2>
+                <img *ngIf="unit.questionType === 'image'" [src]="question.src" [alt]="question.text">
+                <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
+                        (click)="deleteQuestion(questionIndex)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <div class="expansion-panel-content">
-      <div class="question">
-        <div class="text-button-panel">
-          <h4>Text</h4>
-          <button mat-icon-button [matTooltip]="'Text für alle Fragen übernehmen'" [matTooltipPosition]="'above'"
-                  (click)="setQuestionTextForAll(questionText.value)">
-            <mat-icon>copy_all</mat-icon>
-          </button>
+        <div class="expansion-panel-content">
+            <div class="question">
+                <div class="text-button-panel">
+                    <h4>Text</h4>
+                    <button mat-icon-button [matTooltip]="'Text für alle Fragen übernehmen'"
+                            [matTooltipPosition]="'above'"
+                            (click)="setQuestionTextForAll(question.text)">
+                        <mat-icon>copy_all</mat-icon>
+                    </button>
+                </div>
+                <div class="question-content">
+                    <mat-form-field>
+                        <mat-label>Frage</mat-label>
+                        <input matInput #questionText [(ngModel)]="question.text"
+                               (change)="unitService.updateUnitDef()">
+                    </mat-form-field>
+                </div>
+                @if (unit.questionType === 'image') {
+                    <h4>Bild</h4>
+                    <div class="image-panel">
+                        <div class="image-panel-buttons">
+                            <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
+                                <mat-icon>image</mat-icon>
+                            </button>
+                            <input type="file" hidden accept="image/*" #imageUpload
+                                   (change)="loadQuestionSrc(questionIndex, $event.target)">
+                            <button *ngIf="question.src" mat-icon-button [matTooltip]="'Bild entfernen'"
+                                    (click)="removeQuestionSrc(questionIndex);">
+                                <mat-icon>backspace</mat-icon>
+                            </button>
+                        </div>
+                        <img *ngIf="question.src" [src]="question.src" [alt]="question.text">
+                    </div>
+                }
+                @if (unit.questionType === 'audio') {
+                    <h4>Audio</h4>
+                    <audio *ngIf="question.src" controls [src]=question.src></audio>
+                    <button mat-icon-button [matTooltip]="'Audio hinzufügen/ändern'" (click)="audioUpload.click();">
+                        <mat-icon>volume_up</mat-icon>
+                    </button>
+                    <input type="file" hidden accept="audio/*" #audioUpload
+                           (change)="loadQuestionSrc(questionIndex, $event.target)">
+                    <button *ngIf="question.src" mat-icon-button [matTooltip]="'Audio entfernen'"
+                            (click)="removeQuestionSrc(questionIndex);">
+                        <mat-icon>backspace</mat-icon>
+                    </button>
+                }
+            </div>
+
+            <div class="text-button-panel">
+                <h3>Antworten</h3>
+                <button mat-icon-button [matTooltip]="'Antworten für alle Fragen übernehmen'"
+                        [matTooltipPosition]="'above'"
+                        (click)="setAnswersForAll(unit.questions[questionIndex].answers)">
+                    <mat-icon>copy_all</mat-icon>
+                </button>
+            </div>
+
+            <speedtest-answer-panel [answers]="unit.questions[questionIndex].answers" [questionIndex]="questionIndex">
+            </speedtest-answer-panel>
+
+<!--            <div class="answer-list">-->
+<!--&lt;!&ndash;                <h4 [style]="'grid-row: 1 / 2; grid-column: 1 / 2'">richtige Antwort</h4>&ndash;&gt;-->
+<!--&lt;!&ndash;                <h4 [style]="'grid-row: 1 / 2; grid-column: 2 / 3'">Antworttext</h4>&ndash;&gt;-->
+
+<!--                @for (answer of question.answers; let answerIndex = $index; track answer) {-->
+<!--                    <speedtest-answer-panel [answer]="answer"></speedtest-answer-panel>-->
+<!--                }-->
+<!--            </div>-->
+<!--                    <mat-checkbox [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3"-->
+<!--                                  [style.grid-column]="'1 / 2'"-->
+<!--                                  [checked]="unit.questions[questionIndex].correctAnswerIndex === answerIndex"-->
+<!--                                  [disabled]="unit.questions[questionIndex].correctAnswerIndex !== undefined &&-->
+<!--                                    unit.questions[questionIndex].correctAnswerIndex !== answerIndex"-->
+<!--                                  (change)="setCorrectAnswer(questionIndex, answerIndex, $event.checked)">-->
+<!--                    </mat-checkbox>-->
+<!--                    <mat-form-field subscriptSizing="dynamic"-->
+<!--                                    [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3"-->
+<!--                                    [style.grid-column]="'2 / 3'">-->
+<!--                        <input matInput [value]="answer"-->
+<!--                               (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">-->
+<!--                    </mat-form-field>-->
+<!--                    <button mat-mini-fab color="warn"-->
+<!--                            [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3"-->
+<!--                            [style.grid-column]="'3 / 4'"-->
+<!--                            [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">-->
+<!--                        <mat-icon>delete</mat-icon>-->
+<!--                    </button>-->
         </div>
-        <div class="question-content">
-          <mat-form-field>
-            <mat-label>Frage</mat-label>
-            <input matInput #questionText [(ngModel)]="question.text" (change)="unitService.updateUnitDef()">
-          </mat-form-field>
-          <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
-                  (click)="deleteQuestion(questionIndex)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-        <h4>Bild</h4>
-        <div class="image-panel">
-          <div class="image-panel-buttons">
-            <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
-              <mat-icon>image</mat-icon>
-            </button>
-            <input type="file" hidden accept="image/*"
-                   #imageUpload id="button-image-upload"
-                   (change)="loadImage(questionIndex, $event.target)">
-            <button *ngIf="question.imgSrc" mat-icon-button [matTooltip]="'Bild entfernen'"
-                    (click)="removeImage(questionIndex);">
-              <mat-icon>backspace</mat-icon>
-            </button>
-          </div>
-          <img *ngIf="question.imgSrc" [src]="question.imgSrc" [alt]="question.text">
-        </div>
-      </div>
-
-      <div class="text-button-panel">
-        <h3>Antworten</h3>
-        <button mat-icon-button [matTooltip]="'Antworten für alle Fragen übernehmen'" [matTooltipPosition]="'above'"
-                (click)="setAnswersForAll(unit.questions[questionIndex].answers)">
-          <mat-icon>copy_all</mat-icon>
-        </button>
-      </div>
-
-      <div class="answer-list">
-        <h4 [style]="'grid-row: 1 / 2; grid-column: 1 / 2'">richtige Antwort</h4>
-        <h4 [style]="'grid-row: 1 / 2; grid-column: 2 / 3'">Antworttext</h4>
-
-        @for (answer of question.answers; let answerIndex = $index; track answer) {
-          <mat-checkbox [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3" [style.grid-column]="'1 / 2'"
-                        [checked]="unit.questions[questionIndex].correctAnswerIndex === answerIndex"
-                        [disabled]="unit.questions[questionIndex].correctAnswerIndex !== undefined &&
-                                    unit.questions[questionIndex].correctAnswerIndex !== answerIndex"
-                        (change)="setCorrectAnswer(questionIndex, answerIndex, $event.checked)">
-          </mat-checkbox>
-          <mat-form-field subscriptSizing="dynamic"
-                          [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3" [style.grid-column]="'2 / 3'">
-            <input matInput [value]="answer" (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
-          </mat-form-field>
-          <button mat-mini-fab color="warn"
-                  [style.grid-row-start]="answerIndex + 2" [style.grid-row-end]="answerIndex + 3" [style.grid-column]="'3 / 4'"
-                  [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        }
-      </div>
-
-      <button mat-raised-button class="add-button" [matTooltip]="'Antwort hinzu'" (click)="addAnswer(questionIndex)">
-        Neue Antwort
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
-  </mat-expansion-panel>
+    </mat-expansion-panel>
 </mat-accordion>
 
 <button mat-raised-button class="add-button" [matTooltip]="'Frage hinzu'" (click)="addQuestion()">
-  Neue Frage
-  <mat-icon>add</mat-icon>
+    Neue Frage
+    <mat-icon>add</mat-icon>
 </button>

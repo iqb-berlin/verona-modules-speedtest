@@ -14,11 +14,14 @@ import {
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatSelect } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import { UnitService } from '../services/unit.service';
+import { AnswerPanelComponent } from './answer-panel.component';
 
 @Component({
   selector: 'speedtest-unit-view',
@@ -43,7 +46,10 @@ import { UnitService } from '../services/unit.service';
     MatButtonToggle,
     MatCheckbox,
     MatMiniFabButton,
-    SlicePipe
+    SlicePipe,
+    MatOption,
+    MatSelect,
+    AnswerPanelComponent
   ],
   templateUrl: 'unit-view.component.html',
   styleUrls: ['./unit-view.component.css']
@@ -71,62 +77,30 @@ export class UnitViewComponent {
     this.calculateMissingCorrectAnswerIndeces();
   }
 
-  addAnswer(questionIndex: number) {
-    let answerText: string;
-    switch (this.unit.questions[questionIndex].answers.length) {
-      case 0: answerText = 'richtig'; break;
-      case 1: answerText = 'falsch'; break;
-      default: answerText = `Antworttext ${this.unit.questions[questionIndex].answers.length + 1}`; break;
-    }
-    this.unit.questions[questionIndex].answers.push(answerText);
-    this.unitService.updateUnitDef();
-  }
-
-  deleteAnswer(questionIndex: number, answerIndex: number) {
-    this.unit.questions[questionIndex].answers.splice(answerIndex, 1);
-    this.unitService.updateUnitDef();
-    this.calculateMissingCorrectAnswerIndeces();
-  }
-
   async loadCSV(event: Event) {
-    const loadedUnit = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
-    this.unitService.loadCsv(loadedUnit);
-    this.unitService.updateUnitDef();
+    // const loadedUnit = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
+    // this.unitService.loadCsv(loadedUnit);
+    // this.unitService.updateUnitDef();
   }
 
-  async loadImage(questionIndex: number, eventTarget: EventTarget | null): Promise<void> {
-    this.unit.questions[questionIndex].imgSrc =
+  async loadQuestionSrc(questionIndex: number, eventTarget: EventTarget | null): Promise<void> {
+    this.unit.questions[questionIndex].src =
       await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File, true);
     this.unitService.updateUnitDef();
   }
 
-  removeImage(i: number) {
-    this.unit.questions[i].imgSrc = undefined;
+  removeQuestionSrc(i: number) {
+    this.unit.questions[i].src = undefined;
     this.unitService.updateUnitDef();
   }
 
-  changeAnswerText(questionIndex: number, answerIndex: number, eventTarget: EventTarget | null) {
-    this.unit.questions[questionIndex].answers[answerIndex] = (eventTarget as HTMLInputElement).value;
-    this.unitService.updateUnitDef();
-  }
-
-  setQuestionTextForAll(text: string) {
+  setQuestionTextForAll(text?: string) {
     this.unit.questions = this.unit.questions.map(question => ({ ...question, text: text }));
     this.unitService.updateUnitDef();
   }
 
   setAnswersForAll(answers: string[]) {
     this.unit.questions = this.unit.questions.map(question => ({ ...question, answers: [...answers] }));
-    this.unitService.updateUnitDef();
-  }
-
-  setCorrectAnswer(questionIndex: number, answerIndex: number, checked: boolean) {
-    if (checked) {
-      this.unit.questions[questionIndex].correctAnswerIndex = answerIndex;
-    } else {
-      this.unit.questions[questionIndex].correctAnswerIndex = undefined;
-    }
-    this.calculateMissingCorrectAnswerIndeces();
     this.unitService.updateUnitDef();
   }
 

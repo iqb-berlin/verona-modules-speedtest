@@ -4,11 +4,15 @@ export interface Unit {
   questions: Question[];
   layout: 'column' | 'row';
   buttonColor?: string;
+  instructionText?: string;
+  questionType: 'text' | 'image' | 'audio'; // image may also have a subtext
+  answerType: 'text' | 'image' | 'number';
 }
 
 export interface Question {
   text?: string;
-  imgSrc?: string;
+  src?: string;
   answers: string[];
   correctAnswerIndex?: number;
+  answerLength?: number;
 }

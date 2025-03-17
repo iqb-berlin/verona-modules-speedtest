@@ -23,8 +23,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
     <speedtest-player-unit-view *ngIf="unit && unit.questions.length > 0 && !showOutroPage"
                                 [question]="unit.questions[activeQuestionIndex]"
-                                [layout]="unit.layout"
-                                [buttonColor]="unit.buttonColor"
+                                [unit]="unit"
                                 (responseGiven)="onResponse($event)">
     </speedtest-player-unit-view>
 
@@ -41,6 +40,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
     }
     .load-button {
       position: absolute;
+      right: 0;
     }
     .outro {
       margin: auto;
@@ -84,8 +84,17 @@ export class AppComponent implements OnInit {
   }
 
   async loadUnitFromFile(eventTarget: EventTarget | null): Promise<void> {
+    this.resetUnitState();
     const loadedUnit = await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File);
     this.unit = JSON.parse(loadedUnit);
+  }
+
+  private resetUnitState(): void {
+    this.activeQuestionIndex = 0;
+    this.activeQuestionStartTime = Date.now();
+    this.showOutroPage = false;
+    this.sumCorrect = 0;
+    this.sumWrong = 0;
   }
 
   onResponse(answerIndex: number) {
