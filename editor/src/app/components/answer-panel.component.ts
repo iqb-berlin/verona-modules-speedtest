@@ -65,8 +65,8 @@ import { FileService } from 'common/services/file.service';
           </button>
       } @else {
           <mat-form-field>
-              <mat-label>Antwortlaenge</mat-label>
-              <input matInput type="number" max="5"
+              <mat-label>Antwortlänge</mat-label>
+              <input matInput type="number" max="5" required
                      [(ngModel)]="unitService.unit.questions[questionIndex].answerLength">
           </mat-form-field>
       }

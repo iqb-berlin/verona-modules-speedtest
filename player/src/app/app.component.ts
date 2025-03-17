@@ -42,6 +42,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
     }
     .load-button {
       position: absolute;
+      right: 0;
     }
     .outro {
       margin: auto;
@@ -84,7 +85,16 @@ export class AppComponent implements OnInit {
     VeronaAPIService.sendReady();
   }
 
+  private reset(): void {
+    this.activeQuestionIndex = 0;
+    this.activeQuestionStartTime = Date.now();
+    this.showOutroPage = false;
+    this.sumCorrect = 0;
+    this.sumWrong = 0;
+  }
+
   async loadUnitFromFile(eventTarget: EventTarget | null): Promise<void> {
+    this.reset();
     const loadedUnit = await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File);
     this.unit = JSON.parse(loadedUnit);
   }
