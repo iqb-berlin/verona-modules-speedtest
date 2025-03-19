@@ -94,7 +94,7 @@ import { Question, Unit } from 'common/interfaces/unit';
               </div>
               <div class="unit-nav-next">
                   <span class="button-text">Hier geht’s weiter.</span>
-                  <span class="svg-container" (click)="setAnswer($any(numberAnswer))">
+                  <span class="svg-container" (click)="setAnswer($any(numberAnswer.join('')))">
                   <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 100 100">
                       <circle cx="50%" cy="50%" r="50" fill="#b3fe5b"/>
                       <path d="M 45 35 L 60 50 L 45 65" stroke="black" stroke-width="5" fill="none"/>
@@ -117,12 +117,16 @@ export class UnitViewComponent implements OnInit {
   activeNumberIndex: number = 0;
 
   ngOnInit(): void {
-    if (this.unit.answerType === 'number') this.numberAnswer = Array(this.question.answerLength).fill(undefined);
+    if (this.unit.answerType === 'number') {
+      this.numberAnswer = Array(this.question.correctNumberAnswer?.toString().length).fill(undefined);
+    }
   }
 
   enterDigit(number: number) {
     this.numberAnswer[this.activeNumberIndex] = number;
-    if (this.activeNumberIndex + 1 < (this.question.answerLength as number)) this.activeNumberIndex += 1;
+    if (this.activeNumberIndex + 1 < (this.question.correctNumberAnswer?.toString().length as number)) {
+      this.activeNumberIndex += 1;
+    }
   }
 
   deleteDigit() {
@@ -138,7 +142,9 @@ export class UnitViewComponent implements OnInit {
   }
 
   resetState(): void {
-    if (this.unit.answerType === 'number') this.numberAnswer = Array(this.question.answerLength).fill(undefined);
+    if (this.unit.answerType === 'number') {
+      this.numberAnswer = Array(this.question.correctNumberAnswer?.toString().length).fill(undefined);
+    }
     this.activeNumberIndex = 0;
     this.isAudioActive = false;
   }
