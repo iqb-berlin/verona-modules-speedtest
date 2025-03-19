@@ -14,5 +14,5 @@ export interface Question {
   src?: string;
   answers: string[];
   correctAnswerIndex?: number;
-  answerLength?: number;
+  correctNumberAnswer?: number;
 }

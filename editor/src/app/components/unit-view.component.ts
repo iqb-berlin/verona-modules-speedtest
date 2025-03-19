@@ -9,9 +9,8 @@ import {
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import {
-  MatButton, MatFabButton, MatIconButton, MatMiniFabButton
+  MatButton, MatFabButton, MatIconButton
 } from '@angular/material/button';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatOption } from '@angular/material/autocomplete';
@@ -44,8 +43,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
     MatIconButton,
     MatButtonToggleGroup,
     MatButtonToggle,
-    MatCheckbox,
-    MatMiniFabButton,
     SlicePipe,
     MatOption,
     MatSelect,
@@ -57,7 +54,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
 export class UnitViewComponent {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
-  missingCorrectAnswerIndeces: number[] = [];
 
   constructor(public unitService: UnitService) { }
 
@@ -68,13 +64,13 @@ export class UnitViewComponent {
     });
     this.latestQuestionIndex = this.unit.questions.length - 1;
     this.unitService.updateUnitDef();
-    this.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerIndeces();
   }
 
   deleteQuestion(index: number) {
     this.unit.questions.splice(index, 1);
     this.unitService.updateUnitDef();
-    this.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerIndeces();
   }
 
   async loadCSV(event: Event) {
@@ -102,12 +98,5 @@ export class UnitViewComponent {
   setAnswersForAll(answers: string[]) {
     this.unit.questions = this.unit.questions.map(question => ({ ...question, answers: [...answers] }));
     this.unitService.updateUnitDef();
-  }
-
-  /* Gets all the question indices with missing correct answers. */
-  private calculateMissingCorrectAnswerIndeces(): void {
-    this.missingCorrectAnswerIndeces = this.unit.questions
-      .map((question, index) => (question.correctAnswerIndex === undefined ? index : -1))
-      .filter(index => index !== -1);
   }
 }

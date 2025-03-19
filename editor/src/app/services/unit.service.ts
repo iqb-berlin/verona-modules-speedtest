@@ -19,6 +19,8 @@ export class UnitService {
     answerType: 'text'
   };
 
+  missingCorrectAnswerIndeces: number[] = [];
+
   loadUnitDefinition(unitDefinition: string): void {
     if (unitDefinition) this.unit = JSON.parse(unitDefinition);
   }
@@ -121,6 +123,13 @@ export class UnitService {
   deleteAnswer(questionIndex: number, answerIndex: number) {
     this.unit.questions[questionIndex].answers.splice(answerIndex, 1);
     this.updateUnitDef();
-    // this.calculateMissingCorrectAnswerIndeces();
+    this.calculateMissingCorrectAnswerIndeces();
+  }
+
+  /* Gets all the question indices with missing correct answers. */
+  calculateMissingCorrectAnswerIndeces(): void {
+    this.missingCorrectAnswerIndeces = this.unit.questions
+      .map((question, index) => (question.correctAnswerIndex === undefined ? index : -1))
+      .filter(index => index !== -1);
   }
 }

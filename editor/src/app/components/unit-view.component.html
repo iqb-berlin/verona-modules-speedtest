@@ -39,17 +39,17 @@
             </mat-button-toggle-group>
         </label>
 
-        <label>
+        <label [style.opacity]="unit.answerType !== 'text' ? 0.5 : 1">
             Knopffarbe
             <input matInput type="color" [disabled]="unit.answerType !== 'text'" [(ngModel)]="unit.buttonColor"
                    (change)="unitService.updateUnitDef()">
         </label>
     </fieldset>
-    <fieldset [style.visibility]="missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
+    <fieldset [style.visibility]="unitService.missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
         <legend>Warnung</legend>
         <p>Antwortdefinition unvollständig. Es fehlen Antworten für mindestens folgende Fragen:</p>
         <ul>
-            <li *ngFor="let questionIndex of missingCorrectAnswerIndeces | slice: 0 : 5"
+            <li *ngFor="let questionIndex of unitService.missingCorrectAnswerIndeces | slice: 0 : 5"
                 [style.color]="'red'">
                 Frageindex: {{ questionIndex + 1 }}
             </li>
