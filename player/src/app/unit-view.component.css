@@ -109,25 +109,20 @@
   align-items: center;
 }
 
-.answers button {
+.answers button:not(.image-button) {
   font-size: larger;
   padding: 10px 25px;
 }
 
-.audio-button.in-progress {
-  opacity: 0.5;
-}
-
-.answers input[type='image'] {
+.answers img {
   object-fit: scale-down;
   height: 100%;
   width: 100%;
-  border: 1px solid transparent;
-  box-sizing: border-box;
+  cursor: pointer;
 }
 
-.answers input[type='image']:hover {
-  border: 1px dashed green;
+.audio-button.in-progress {
+  opacity: 0.5;
 }
 
 .number-result-box {

@@ -52,14 +52,14 @@ import { Question, Unit } from 'common/interfaces/unit';
               </div>
               <div class="answers">
                   @if (unit.answerType !== 'number') {
-                      @for (answer of question.answers; let answerIndex = $index; track answer) {
+                      @for (answer of question.answers; let answerIndex = $index; track answerIndex) {
                           @if (unit.answerType === 'text') {
                               <button mat-raised-button [style.background-color]="unit.buttonColor"
                                       (click)="setAnswer(answerIndex)">
                                   {{ answer }}
                               </button>
                           } @else if (unit.answerType === 'image') {
-                              <input type="image" [src]="answer" (click)="setAnswer(answerIndex)">
+                              <img [src]="answer" (click)="setAnswer(answerIndex)">
                           }
                       }
                   } @else {
