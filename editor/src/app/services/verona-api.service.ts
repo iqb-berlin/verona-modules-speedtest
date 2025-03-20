@@ -1,6 +1,5 @@
 import { Subject } from 'rxjs';
 import { VariableInfo } from '@iqb/responses';
-import { Unit } from 'common/interfaces/unit';
 
 export class VeronaAPIService {
   static sessionID: string | undefined;
@@ -26,12 +25,12 @@ export class VeronaAPIService {
     });
   }
 
-  static sendChange(unit: Unit, variableInfo: VariableInfo[]): void {
+  static sendChange(unitDefinitionString: string, variableInfo: VariableInfo[]): void {
     VeronaAPIService.sendMessage({
       type: 'voeDefinitionChangedNotification',
       sessionId: VeronaAPIService.sessionID as string,
       timeStamp: String(Date.now()),
-      unitDefinition: JSON.stringify(unit),
+      unitDefinition: unitDefinitionString,
       unitDefinitionType: 'speedtest-unit-definition@1.0.0',
       variables: variableInfo
     });

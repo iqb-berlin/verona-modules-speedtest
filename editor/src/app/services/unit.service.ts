@@ -26,7 +26,7 @@ export class UnitService {
   }
 
   saveUnitToFile(): void {
-    FileService.saveUnitToFile(JSON.stringify(this.unit));
+    FileService.saveUnitToFile(UnitService.stringifyUnit(this.unit));
   }
 
   // loadCsv(loadedUnit: string) {
@@ -51,8 +51,16 @@ export class UnitService {
   // }
 
   updateUnitDef() {
-    // TODO remove unused fields
-    VeronaAPIService.sendChange(this.unit, this.getVariableInfo());
+    VeronaAPIService.sendChange(UnitService.stringifyUnit(this.unit), this.getVariableInfo());
+  }
+
+  private static stringifyUnit(unit: Unit): string {
+    return JSON.stringify(unit, (key, value) => {
+      if (unit.answerType === 'number' && key === 'answers') {
+        return undefined;
+      }
+      return value;
+    });
   }
 
   getVariableInfo(): VariableInfo[] {
