@@ -94,7 +94,7 @@ import { Question, Unit } from 'common/interfaces/unit';
               </div>
               <div class="unit-nav-next">
                   <span class="button-text">Hier geht’s weiter.</span>
-                  <span class="svg-container" (click)="setAnswer($any(numberAnswer.join('')))">
+                  <span class="svg-container" (click)="setAnswer($any(parseInt(numberAnswer.join(''))))">
                   <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 100 100">
                       <circle cx="50%" cy="50%" r="50" fill="#b3fe5b"/>
                       <path d="M 45 35 L 60 50 L 45 65" stroke="black" stroke-width="5" fill="none"/>
@@ -148,4 +148,6 @@ export class UnitViewComponent implements OnInit {
     this.activeNumberIndex = 0;
     this.isAudioActive = false;
   }
+
+  protected readonly parseInt = parseInt;
 }
