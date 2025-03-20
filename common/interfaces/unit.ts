@@ -15,4 +15,3 @@ export interface Question {
   answers: string[];
   correctAnswer?: number;
 }
-

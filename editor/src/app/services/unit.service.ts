@@ -29,26 +29,33 @@ export class UnitService {
     FileService.saveUnitToFile(UnitService.stringifyUnit(this.unit));
   }
 
-  // loadCsv(loadedUnit: string) {
-  //   const newQuestions = loadedUnit.split(/\n/)
-  //     .filter(text => text.trim())
-  //     .map((line: string) => {
-  //       const items = line.split(';');
-  //       return {
-  //         layout: 'column' as 'column' | 'row',
-  //         text: items[0],
-  //         answers: items
-  //           .filter((item: string, index: number) => index > 0)
-  //           .map(item => (item.trim()))
-  //       };
-  //     });
-  //   this.unit = {
-  //     type: 'speedtest-unit-defintion',
-  //     version: this.unitDefVersion,
-  //     layout: 'column',
-  //     questions: newQuestions
-  //   };
-  // }
+  loadUnitFromCSV(unitString: string) {
+    const questions = unitString.split(/\n/)
+      .filter(text => text.trim())
+      .map((line: string) => {
+        const items = line.split(';');
+        return {
+          text: items[0],
+          correctAnswer: UnitService.isNumber(items[1].trim()) ? parseInt(items[1].trim(), 10) : undefined,
+          answers: this.unit.answerType === 'text' ? items
+            .filter((item: string, index: number) => index > (UnitService.isNumber(items[1].trim()) ? 1 : 0))
+            .map(item => (item.trim())) : []
+        };
+      });
+    this.unit = {
+      type: 'speedtest-unit-defintion',
+      version: this.unitDefVersion,
+      layout: this.unit.layout,
+      questions: questions,
+      questionType: 'text',
+      answerType: this.unit.answerType
+    };
+    this.updateUnitDef();
+  }
+
+  private static isNumber(string: string): boolean {
+    return !Number.isNaN(parseInt(string, 10));
+  }
 
   updateUnitDef() {
     VeronaAPIService.sendChange(UnitService.stringifyUnit(this.unit), this.getVariableInfo());

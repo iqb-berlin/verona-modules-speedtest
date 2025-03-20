@@ -54,6 +54,7 @@ import { AnswerPanelComponent } from './answer-panel.component';
 export class UnitViewComponent {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
+  csvImportVisible = false;
 
   constructor(public unitService: UnitService) { }
 
@@ -74,9 +75,8 @@ export class UnitViewComponent {
   }
 
   async loadCSV(event: Event) {
-    // const loadedUnit = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
-    // this.unitService.loadCsv(loadedUnit);
-    // this.unitService.updateUnitDef();
+    const unitString = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
+    this.unitService.loadUnitFromCSV(unitString);
   }
 
   async loadQuestionSrc(questionIndex: number, eventTarget: EventTarget | null): Promise<void> {

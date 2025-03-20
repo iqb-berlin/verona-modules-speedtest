@@ -79,7 +79,8 @@ import { FileService } from 'common/services/file.service';
           </button>
       } @else {
           <mat-form-field>
-              <mat-label>erwartete Antwort</mat-label>
+              <mat-label>
+                  Erwartete Antwort - Hierüber wird ebenfalls die Anzahl der dargestellten Felder gesteuert.</mat-label>
               <input matInput type="number" required
                      [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
                      (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
