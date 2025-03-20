@@ -28,7 +28,7 @@ import { FileService } from 'common/services/file.service';
   ],
   template: `
       @if (unitService.unit.answerType !== 'number') {
-          <mat-radio-group [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswerIndex"
+          <mat-radio-group [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
                            (ngModelChange)="updateCorrectAnswer()">
               <div class="text-answer-list">
                   <h4 [style.grid-row-start]="1" [style.grid-column-start]="1">richtige Antwort</h4>
@@ -80,9 +80,9 @@ import { FileService } from 'common/services/file.service';
       } @else {
           <mat-form-field>
               <mat-label>erwartete Antwort</mat-label>
-              <input matInput type="number" max="5" required
-                     [(ngModel)]="unitService.unit.questions[questionIndex].correctNumberAnswer"
-                     (ngModelChange)="unitService.updateUnitDef()">
+              <input matInput type="number" required
+                     [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
+                     (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
           </mat-form-field>
       }
   `,

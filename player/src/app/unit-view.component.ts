@@ -118,13 +118,13 @@ export class UnitViewComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.unit.answerType === 'number') {
-      this.numberAnswer = Array(this.question.correctNumberAnswer?.toString().length).fill(undefined);
+      this.numberAnswer = Array(this.question.correctAnswer?.toString().length).fill(undefined);
     }
   }
 
   enterDigit(number: number) {
     this.numberAnswer[this.activeNumberIndex] = number;
-    if (this.activeNumberIndex + 1 < (this.question.correctNumberAnswer?.toString().length as number)) {
+    if (this.activeNumberIndex + 1 < (this.question.correctAnswer?.toString().length as number)) {
       this.activeNumberIndex += 1;
     }
   }
@@ -134,8 +134,8 @@ export class UnitViewComponent implements OnInit {
     if (this.activeNumberIndex > 0) this.activeNumberIndex -= 1;
   }
 
-  setAnswer(answerIndex: number) {
-    this.responseGiven.emit(answerIndex);
+  setAnswer(answer: number) {
+    this.responseGiven.emit(answer);
     setTimeout(() => {
       this.resetState();
     });
@@ -143,7 +143,7 @@ export class UnitViewComponent implements OnInit {
 
   resetState(): void {
     if (this.unit.answerType === 'number') {
-      this.numberAnswer = Array(this.question.correctNumberAnswer?.toString().length).fill(undefined);
+      this.numberAnswer = Array(this.question.correctAnswer?.toString().length).fill(undefined);
     }
     this.activeNumberIndex = 0;
     this.isAudioActive = false;

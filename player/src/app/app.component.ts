@@ -97,19 +97,20 @@ export class AppComponent implements OnInit {
     this.sumWrong = 0;
   }
 
-  onResponse(answerIndex: number) {
-    this.updateResults(answerIndex);
-    const isCorrect = this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== undefined ?
-      this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex === answerIndex :
-      undefined;
-    VeronaAPIService.sendState(this.createResponseData(answerIndex, isCorrect));
+  onResponse(answer: number) {
+    this.updateResults(answer);
+    const isCorrect =
+      this.unit?.questions[this.activeQuestionIndex].correctAnswer !== undefined ?
+        this.unit?.questions[this.activeQuestionIndex].correctAnswer === answer :
+        undefined;
+    VeronaAPIService.sendState(this.createResponseData(answer, isCorrect));
     this.gotoNextQuestion();
   }
 
   private updateResults(answerIndex: number): void {
-    if (this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== undefined &&
-        this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex !== null) {
-      this.unit?.questions[this.activeQuestionIndex].correctAnswerIndex === answerIndex ?
+    if (this.unit?.questions[this.activeQuestionIndex].correctAnswer !== undefined &&
+        this.unit?.questions[this.activeQuestionIndex].correctAnswer !== null) {
+      this.unit?.questions[this.activeQuestionIndex].correctAnswer === answerIndex ?
         this.sumCorrect += 1 : this.sumWrong += 1;
     }
   }

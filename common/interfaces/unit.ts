@@ -13,6 +13,6 @@ export interface Question {
   text?: string;
   src?: string;
   answers: string[];
-  correctAnswerIndex?: number;
-  correctNumberAnswer?: number;
+  correctAnswer?: number;
 }
+
