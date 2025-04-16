@@ -68,6 +68,7 @@ export class AppComponent implements OnInit {
     VeronaAPIService.startCommand
       .subscribe((message: StartCommand): void => {
         if (!message.unitDefinition) return;
+        this.resetUnitState();
         this.unit = JSON.parse(message.unitDefinition) as Unit;
         if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
           // Add 1 because the activeQuestionIndex has already been seen and answered
@@ -90,6 +91,7 @@ export class AppComponent implements OnInit {
   }
 
   private resetUnitState(): void {
+    this.unit = undefined;
     this.activeQuestionIndex = 0;
     this.activeQuestionStartTime = Date.now();
     this.showOutroPage = false;
