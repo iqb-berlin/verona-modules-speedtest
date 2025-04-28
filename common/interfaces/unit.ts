@@ -7,6 +7,7 @@ export interface Unit {
   instructionText?: string;
   questionType: 'text' | 'image' | 'audio'; // image may also have a subtext
   answerType: 'text' | 'image' | 'number';
+  questionSpaceRatio?: number;
 }
 
 export interface Question {

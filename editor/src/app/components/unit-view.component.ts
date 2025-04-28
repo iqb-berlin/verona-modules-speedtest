@@ -21,6 +21,7 @@ import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import { UnitService } from '../services/unit.service';
 import { AnswerPanelComponent } from './answer-panel.component';
+import { imageAndImage, imageAndText, textOnly } from 'common/constants';
 
 @Component({
   selector: 'speedtest-unit-view',
@@ -55,6 +56,7 @@ export class UnitViewComponent {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
   csvImportVisible = false;
+  activeRatioDefault = textOnly;
 
   constructor(public unitService: UnitService) { }
 
@@ -98,5 +100,15 @@ export class UnitViewComponent {
   setAnswersForAll(answers: string[]) {
     this.unit.questions = this.unit.questions.map(question => ({ ...question, answers: [...answers] }));
     this.unitService.updateUnitDef();
+  }
+
+  updateRatioDeault() {
+    if (this.unit.questionType === 'text' && this.unit.answerType === 'text') {
+      this.activeRatioDefault = textOnly;
+    } else if (this.unit.questionType === 'image' && this.unit.answerType === 'text') {
+      this.activeRatioDefault = imageAndText;
+    } else if (this.unit.questionType === 'image' && this.unit.answerType === 'image') {
+      this.activeRatioDefault = imageAndImage;
+    }
   }
 }

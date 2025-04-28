@@ -3,7 +3,8 @@
         <legend>Globale Einstellungen</legend>
         <mat-form-field>
             <mat-label>Stimulustyp</mat-label>
-            <mat-select required [(ngModel)]="unit.questionType" (ngModelChange)="unitService.updateUnitDef()">
+            <mat-select required [(ngModel)]="unit.questionType"
+                        (ngModelChange)="updateRatioDeault(); unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="audio">Audio</mat-option>
@@ -12,7 +13,8 @@
 
         <mat-form-field>
             <mat-label>Antworttyp</mat-label>
-            <mat-select required [(ngModel)]="unit.answerType" (ngModelChange)="unitService.updateUnitDef()">
+            <mat-select required [(ngModel)]="unit.answerType"
+                        (ngModelChange)="updateRatioDeault(); unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="number">Zahl</mat-option>
@@ -31,6 +33,13 @@
                 <mat-button-toggle value="row">Horizontal</mat-button-toggle>
             </mat-button-toggle-group>
         </label>
+
+        Größenanteil Fragebereich
+        <mat-form-field>
+            <mat-label>Standardwert: {{ activeRatioDefault }}</mat-label>
+            <input matInput [type]="'number'" [(ngModel)]="unit.questionSpaceRatio"
+                   (ngModelChange)="unitService.updateUnitDef()">
+        </mat-form-field>
 
         <label [style.margin-top.px]="5" [style.margin-bottom.px]="3"
                [style.opacity]="unit.answerType !== 'text' ? 0.5 : 1">
