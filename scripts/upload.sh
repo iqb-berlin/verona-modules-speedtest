@@ -1,5 +1,7 @@
 #!/bin/bash
 
+USERNAME="richard"
+
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <filepath>"
     exit 1
@@ -9,14 +11,10 @@ if [ -z "$IQB_STUDIO_PW" ]; then
     read -sp "Enter password: " IQB_STUDIO_PW
 fi
 
-
-SERVER="example.com"
-REMOTE_PATH="/upload/"
-
 # Login
 TOKEN=$(curl --silent --show-error --header "Content-Type: application/json" --header "app-version: 12.1.1" \
 --request POST \
---data "{\"username\": \"richard\", \"password\": \"$IQB_STUDIO_PW\"}" \
+--data "{\"username\": \"$USERNAME\", \"password\": \"$IQB_STUDIO_PW\"}" \
 https://www.iqb-studio.de/api/login)
 
 # Remove quotes from token
