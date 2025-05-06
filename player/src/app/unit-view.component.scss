@@ -27,6 +27,7 @@
   display: flex;
   height: 100%;
   gap: 3%;
+  overflow: hidden;
 
   &.instruction-present {
     height: 90%;
@@ -132,7 +133,7 @@
 
   img {
     object-fit: scale-down;
-    max-height: 90%;
+    max-height: 85%;
     max-width: 100%;
   }
 
