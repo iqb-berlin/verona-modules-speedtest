@@ -75,7 +75,6 @@
   &.numbers .answers {
     align-items: end;
     height: unset;
-    gap: 10px;
   }
 
   &.image-answers .answers,
@@ -109,7 +108,6 @@
   &.numbers .question {
     width: 45%;
   }
-
 
   &:not(.numbers) .answers {
     flex-direction: column;
@@ -161,9 +159,9 @@
   }
 }
 
-//.numbers .answers {
-//  align-items: center;
-//}
+.numbers .answers {
+  gap: 10px;
+}
 
 .text-image-wrapper {
   height: 100%;
