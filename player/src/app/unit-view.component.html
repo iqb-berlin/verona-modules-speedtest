@@ -19,12 +19,12 @@
 
             }
             @if (unit.questionType === 'image') {
-                <div class="text-image-wrapper">
+                <figure class="text-image-wrapper">
                     <img *ngIf="question.src" [src]="question.src" [alt]="question.text">
                     @if (question.text) {
-                        <p>{{ question.text }}</p>
+                        <figcaption>{{ question.text }}</figcaption>
                     }
-                </div>
+                </figure>
             }
             @if (unit.questionType === 'audio') {
                 <audio #audioElement [src]=question.src
