@@ -15,13 +15,14 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatSelect } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
-import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
-import { Unit } from 'common/interfaces/unit';
+import { Answer, Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
+import { imageAndImage, imageAndText, textOnly } from 'common/constants';
 import { UnitService } from '../services/unit.service';
 import { AnswerPanelComponent } from './answer-panel.component';
-import { imageAndImage, imageAndText, textOnly } from 'common/constants';
 
 @Component({
   selector: 'speedtest-unit-view',
@@ -42,12 +43,13 @@ import { imageAndImage, imageAndText, textOnly } from 'common/constants';
     FormsModule,
     NgIf,
     MatIconButton,
-    MatButtonToggleGroup,
-    MatButtonToggle,
     SlicePipe,
     MatOption,
     MatSelect,
-    AnswerPanelComponent
+    AnswerPanelComponent,
+    MatCheckbox,
+    MatRadioGroup,
+    MatRadioButton
   ],
   templateUrl: 'unit-view.component.html',
   styleUrls: ['./unit-view.component.css']
@@ -63,7 +65,7 @@ export class UnitViewComponent {
   addQuestion() {
     this.unit.questions.push({
       text: `Frage ${this.unit.questions.length + 1}`,
-      answers: ['richtig', 'falsch']
+      answers: [{ text: 'richtig' }, { text: 'falsch' }]
     });
     this.latestQuestionIndex = this.unit.questions.length - 1;
     this.unitService.updateUnitDef();
@@ -97,7 +99,7 @@ export class UnitViewComponent {
     this.unitService.updateUnitDef();
   }
 
-  setAnswersForAll(answers: string[]) {
+  setAnswersForAll(answers: Answer[]) {
     this.unit.questions = this.unit.questions.map(question => ({ ...question, answers: [...answers] }));
     this.unitService.updateUnitDef();
   }

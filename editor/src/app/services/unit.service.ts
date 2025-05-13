@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { VariableInfo } from '@iqb/responses';
 import packageInfo from 'packageInfo';
-import { Unit } from 'common/interfaces/unit';
+import { Answer, Question, Unit, AnswerType } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import { VeronaAPIService } from './verona-api.service';
 
@@ -30,16 +30,15 @@ export class UnitService {
   }
 
   loadUnitFromCSV(unitString: string) {
-    const questions = unitString.split(/\n/)
+    const questions: Question[] = unitString.split(/\n/)
       .filter(text => text.trim())
       .map((line: string) => {
-        const items = line.split(';');
+        const items: string[] = line.split(';');
         return {
           text: items[0],
+          // Only set when second column contains a number. Otherwise it is interpreted as answer text.
           correctAnswer: UnitService.isNumber(items[1].trim()) ? parseInt(items[1].trim(), 10) : undefined,
-          answers: this.unit.answerType === 'text' ? items
-            .filter((item: string, index: number) => index > (UnitService.isNumber(items[1].trim()) ? 1 : 0))
-            .map(item => (item.trim())) : []
+          answers: UnitService.generateAnswers(this.unit.answerType, items)
         };
       });
     this.unit = {
@@ -47,7 +46,7 @@ export class UnitService {
       version: this.unitDefVersion,
       layout: this.unit.layout,
       questions: questions,
-      questionType: 'text',
+      questionType: this.unit.questionType,
       answerType: this.unit.answerType
     };
     this.updateUnitDef();
@@ -57,8 +56,18 @@ export class UnitService {
     return !Number.isNaN(parseInt(string, 10));
   }
 
+  private static generateAnswers(answerType: AnswerType, items: string[]): Answer[] {
+    if (answerType === 'text') {
+      return items
+        // skip column if it contains a number
+        .filter((item: string, index: number) => index > (UnitService.isNumber(items[1].trim()) ? 1 : 0))
+        .map(item => ({ text: item.trim() }));
+    }
+    return [];
+  }
+
   updateUnitDef() {
-    VeronaAPIService.sendChange(UnitService.stringifyUnit(this.unit), this.getVariableInfo());
+    VeronaAPIService.sendChange(UnitService.stringifyUnit(this.unit), UnitService.getVariableInfo());
   }
 
   private static stringifyUnit(unit: Unit): string {
@@ -70,14 +79,14 @@ export class UnitService {
     });
   }
 
-  getVariableInfo(): VariableInfo[] {
+  static getVariableInfo(useMultiSelect: boolean = false): VariableInfo[] {
     return [
       {
         id: 'value',
         alias: 'value',
         type: 'integer',
         format: '',
-        multiple: false,
+        multiple: useMultiSelect,
         nullable: false,
         values: [],
         valuePositionLabels: [],
@@ -131,7 +140,7 @@ export class UnitService {
   }
 
   addAnswer(questionIndex: number, answerText: string) {
-    this.unit.questions[questionIndex].answers.push(answerText);
+    this.unit.questions[questionIndex].answers.push({ text: answerText });
     this.updateUnitDef();
   }
 

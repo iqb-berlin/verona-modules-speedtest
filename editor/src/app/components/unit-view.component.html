@@ -8,45 +8,58 @@
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="audio">Audio</mat-option>
+                <mat-option value="word-select">Wörter auswählen</mat-option>
+                <mat-option value="inline-answers">Inline-Antworten</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-form-field>
             <mat-label>Antworttyp</mat-label>
-            <mat-select required [(ngModel)]="unit.answerType"
+            <mat-select required
+                        [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
+                        [(ngModel)]="unit.answerType"
                         (ngModelChange)="updateRatioDeault(); unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
+                <mat-option value="audio">Audio</mat-option>
                 <mat-option value="number">Zahl</mat-option>
             </mat-select>
         </mat-form-field>
 
+        <mat-checkbox [(ngModel)]="unit.multipleSelection"
+                      [disabled]="unit.questionType === 'inline-answers' ||
+                                  unit.answerType == 'number' ||
+                                  unit.questionType === 'word-select'">
+            Mehrfachauswahl
+        </mat-checkbox>
+
         <mat-form-field>
             <mat-label>Instruktionstext</mat-label>
-            <input matInput [(ngModel)]="unit.instructionText" (ngModelChange)="unitService.updateUnitDef()">
+            <textarea matInput [(ngModel)]="unit.instructionText" (ngModelChange)="unitService.updateUnitDef()">
+            </textarea>
         </mat-form-field>
 
-        <label>
-            Ausrichtung
-            <mat-button-toggle-group [(ngModel)]="unit.layout" (ngModelChange)="unitService.updateUnitDef()">
-                <mat-button-toggle value="column">Vertikal</mat-button-toggle>
-                <mat-button-toggle value="row">Horizontal</mat-button-toggle>
-            </mat-button-toggle-group>
-        </label>
+        <label>Ausrichtung Frage- Antwortbereich</label>
+        <mat-radio-group [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
+                         [(ngModel)]="unit.layout" (ngModelChange)="unitService.updateUnitDef()">
+            <mat-radio-button value="column">Vertikal</mat-radio-button>
+            <mat-radio-button value="row">Horizontal</mat-radio-button>
+        </mat-radio-group>
 
-        Größenanteil Fragebereich
+
         <mat-form-field>
-            <mat-label>Standardwert: {{ activeRatioDefault }}</mat-label>
-            <input matInput [type]="'number'" [(ngModel)]="unit.questionSpaceRatio"
+            <mat-label>Größenanteil Fragebereich</mat-label>
+            <input matInput [type]="'number'"
+                   [placeholder]="'Standardwert: ' + activeRatioDefault"
+                   [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
+                   [(ngModel)]="unit.questionSpaceRatio"
                    (ngModelChange)="unitService.updateUnitDef()">
         </mat-form-field>
 
-        <label [style.margin-top.px]="5" [style.margin-bottom.px]="3"
-               [style.opacity]="unit.answerType !== 'text' ? 0.5 : 1">
-            Knopffarbe bei Textantworten
-            <input matInput type="color" [disabled]="unit.answerType !== 'text'" [(ngModel)]="unit.buttonColor"
-                   (change)="unitService.updateUnitDef()">
-        </label>
+        <label [style.margin-top.px]="5" [style.margin-bottom.px]="3">Antwortknopffarbe</label>
+        <input matInput type="color" [disabled]="unit.answerType !== 'text' || unit.questionType === 'word-select'"
+               [(ngModel)]="unit.buttonColor"
+               (change)="unitService.updateUnitDef()">
 
         <button mat-raised-button [style.margin-top.px]="10" (click)="csvImportVisible = true">
             CSV Import
@@ -73,7 +86,7 @@
         <ul [style.margin-top]="0">
             <li>Trennzeichen: Semikolon</li>
             <li>Funktioniert nur für Texte - Bilder oder Audios werden nicht unterstützt.</li>
-            <li>Für Zahlenaufgaben zuerst den entsprechenden Antworttyp auswählen</li>
+            <li>Ausgewählter Frage- und Antworttyp ist entscheidend für das korrekte Einlesen.</li>
         </ul>
         Spalten
         <ul [style.margin-top]="0">
@@ -121,10 +134,17 @@
                 <div class="question-content">
                     <mat-form-field>
                         <mat-label>Frage</mat-label>
-                        <input matInput #questionText [(ngModel)]="question.text"
+                        <input matInput [(ngModel)]="question.text"
                                (change)="unitService.updateUnitDef()">
                     </mat-form-field>
                 </div>
+                @if (unit.questionType === 'inline-answers') {
+                    <mat-form-field>
+                        <mat-label>Antwortpositionsindex</mat-label>
+                        <input matInput [(ngModel)]="question.answerPosition"
+                               (change)="unitService.updateUnitDef()">
+                    </mat-form-field>
+                }
                 @if (unit.questionType === 'image') {
                     <h4>Bild</h4>
                     <div class="image-panel">
@@ -142,7 +162,7 @@
                         <img *ngIf="question.src" [src]="question.src" [alt]="question.text">
                     </div>
                 }
-                @if (unit.questionType === 'audio') {
+                @if (unit.questionType === 'audio' || unit.questionType === 'word-select') {
                     <h4>Audio</h4>
                     <audio *ngIf="question.src" controls [src]=question.src></audio>
                     <button mat-icon-button [matTooltip]="'Audio hinzufügen/ändern'" (click)="audioUpload.click();">

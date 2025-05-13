@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { FileService } from 'common/services/file.service';
+import { Answer } from 'common/interfaces/unit';
 
 @Component({
   selector: 'speedtest-answer-panel',
@@ -27,7 +28,7 @@ import { FileService } from 'common/services/file.service';
     MatRadioButton
   ],
   template: `
-      @if (unitService.unit.answerType !== 'number') {
+      @if (unitService.unit.answerType !== 'number' && unitService.unit.questionType !== 'word-select') {
           <mat-radio-group [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
                            (ngModelChange)="updateCorrectAnswer()">
               <div class="text-answer-list">
@@ -37,18 +38,16 @@ import { FileService } from 'common/services/file.service';
                       <mat-radio-button [value]="answerIndex"
                                         [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1">
                       </mat-radio-button>
-                      @if (unitService.unit.answerType === 'text') {
-                          <mat-form-field [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="2">
-                              <mat-label>Frage</mat-label>
-                              <input matInput [value]="answer"
-                                     (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
-                          </mat-form-field>
-                      }
+                      <mat-form-field [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="2">
+                          <mat-label>Frage</mat-label>
+                          <input matInput [value]="answer.text"
+                                 (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
+                      </mat-form-field>
                       @if (unitService.unit.answerType === 'image') {
                           <div class="image-answer" [style.grid-row-start]="answerIndex + 2"
-                               [style.grid-column-start]="2">
+                               [style.grid-column-start]="3">
                               @if (answer) {
-                                  <img [src]="answer">
+                                  <img [src]="answer.src">
                               } @else {
                                   kein Bild definiert
                               }
@@ -56,16 +55,41 @@ import { FileService } from 'common/services/file.service';
                                   <mat-icon>image</mat-icon>
                               </button>
                               <input type="file" hidden accept="image/*" #imageUpload
-                                     (change)="loadAnswerImage(questionIndex, answerIndex, $event.target)">
+                                     (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
                               <button mat-icon-button [matTooltip]="'Bild entfernen'"
-                                      [disabled]="!answer"
-                                      (click)="removeAnswerImage(questionIndex, answerIndex);">
+                                      [disabled]="!answer.src"
+                                      (click)="removeAnswerSrc(questionIndex, answerIndex);">
                                   <mat-icon>backspace</mat-icon>
                               </button>
                           </div>
                       }
+                      @if (unitService.unit.answerType === 'audio') {
+                          <div [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
+                              @if (answer.src) {
+                                <audio controls [src]=answer.src></audio>
+                              } @else {
+                                  kein Audio definiert
+                              }
+                              <button mat-icon-button [matTooltip]="'Audio hinzufügen'" (click)="audioUpload.click();">
+                                  <mat-icon>volume_up</mat-icon>
+                              </button>
+                              <input type="file" hidden accept="audio/*" #audioUpload
+                                     (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
+                              <button mat-icon-button [matTooltip]="'Audio entfernen'"
+                                      [disabled]="!answer.src"
+                                      (click)="removeAnswerSrc(questionIndex, answerIndex);">
+                                  <mat-icon>backspace</mat-icon>
+                              </button>
+                          </div>
+                      }
+                      @if (unitService.unit.answerType === 'text') {
+                          <mat-form-field [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
+                              <mat-label>Teilungsposition</mat-label>
+                              <input matInput type="number" [(ngModel)]="answer.splitPosition">
+                          </mat-form-field>
+                      }
                       <button mat-mini-fab color="warn"
-                              [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3"
+                              [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="4"
                               [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
                           <mat-icon>delete</mat-icon>
                       </button>
@@ -77,10 +101,20 @@ import { FileService } from 'common/services/file.service';
               Neue Antwort
               <mat-icon>add</mat-icon>
           </button>
+      } @else if (unitService.unit.questionType === 'word-select') {
+          <mat-form-field>
+              <mat-label>
+                  Erwartete Antwortindizes
+              </mat-label>
+              <input matInput type="text" required
+                     [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
+                     (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
+          </mat-form-field>
       } @else {
           <mat-form-field>
               <mat-label>
-                  Erwartete Antwort - Hierüber wird ebenfalls die Anzahl der dargestellten Felder gesteuert.</mat-label>
+                  Erwartete Antwort - Hierüber wird ebenfalls die Anzahl der dargestellten Felder gesteuert.
+              </mat-label>
               <input matInput type="number" required
                      [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
                      (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
@@ -122,7 +156,7 @@ import { FileService } from 'common/services/file.service';
   `
 })
 export class AnswerPanelComponent {
-  @Input() answers!: string[];
+  @Input() answers!: Answer[];
   @Input() questionIndex!: number;
 
   constructor(public unitService: UnitService) { }
@@ -142,18 +176,18 @@ export class AnswerPanelComponent {
   }
 
   changeAnswerText(questionIndex: number, answerIndex: number, eventTarget: EventTarget | null) {
-    this.unitService.unit.questions[questionIndex].answers[answerIndex] = (eventTarget as HTMLInputElement).value;
+    this.unitService.unit.questions[questionIndex].answers[answerIndex].text = (eventTarget as HTMLInputElement).value;
     this.unitService.updateUnitDef();
   }
 
-  async loadAnswerImage(questionIndex: number, answerIndex: number, eventTarget: EventTarget | null): Promise<void> {
-    this.unitService.unit.questions[questionIndex].answers[answerIndex] =
+  async loadAnswerSrc(questionIndex: number, answerIndex: number, eventTarget: EventTarget | null): Promise<void> {
+    this.unitService.unit.questions[questionIndex].answers[answerIndex].src =
       await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File, true);
     this.unitService.updateUnitDef();
   }
 
-  removeAnswerImage(questionIndex: number, answerIndex: number) {
-    this.unitService.unit.questions[questionIndex].answers[answerIndex] = '';
+  removeAnswerSrc(questionIndex: number, answerIndex: number) {
+    this.unitService.unit.questions[questionIndex].answers[answerIndex].src = '';
     this.unitService.updateUnitDef();
   }
 

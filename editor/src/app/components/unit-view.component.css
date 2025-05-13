@@ -15,7 +15,7 @@
   gap: 10px;
 }
 
-.global-settings-fieldset .mat-button-toggle-group {
+.global-settings-fieldset mat-button-toggle-group {
   align-self: start;
 }
 

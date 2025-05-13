@@ -69,18 +69,20 @@ export class AppComponent implements OnInit {
       .subscribe((message: StartCommand): void => {
         if (!message.unitDefinition) return;
         this.resetUnitState();
-        this.unit = JSON.parse(message.unitDefinition) as Unit;
-        if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
-          // Add 1 because the activeQuestionIndex has already been seen and answered
-          this.activeQuestionIndex = Number(JSON.parse(message.unitState?.dataParts.activeQuestionIndex)[0].value) + 1;
-          this.sumCorrect = Number(JSON.parse(message.unitState?.dataParts.sums)[0].value);
-          this.sumWrong = Number(JSON.parse(message.unitState?.dataParts.activeQuestionIndex)[0].value);
-          if (this.activeQuestionIndex >= this.unit!.questions.length) this.showOutroPage = true;
-        }
-
-        VeronaAPIService.sendState({});
+        // Wait for the child component to be destroyed, before loading the new unit.
+        setTimeout(() => {
+          this.unit = JSON.parse(message.unitDefinition) as Unit;
+          if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
+            // Add 1 because the activeQuestionIndex has already been seen and answered
+            this.activeQuestionIndex =
+              Number(JSON.parse(message.unitState?.dataParts.activeQuestionIndex)[0].value) + 1;
+            this.sumCorrect = Number(JSON.parse(message.unitState?.dataParts.sums)[0].value);
+            this.sumWrong = Number(JSON.parse(message.unitState?.dataParts.activeQuestionIndex)[0].value);
+            if (this.activeQuestionIndex >= this.unit!.questions.length) this.showOutroPage = true;
+          }
+          VeronaAPIService.sendState({});
+        });
       });
-
     VeronaAPIService.sendReady();
   }
 
@@ -99,25 +101,21 @@ export class AppComponent implements OnInit {
     this.sumWrong = 0;
   }
 
-  onResponse(answer: number) {
-    this.updateResults(answer);
+  onResponse(answer: number | number[]) {
     const isCorrect =
       this.unit?.questions[this.activeQuestionIndex].correctAnswer !== undefined ?
         this.unit?.questions[this.activeQuestionIndex].correctAnswer === answer :
         undefined;
+    if (isCorrect !== undefined) this.updateResultSums(isCorrect);
     VeronaAPIService.sendState(this.createResponseData(answer, isCorrect));
     this.gotoNextQuestion();
   }
 
-  private updateResults(answerIndex: number): void {
-    if (this.unit?.questions[this.activeQuestionIndex].correctAnswer !== undefined &&
-        this.unit?.questions[this.activeQuestionIndex].correctAnswer !== null) {
-      this.unit?.questions[this.activeQuestionIndex].correctAnswer === answerIndex ?
-        this.sumCorrect += 1 : this.sumWrong += 1;
-    }
+  private updateResultSums(isCorrect: boolean): void {
+    isCorrect ? this.sumCorrect += 1 : this.sumWrong += 1;
   }
 
-  private createResponseData(answerIndex: number, isCorrect?: boolean): Record<string, Response[]> {
+  private createResponseData(answerValue: number | number[], isCorrect?: boolean): Record<string, Response[]> {
     let code;
     if (isCorrect === undefined) {
       code = undefined;
@@ -129,7 +127,7 @@ export class AppComponent implements OnInit {
       [`question_${this.activeQuestionIndex}`]: [{
         id: 'value',
         status: 'CODING_COMPLETE',
-        value: answerIndex,
+        value: answerValue,
         subform: String(this.activeQuestionIndex),
         code: code,
         score: code

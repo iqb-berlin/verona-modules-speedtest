@@ -99,7 +99,7 @@ interface UnitState {
 export interface Response {
   id: string;
   status: 'VALUE_CHANGED' | 'CODING_COMPLETE';
-  value: number;
+  value: number | number[];
   subform?: string;
   code?: number;
   score?: number;
