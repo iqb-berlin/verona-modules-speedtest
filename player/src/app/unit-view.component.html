@@ -31,7 +31,7 @@
             @if (unit.questionType === 'word-select') {
                 <p>
                     @for (word of textParts; track $index) {
-                        <span [class.selected]="word.wordIndex && selectedAnswers.includes(word.wordIndex)"
+                        <span [class.selected]="word.wordIndex !== undefined && selectedAnswers.includes(word.wordIndex)"
                               (click)="word.isSelectable && onAnswerClick($any(word.wordIndex))">
                             {{ word.text }}
                         </span>
