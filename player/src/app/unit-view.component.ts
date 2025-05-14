@@ -1,5 +1,5 @@
 import {
-  Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren
+  Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren
 } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
@@ -22,7 +22,7 @@ import { MatIcon } from '@angular/material/icon';
   templateUrl: 'unit-view.component.html',
   styleUrls: ['unit-view.component.scss']
 })
-export class UnitViewComponent implements OnInit {
+export class UnitViewComponent implements OnInit, OnChanges {
   @Input() question!: Question;
   @Input() unit!: Unit;
   @Output() responseGiven = new EventEmitter<number | number[]>();
@@ -38,6 +38,15 @@ export class UnitViewComponent implements OnInit {
   textParts: TextPart[] = [];
 
   ngOnInit(): void {
+    this.initStateVars();
+    this.innerWrapperClasses = UnitViewComponent.setInnerWrapperClasses(this.unit);
+  }
+
+  ngOnChanges(): void {
+    this.initStateVars();
+  }
+
+  private initStateVars(): void {
     if (this.unit.answerType === 'number') {
       this.numberAnswer = Array(this.question.correctAnswer?.toString().length).fill(undefined);
     }
@@ -50,7 +59,6 @@ export class UnitViewComponent implements OnInit {
       this.textParts[0] = { text: firstPart };
       this.textParts[1] = { text: secondPart };
     }
-    this.innerWrapperClasses = UnitViewComponent.setInnerWrapperClasses(this.unit);
   }
 
   private static splitSentence(text: string, pos: number): [string, string] {
