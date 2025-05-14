@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { VariableInfo } from '@iqb/responses';
 import packageInfo from 'packageInfo';
-import { Answer, Question, Unit, AnswerType } from 'common/interfaces/unit';
+import {
+  Answer, Question, Unit, AnswerType
+} from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import { VeronaAPIService } from './verona-api.service';
 
@@ -38,7 +40,9 @@ export class UnitService {
           text: items[0],
           // Only set when second column contains a number. Otherwise it is interpreted as answer text.
           correctAnswer: UnitService.isNumber(items[1].trim()) ? parseInt(items[1].trim(), 10) : undefined,
-          answers: UnitService.generateAnswers(this.unit.answerType, items)
+          answers: UnitService.generateAnswers(this.unit.answerType, items,
+                                               UnitService.useOffet(this.unit, items[1]) ? 1 : 0),
+          answerPosition: this.unit.questionType === 'inline-answers' ? parseInt(items[1], 10) : undefined
         };
       });
     this.unit = {
@@ -56,11 +60,15 @@ export class UnitService {
     return !Number.isNaN(parseInt(string, 10));
   }
 
-  private static generateAnswers(answerType: AnswerType, items: string[]): Answer[] {
+  private static useOffet(unit: Unit, cellContent: string): boolean {
+    return UnitService.isNumber(cellContent.trim()) || unit.questionType === 'inline-answers';
+  }
+
+  private static generateAnswers(answerType: AnswerType, items: string[], offset: number = 0): Answer[] {
     if (answerType === 'text') {
       return items
         // skip column if it contains a number
-        .filter((item: string, index: number) => index > (UnitService.isNumber(items[1].trim()) ? 1 : 0))
+        .filter((item: string, index: number) => index > offset)
         .map(item => ({ text: item.trim() }));
     }
     return [];
