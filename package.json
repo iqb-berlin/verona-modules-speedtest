@@ -26,6 +26,14 @@
     "extends": "@iqb/eslint-config",
     "parserOptions": {
       "project": "./tsconfig.json"
+    },
+    "rules": {
+      "function-call-argument-newline": "off",
+      "@typescript-eslint/indent": ["error", 2, {
+        "CallExpression": {
+          "arguments": "first"
+        }
+      }]
     }
   },
   "devDependencies": {
