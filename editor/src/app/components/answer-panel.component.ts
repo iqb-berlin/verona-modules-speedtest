@@ -104,11 +104,11 @@ import { Answer } from 'common/interfaces/unit';
       } @else if (unitService.unit.questionType === 'word-select') {
           <mat-form-field>
               <mat-label>
-                  Erwartete Antwortindizes
+                  Erwartete Antwortindizes, getrennt mit Komma
               </mat-label>
               <input matInput type="text" required
-                     [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
-                     (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
+                     [ngModel]="unitService.unit.questions[questionIndex].correctAnswer"
+                     (change)="setCorrectAnswerWordSelect($any($event).target.value)">
           </mat-form-field>
       } @else {
           <mat-form-field>
@@ -192,6 +192,13 @@ export class AnswerPanelComponent {
   }
 
   updateCorrectAnswer() {
+    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.updateUnitDef();
+  }
+
+  setCorrectAnswerWordSelect(value: string) {
+    this.unitService.unit.questions[this.questionIndex].correctAnswer =
+      value.split(',').map(val => parseInt(val, 10));
     this.unitService.calculateMissingCorrectAnswerIndeces();
     this.unitService.updateUnitDef();
   }
