@@ -87,23 +87,17 @@
             <li>Trennzeichen: Semikolon</li>
             <li>Funktioniert nur für Texte - Bilder oder Audios werden nicht unterstützt.</li>
             <li>Ausgewählter Frage- und Antworttyp ist entscheidend für das korrekte Einlesen.</li>
+            <li>Spalten werden über Kopfzeile identifiziert. Valide Werte sind: "frage", "loesung" und "antwort_#"</li>
         </ul>
-        Spalten
-        <ul [style.margin-top]="0">
-            <li>Spalte 1: Fragetext</li>
-            <li>Spalte 2: Index der korrekten Antwort, beginnend bei 0!</li>
-            <li>weitere Spalten: Antworttexte</li>
-        </ul>
-        <p [style.margin-top]="0">
-            Falls Spalte 2 keine Zahl enthält, wird der Inhalt als erste Antwortspalte interpretiert und keine korrekte
-            Antwort gesetzt.
-        </p>
         <button mat-raised-button class="csv-import-button" (click)="upload.click()">
             Datei hochladen
             <mat-icon>file_upload</mat-icon>
         </button>
         <input type="file" hidden accept=".csv" #upload
-               (change)="loadCSV($event)">
+               (change)="onLoadCSVClick($event)">
+        @if (csvError) {
+            <p [style.color]="'red'">{{ csvError }}</p>
+        }
     </fieldset>
 }
 

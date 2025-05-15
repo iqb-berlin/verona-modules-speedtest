@@ -59,6 +59,7 @@ export class UnitViewComponent {
   latestQuestionIndex: number | undefined;
   csvImportVisible = false;
   activeRatioDefault = textOnly;
+  csvError: string | undefined;
 
   constructor(public unitService: UnitService) { }
 
@@ -78,9 +79,16 @@ export class UnitViewComponent {
     this.unitService.calculateMissingCorrectAnswerIndeces();
   }
 
-  async loadCSV(event: Event) {
+  async onLoadCSVClick(event: Event) {
     const unitString = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
-    this.unitService.loadUnitFromCSV(unitString);
+    try {
+      this.unitService.loadUnitFromCSV(unitString);
+      this.csvError = undefined;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        this.csvError = error.message;
+      }
+    }
   }
 
   async loadQuestionSrc(questionIndex: number, eventTarget: EventTarget | null): Promise<void> {

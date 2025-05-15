@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { VariableInfo } from '@iqb/responses';
 import packageInfo from 'packageInfo';
-import {
-  Answer, Question, Unit, AnswerType
-} from 'common/interfaces/unit';
+import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
+import * as csvParser from 'editor/src/app/services/csv-parser';
 import { VeronaAPIService } from './verona-api.service';
 
 @Injectable({
@@ -32,46 +31,15 @@ export class UnitService {
   }
 
   loadUnitFromCSV(unitString: string) {
-    const questions: Question[] = unitString.split(/\n/)
-      .filter(text => text.trim())
-      .map((line: string) => {
-        const items: string[] = line.split(';');
-        return {
-          text: items[0],
-          // Only set when second column contains a number. Otherwise it is interpreted as answer text.
-          correctAnswer: UnitService.isNumber(items[1].trim()) ? parseInt(items[1].trim(), 10) : undefined,
-          answers: UnitService.generateAnswers(this.unit.answerType, items,
-                                               UnitService.useOffet(this.unit, items[1]) ? 1 : 0),
-          answerPosition: this.unit.questionType === 'inline-answers' ? parseInt(items[1], 10) : undefined
-        };
-      });
     this.unit = {
       type: 'speedtest-unit-defintion',
       version: this.unitDefVersion,
       layout: this.unit.layout,
-      questions: questions,
+      questions: csvParser.parseQuestions(unitString, this.unit.questionType),
       questionType: this.unit.questionType,
       answerType: this.unit.answerType
     };
     this.updateUnitDef();
-  }
-
-  private static isNumber(string: string): boolean {
-    return !Number.isNaN(parseInt(string, 10));
-  }
-
-  private static useOffet(unit: Unit, cellContent: string): boolean {
-    return UnitService.isNumber(cellContent.trim()) || unit.questionType === 'inline-answers';
-  }
-
-  private static generateAnswers(answerType: AnswerType, items: string[], offset: number = 0): Answer[] {
-    if (answerType === 'text') {
-      return items
-        // skip column if it contains a number
-        .filter((item: string, index: number) => index > offset)
-        .map(item => ({ text: item.trim() }));
-    }
-    return [];
   }
 
   updateUnitDef() {
