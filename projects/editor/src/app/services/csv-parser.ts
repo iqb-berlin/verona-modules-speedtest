@@ -4,7 +4,7 @@ import {
 
 export type CSVHeaderLabels = 'frage' | 'loesung' | `antwort_${number}`;
 
-export function parseQuestions(csv: string, questionType: QuestionType): Question[] {
+export function parseQuestions(csv: string, questionType: QuestionType, multiSelect: boolean = false): Question[] {
   const headerItems = csv.split(/\n/)[0].split(';').map(h => h.trim());
   const invalidHeaders = getInvalidHeaderLabels(headerItems);
   if (invalidHeaders.length > 0) throw Error(`Invalid header label(s): ${invalidHeaders}`);
@@ -20,7 +20,7 @@ export function parseQuestions(csv: string, questionType: QuestionType): Questio
       }
       return {
         text: cellValues[headerItems.indexOf('frage')].trim(),
-        correctAnswer: questionType === 'word-select' ?
+        correctAnswer: multiSelect || questionType === 'word-select' ?
           cellValues[headerItems.indexOf('loesung')]
             .split(',').map(val => parseInt(val, 10)) :
           parseInt(cellValues[headerItems.indexOf('loesung')].trim(), 10),

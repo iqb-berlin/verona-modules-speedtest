@@ -42,7 +42,7 @@ Frage 2; antwort 1; antwort2; 1`;
     const csv = `frage; antwort_1; antwort_2; loesung
 Frage 1; richtig; falsch; 1
 Frage 2; antwort 1; antwort2; 0, 1`;
-    const questions = csvParser.parseQuestions(csv, 'text');
+    const questions = csvParser.parseQuestions(csv, 'text', true);
     expect(questions.length).toBe(2);
     expect(questions[0]).toEqual({
       text: 'Frage 1',
@@ -51,8 +51,8 @@ Frage 2; antwort 1; antwort2; 0, 1`;
       answerPosition: undefined
     });
     expect(questions[1]).toEqual({
-      text: 'Frage 1',
-      answers: [{ text: 'richtig' }, { text: 'falsch' }],
+      text: 'Frage 2',
+      answers: [{ text: 'antwort 1' }, { text: 'antwort2' }],
       correctAnswer: [0, 1],
       answerPosition: undefined
     });

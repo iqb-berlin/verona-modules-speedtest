@@ -35,9 +35,10 @@ export class UnitService {
       type: 'speedtest-unit-defintion',
       version: this.unitDefVersion,
       layout: this.unit.layout,
-      questions: csvParser.parseQuestions(unitString, this.unit.questionType),
+      questions: csvParser.parseQuestions(unitString, this.unit.questionType, this.unit.multipleSelection),
       questionType: this.unit.questionType,
-      answerType: this.unit.answerType
+      answerType: this.unit.answerType,
+      multipleSelection: this.unit.multipleSelection
     };
     this.updateUnitDef();
   }
