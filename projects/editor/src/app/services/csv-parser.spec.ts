@@ -38,6 +38,26 @@ Frage 2; antwort 1; antwort2; 1`;
     });
   });
 
+  it('reads text-text multiselect', () => {
+    const csv = `frage; antwort_1; antwort_2; loesung
+Frage 1; richtig; falsch; 1
+Frage 2; antwort 1; antwort2; 0, 1`;
+    const questions = csvParser.parseQuestions(csv, 'text');
+    expect(questions.length).toBe(2);
+    expect(questions[0]).toEqual({
+      text: 'Frage 1',
+      answers: [{ text: 'richtig' }, { text: 'falsch' }],
+      correctAnswer: [1],
+      answerPosition: undefined
+    });
+    expect(questions[1]).toEqual({
+      text: 'Frage 1',
+      answers: [{ text: 'richtig' }, { text: 'falsch' }],
+      correctAnswer: [0, 1],
+      answerPosition: undefined
+    });
+  });
+
   it('reads word-select format', () => {
     const csv = `frage; loesung
 Frage mit mehreren Worten; 1,3

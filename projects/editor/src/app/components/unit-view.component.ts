@@ -66,7 +66,8 @@ export class UnitViewComponent {
   addQuestion() {
     this.unit.questions.push({
       text: `Frage ${this.unit.questions.length + 1}`,
-      answers: [{ text: 'richtig' }, { text: 'falsch' }]
+      answers: [{ text: 'richtig' }, { text: 'falsch' }],
+      correctAnswer: this.unit.multipleSelection ? [] : undefined
     });
     this.latestQuestionIndex = this.unit.questions.length - 1;
     this.unitService.updateUnitDef();
@@ -120,5 +121,19 @@ export class UnitViewComponent {
     } else if (this.unit.questionType === 'image' && this.unit.answerType === 'image') {
       this.activeRatioDefault = imageAndImage;
     }
+  }
+
+  onToggleMultiselect() {
+    this.unit.multipleSelection = !this.unit.multipleSelection;
+    this.unit.questions.forEach(question => {
+      if (this.unit.multipleSelection) {
+        question.correctAnswer = question.correctAnswer === undefined ? [] : [(question.correctAnswer as number)];
+      } else {
+        question.correctAnswer =
+          (question.correctAnswer as number[]).length > 1 ? undefined : (question.correctAnswer as number[])[0];
+      }
+    });
+    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.updateUnitDef();
   }
 }

@@ -26,10 +26,11 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-checkbox [(ngModel)]="unit.multipleSelection"
+        <mat-checkbox [ngModel]="unit.multipleSelection"
                       [disabled]="unit.questionType === 'inline-answers' ||
                                   unit.answerType == 'number' ||
-                                  unit.questionType === 'word-select'">
+                                  unit.questionType === 'word-select'"
+                      (ngModelChange)="onToggleMultiselect()">
             Mehrfachauswahl
         </mat-checkbox>
 
