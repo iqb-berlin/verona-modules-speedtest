@@ -94,7 +94,8 @@ import { MatCheckbox } from '@angular/material/checkbox';
                       </div>
                   }
                   @if (unitService.unit.answerType === 'text') {
-                      <mat-form-field [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
+                      <mat-form-field class="split-pos-field"
+                                      [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
                           <mat-label>Teilungsposition</mat-label>
                           <input matInput type="number" [(ngModel)]="answer.splitPosition">
                       </mat-form-field>
@@ -149,6 +150,9 @@ import { MatCheckbox } from '@angular/material/checkbox';
     }
     .text-answer-list button.mdc-fab {
       margin-left: 30px;
+    }
+    .split-pos-field {
+      margin-left: 10px;
     }
     .image-answer {
       display: flex;
