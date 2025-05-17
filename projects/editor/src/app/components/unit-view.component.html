@@ -96,9 +96,6 @@
         </button>
         <input type="file" hidden accept=".csv" #upload
                (change)="onLoadCSVClick($event)">
-        @if (csvError) {
-            <p [style.color]="'red'">{{ csvError }}</p>
-        }
     </fieldset>
 }
 

@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { Answer, Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import { imageAndImage, imageAndText, textOnly } from 'common/constants';
+import { MessageService } from 'editor/src/app/services/message.service';
 import { UnitService } from '../services/unit.service';
 import { AnswerPanelComponent } from './answer-panel.component';
 
@@ -59,9 +60,8 @@ export class UnitViewComponent {
   latestQuestionIndex: number | undefined;
   csvImportVisible = false;
   activeRatioDefault = textOnly;
-  csvError: string | undefined;
 
-  constructor(public unitService: UnitService) { }
+  constructor(public unitService: UnitService, private messageService: MessageService) { }
 
   addQuestion() {
     this.unit.questions.push({
@@ -84,10 +84,9 @@ export class UnitViewComponent {
     const unitString = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
     try {
       this.unitService.loadUnitFromCSV(unitString);
-      this.csvError = undefined;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        this.csvError = error.message;
+        this.messageService.showError(error.message);
       }
     }
   }
