@@ -7,7 +7,7 @@ export type CSVHeaderLabels = 'frage' | 'loesung' | `antwort_${number}`;
 export function parseQuestions(csv: string, questionType: QuestionType, multiSelect: boolean = false): Question[] {
   const headerItems = csv.split(/\n/)[0].split(';').map(h => h.trim());
   const invalidHeaders = getInvalidHeaderLabels(headerItems);
-  if (invalidHeaders.length > 0) throw Error(`Invalid header label(s): ${invalidHeaders}`);
+  if (invalidHeaders.length > 0) throw Error(`Nicht erlaubte Kopfzeilenelement(e): ${invalidHeaders}`);
 
   return csv.split(/\n/)
     .filter(text => text.trim())
@@ -15,8 +15,8 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
     .map((line: string) => {
       const cellValues: string[] = line.split(';');
       if (cellValues.length !== headerItems.length) {
-        throw Error(`Item numbers do not match!
-          header length: ${headerItems.length} - items length: ${cellValues.length}`);
+        throw Error(`Zeilenlänge passt nicht zur Kopfzeile!
+                     Länge Kopfzeile: ${headerItems.length}; Zeilenlänge: ${cellValues.length}`);
       }
       return {
         text: cellValues[headerItems.indexOf('frage')].trim(),
