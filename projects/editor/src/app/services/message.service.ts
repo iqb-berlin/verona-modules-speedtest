@@ -10,4 +10,12 @@ export class MessageService {
   showError(message: string): void {
     this._snackBar.open(message, 'OK');
   }
+
+  showPermanently(message: string): void {
+    this._snackBar.open(message, 'Verwerfen');
+  }
+
+  hideMessage(): void {
+    this._snackBar.dismiss();
+  }
 }

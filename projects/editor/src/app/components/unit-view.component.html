@@ -1,6 +1,9 @@
 <div [style]="'display: flex; flex-direction: row;'">
-    <fieldset class="global-settings-fieldset">
-        <legend>Globale Einstellungen</legend>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Frage- Antworttypen</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <mat-form-field>
             <mat-label>Stimulustyp</mat-label>
             <mat-select required [(ngModel)]="unit.questionType"
@@ -12,7 +15,6 @@
                 <mat-option value="inline-answers">Inline-Antworten</mat-option>
             </mat-select>
         </mat-form-field>
-
         <mat-form-field>
             <mat-label>Antworttyp</mat-label>
             <mat-select required
@@ -25,7 +27,6 @@
                 <mat-option value="number">Zahl</mat-option>
             </mat-select>
         </mat-form-field>
-
         <mat-checkbox [ngModel]="unit.multipleSelection"
                       [disabled]="unit.questionType === 'inline-answers' ||
                                   unit.answerType == 'number' ||
@@ -33,71 +34,62 @@
                       (ngModelChange)="onToggleMultiselect()">
             Mehrfachauswahl
         </mat-checkbox>
-
         <mat-form-field>
             <mat-label>Instruktionstext</mat-label>
             <textarea matInput [(ngModel)]="unit.instructionText" (ngModelChange)="unitService.updateUnitDef()">
             </textarea>
         </mat-form-field>
+      </mat-card-content>
+    </mat-card>
 
+    <mat-card class="styling-settings-card">
+      <mat-card-header>
+        <mat-card-title>Ausrichtung & Gestaltung</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <label>Ausrichtung Frage- Antwortbereich</label>
         <mat-radio-group [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
                          [(ngModel)]="unit.layout" (ngModelChange)="unitService.updateUnitDef()">
-            <mat-radio-button value="column">Vertikal</mat-radio-button>
-            <mat-radio-button value="row">Horizontal</mat-radio-button>
+          <mat-radio-button value="column">Vertikal</mat-radio-button>
+          <mat-radio-button value="row">Horizontal</mat-radio-button>
         </mat-radio-group>
-
-
         <mat-form-field>
-            <mat-label>Größenanteil Fragebereich</mat-label>
-            <input matInput [type]="'number'"
-                   [placeholder]="'Standardwert: ' + activeRatioDefault"
-                   [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
-                   [(ngModel)]="unit.questionSpaceRatio"
-                   (ngModelChange)="unitService.updateUnitDef()">
+          <mat-label>Größenanteil Fragebereich</mat-label>
+          <input matInput [type]="'number'"
+                 [placeholder]="'Standardwert: ' + activeRatioDefault"
+                 [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
+                 [(ngModel)]="unit.questionSpaceRatio"
+                 (ngModelChange)="unitService.updateUnitDef()">
         </mat-form-field>
 
         <label [style.margin-top.px]="5" [style.margin-bottom.px]="3">Antwortknopffarbe</label>
         <input matInput type="color" [disabled]="unit.answerType !== 'text' || unit.questionType === 'word-select'"
                [(ngModel)]="unit.buttonColor"
                (change)="unitService.updateUnitDef()">
+      </mat-card-content>
+    </mat-card>
 
-        <button mat-raised-button [style.margin-top.px]="10" (click)="csvImportVisible = true">
-            CSV Import
-            <mat-icon>upload_file</mat-icon>
-        </button>
-    </fieldset>
-
-    <fieldset [style.visibility]="unitService.missingCorrectAnswerIndeces.length == 0 ? 'hidden' : 'visible'">
-        <legend>Warnung</legend>
-        <p>Antwortdefinition unvollständig. Es fehlen Antworten für mindestens folgende Fragen:</p>
-        <ul>
-            <li *ngFor="let questionIndex of unitService.missingCorrectAnswerIndeces | slice: 0 : 5"
-                [style.color]="'red'">
-                Frageindex: {{ questionIndex + 1 }}
-            </li>
-        </ul>
-    </fieldset>
+  <mat-card class="csv-import-card">
+    <mat-card-header>
+      <mat-card-title>CSV-Import</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Hier können Fragen und Antworten importiert werden.</p>
+      <ul [style.margin-top]="0">
+        <li>Trennzeichen: Semikolon</li>
+        <li>Funktioniert nur für Texte - Bilder oder Audios werden nicht unterstützt.</li>
+        <li>Ausgewählter Frage- und Antworttyp ist entscheidend für das korrekte Einlesen.</li>
+        <li>Spalten werden über Kopfzeile identifiziert. Valide Werte sind: "frage", "loesung" und "antwort_#"</li>
+      </ul>
+      <button mat-raised-button class="csv-import-button" (click)="upload.click()">
+        Datei hochladen
+        <mat-icon>file_upload</mat-icon>
+      </button>
+      <input type="file" hidden accept=".csv" #upload
+             (change)="onLoadCSVClick($event)">
+    </mat-card-content>
+  </mat-card>
 </div>
-
-@if (csvImportVisible) {
-    <fieldset class="global-settings-fieldset">
-        <legend>CSV Import</legend>
-        <p>Hier können Fragen und Antworten importiert werden.</p>
-        <ul [style.margin-top]="0">
-            <li>Trennzeichen: Semikolon</li>
-            <li>Funktioniert nur für Texte - Bilder oder Audios werden nicht unterstützt.</li>
-            <li>Ausgewählter Frage- und Antworttyp ist entscheidend für das korrekte Einlesen.</li>
-            <li>Spalten werden über Kopfzeile identifiziert. Valide Werte sind: "frage", "loesung" und "antwort_#"</li>
-        </ul>
-        <button mat-raised-button class="csv-import-button" (click)="upload.click()">
-            Datei hochladen
-            <mat-icon>file_upload</mat-icon>
-        </button>
-        <input type="file" hidden accept=".csv" #upload
-               (change)="onLoadCSVClick($event)">
-    </fieldset>
-}
 
 <mat-accordion multi="true">
     <mat-expansion-panel *ngFor="let question of unit.questions; let questionIndex = index"

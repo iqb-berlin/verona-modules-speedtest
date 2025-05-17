@@ -5,6 +5,7 @@ import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import * as csvParser from 'editor/src/app/services/csv-parser';
 import { VeronaAPIService } from './verona-api.service';
+import { MessageService } from 'editor/src/app/services/message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,10 @@ export class UnitService {
     answerType: 'text'
   };
 
-  missingCorrectAnswerIndeces: number[] = [];
+  missingCorrectAnswerIndices: number[] = [];
+
+  constructor(private messageService: MessageService) {
+  }
 
   loadUnitDefinition(unitDefinition: string): void {
     if (unitDefinition) this.unit = JSON.parse(unitDefinition);
@@ -129,8 +133,17 @@ export class UnitService {
 
   /* Gets all the question indices with missing correct answers. */
   calculateMissingCorrectAnswerIndeces(): void {
-    this.missingCorrectAnswerIndeces = this.unit.questions
+    this.missingCorrectAnswerIndices = this.unit.questions
       .map((question, index) => (question.correctAnswer === undefined ? index : -1))
-      .filter(index => index !== -1);
+      .filter(index => index !== -1)
+      .map(index => index + 1);
+    if (this.missingCorrectAnswerIndices.length > 0) {
+      this.messageService.showPermanently(
+        `Es fehlen Lösungen für mindestens folgende Fragen:
+                    ${this.missingCorrectAnswerIndices.slice(0, 9).join(', ')}`
+      );
+    } else {
+      this.messageService.hideMessage();
+    }
   }
 }

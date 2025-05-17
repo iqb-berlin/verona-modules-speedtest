@@ -18,6 +18,9 @@ import { MatSelect } from '@angular/material/select';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
+import {
+  MatCard, MatCardContent, MatCardHeader, MatCardTitle
+} from '@angular/material/card';
 import { Answer, Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import { imageAndImage, imageAndText, textOnly } from 'common/constants';
@@ -50,7 +53,11 @@ import { AnswerPanelComponent } from './answer-panel.component';
     AnswerPanelComponent,
     MatCheckbox,
     MatRadioGroup,
-    MatRadioButton
+    MatRadioButton,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent
   ],
   templateUrl: 'unit-view.component.html',
   styleUrls: ['./unit-view.component.css']

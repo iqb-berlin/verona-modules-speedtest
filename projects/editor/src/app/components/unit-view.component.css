@@ -8,15 +8,22 @@
   align-self: start;
 }
 
-.global-settings-fieldset {
-  align-self: start;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+mat-card {
+  width: 350px;
 }
 
-.global-settings-fieldset mat-button-toggle-group {
-  align-self: start;
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.styling-settings-card mat-card-content {
+  gap: 15px;
+}
+
+mat-card.csv-import-card {
+  width: 550px;
 }
 
 .add-button {
