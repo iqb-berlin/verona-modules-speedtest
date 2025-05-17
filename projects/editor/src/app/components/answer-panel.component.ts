@@ -35,9 +35,10 @@ import { MatCheckbox } from '@angular/material/checkbox';
               <h4 [style.grid-row-start]="1" [style.grid-column-start]="2">Antwort</h4>
               @for (answer of answers; let answerIndex = $index; track answer) {
                   @if (!unitService.unit.multipleSelection) {
-                      <mat-radio-button [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
+                      <mat-radio-button [name]="'radio_' + questionIndex + answerIndex"
+                                        [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
                                         [checked]="unitService.unit.questions[questionIndex]
-                                                         .correctAnswer == answerIndex"
+                                                     .correctAnswer == answerIndex"
                                         (change)="onSelectCorrectAnswer(answerIndex)">
                       </mat-radio-button>
                   } @else {
