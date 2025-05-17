@@ -3,8 +3,8 @@ import * as csvParser from 'editor/src/app/services/csv-parser';
 describe('CSVParser', () => {
   it('reads text-text format', () => {
     const csv = `frage; loesung; antwort_1; antwort_2
-Frage 1; 1; richtig; falsch
-Frage 2; 2;antwort 1; antwort2`;
+                 Frage 1; 1; richtig; falsch
+                 Frage 2; 2;antwort 1; antwort2`;
 
     const questions = csvParser.parseQuestions(csv, 'text');
 
@@ -12,13 +12,13 @@ Frage 2; 2;antwort 1; antwort2`;
 
     expect(questions[0]).toEqual({
       text: 'Frage 1',
-      answers: [{ text: 'richtig' }, { text: 'falsch' }],
+      answers: [{ text: 'richtig', splitPosition: undefined }, { text: 'falsch', splitPosition: undefined }],
       correctAnswer: 1,
       answerPosition: undefined
     });
     expect(questions[1]).toEqual({
       text: 'Frage 2',
-      answers: [{ text: 'antwort 1' }, { text: 'antwort2' }],
+      answers: [{ text: 'antwort 1', splitPosition: undefined }, { text: 'antwort2', splitPosition: undefined }],
       correctAnswer: 2,
       answerPosition: undefined
     });
@@ -26,13 +26,13 @@ Frage 2; 2;antwort 1; antwort2`;
 
   it('reads text-text format in mixed up column order', () => {
     const csv = `frage; antwort_1; antwort_2; loesung
-Frage 1; richtig; falsch; 1
-Frage 2; antwort 1; antwort2; 1`;
+                 Frage 1; richtig; falsch; 1
+                 Frage 2; antwort 1; antwort2; 1`;
     const questions = csvParser.parseQuestions(csv, 'text');
     expect(questions.length).toBe(2);
     expect(questions[0]).toEqual({
       text: 'Frage 1',
-      answers: [{ text: 'richtig' }, { text: 'falsch' }],
+      answers: [{ text: 'richtig', splitPosition: undefined }, { text: 'falsch', splitPosition: undefined }],
       correctAnswer: 1,
       answerPosition: undefined
     });
@@ -40,22 +40,43 @@ Frage 2; antwort 1; antwort2; 1`;
 
   it('reads text-text multiselect', () => {
     const csv = `frage; antwort_1; antwort_2; loesung
-Frage 1; richtig; falsch; 1
-Frage 2; antwort 1; antwort2; 0, 1`;
+                 Frage 1; richtig; falsch; 1
+                 Frage 2; antwort 1; antwort2; 0, 1`;
     const questions = csvParser.parseQuestions(csv, 'text', true);
     expect(questions.length).toBe(2);
     expect(questions[0]).toEqual({
       text: 'Frage 1',
-      answers: [{ text: 'richtig' }, { text: 'falsch' }],
+      answers: [{ text: 'richtig', splitPosition: undefined }, { text: 'falsch', splitPosition: undefined }],
       correctAnswer: [1],
       answerPosition: undefined
     });
     expect(questions[1]).toEqual({
       text: 'Frage 2',
-      answers: [{ text: 'antwort 1' }, { text: 'antwort2' }],
+      answers: [{ text: 'antwort 1', splitPosition: undefined }, { text: 'antwort2', splitPosition: undefined }],
       correctAnswer: [0, 1],
       answerPosition: undefined
     });
+  });
+
+  it('reads text-text with split button labels', () => {
+    const csv = `frage;   antwort_1; antwort_2; loesung; teilungsposition_2; teilungsposition_1
+                 Frage 1; richtig;   falsch;    1;       2;                  3
+                 Frage 2; antwort 1; antwort2;  0;       1;                  4`;
+    const questions = csvParser.parseQuestions(csv, 'text', true);
+    expect(questions.length).toBe(2);
+    expect(questions[0]).toEqual({
+      text: 'Frage 1',
+      answers: [{ text: 'richtig', splitPosition: 3 }, { text: 'falsch', splitPosition: 2 }],
+      correctAnswer: [1],
+      answerPosition: undefined
+    });
+  });
+
+  it('throws error with split button labels with missing headers', () => {
+    const csv = `frage; antwort_1; antwort_2; loesung; teilungsposition_1; teilungsposition_2
+                 Frage 1; richtig; falsch; 1
+                 Frage 2; antwort 1; antwort2; 0, 1`;
+    expect(() => csvParser.parseQuestions(csv, 'text', true)).toThrow();
   });
 
   it('reads word-select format', () => {

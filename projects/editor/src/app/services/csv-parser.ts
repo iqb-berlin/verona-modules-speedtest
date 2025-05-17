@@ -31,20 +31,22 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
 }
 
 function generateAnswers(headers: string[], cellValues: string[]): Answer[] {
-  const answerColIndices = getAnswerColIndices(headers);
-  return answerColIndices
-    .map(answerIndex => ({ text: cellValues[answerIndex].trim() }));
-}
-
-/** Get indices of columns containing answers. */
-function getAnswerColIndices(headers: string[]): number[] {
   return headers
     .filter((header: string) => /^antwort_\d+$/.test(header))
-    .map(answerHeader => headers.indexOf(answerHeader));
+    .map(header => {
+      const splitHeaderName = `teilungsposition_${header.split('_')[1]}`;
+      return {
+        text: cellValues[headers.indexOf(header)].trim(),
+        splitPosition: headers.includes(splitHeaderName) ?
+          parseInt(cellValues[headers.indexOf(splitHeaderName)].trim(), 10) :
+          undefined
+      };
+    });
 }
 
 function getInvalidHeaderLabels(headerItems: string[]): string[] {
   return headerItems.filter(
-    item => item !== 'frage' && item !== 'loesung' && !/^antwort_\d+$/.test(item)
+    item => item !== 'frage' && item !== 'loesung' && !/^antwort_\d+$/.test(item) &&
+      !/^teilungsposition_\d+$/.test(item)
   );
 }
