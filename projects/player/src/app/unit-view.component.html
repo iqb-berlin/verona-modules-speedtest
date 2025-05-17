@@ -69,7 +69,8 @@
                                 }
                             </button>
                         } @else if (unit.answerType === 'image') {
-                            <img [src]="answer.src" (click)="onAnswerClick(answerIndex)">
+                            <img [class.selected]="selectedAnswers.includes(answerIndex)"
+                                 [src]="answer.src" (click)="onAnswerClick(answerIndex)">
                         } @else if (unit.answerType === 'audio') {
                             <div class="audio-button-wrapper">
                                 <audio #audioRef [id]="'audioElement' + answerIndex" [src]=answer.src

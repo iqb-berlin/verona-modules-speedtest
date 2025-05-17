@@ -168,7 +168,7 @@
   justify-content: center;
   gap: 30px;
 
-  & button.selected {
+  & button.selected, & img.selected {
     border: 5px solid blueviolet;
   }
 
