@@ -79,7 +79,13 @@
         <li>Trennzeichen: Semikolon</li>
         <li>Funktioniert nur für Texte - Bilder oder Audios werden nicht unterstützt.</li>
         <li>Ausgewählter Frage- und Antworttyp ist entscheidend für das korrekte Einlesen.</li>
-        <li>Spalten werden über Kopfzeile identifiziert. Valide Werte sind: "frage", "loesung" und "antwort_#"</li>
+        <li>Spalten werden über Kopfzeile identifiziert. Valide Werte sind:
+        <ul>
+          <li>frage</li>
+          <li>loesung</li>
+          <li>antwort_#</li>
+          <li>teilungsposition_#</li>
+        </ul>
       </ul>
       <button mat-raised-button class="csv-import-button" (click)="upload.click()">
         Datei hochladen
