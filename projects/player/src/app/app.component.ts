@@ -102,13 +102,17 @@ export class AppComponent implements OnInit {
   }
 
   onResponse(answer: number | number[]) {
-    const isCorrect =
-      this.unit?.questions[this.activeQuestionIndex].correctAnswer !== undefined ?
-        this.unit?.questions[this.activeQuestionIndex].correctAnswer === answer :
-        undefined;
+    const isCorrect = AppComponent.getIsCorrect(
+      answer, this.unit?.questions[this.activeQuestionIndex].correctAnswer);
     if (isCorrect !== undefined) this.updateResultSums(isCorrect);
     VeronaAPIService.sendState(this.createResponseData(answer, isCorrect));
     this.gotoNextQuestion();
+  }
+
+  private static getIsCorrect(answer: number | number[],
+                              correctAnswer: number | number[] | undefined): boolean | undefined {
+    if (correctAnswer === undefined) return undefined;
+    return JSON.stringify(answer) === JSON.stringify(correctAnswer);
   }
 
   private updateResultSums(isCorrect: boolean): void {
