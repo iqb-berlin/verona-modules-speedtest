@@ -134,7 +134,11 @@ export class UnitService {
   /* Gets all the question indices with missing correct answers. */
   calculateMissingCorrectAnswerIndeces(): void {
     this.missingCorrectAnswerIndices = this.unit.questions
-      .map((question, index) => (question.correctAnswer === undefined ? index : -1))
+      .map((question, index) => {
+        return question.correctAnswer === undefined ||
+               (Array.isArray(question.correctAnswer) && question.correctAnswer.length === 0) ?
+          index : -1;
+      })
       .filter(index => index !== -1)
       .map(index => index + 1);
     if (this.missingCorrectAnswerIndices.length > 0) {
