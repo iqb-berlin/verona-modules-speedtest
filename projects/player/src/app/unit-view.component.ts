@@ -119,6 +119,7 @@ export class UnitViewComponent implements OnInit, OnChanges {
     }
     this.activeNumberIndex = 0;
     this.isAudioActive = false;
+    this.selectedAnswers = [];
   }
 
   /* Tokenized sentence for word selection */
