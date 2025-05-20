@@ -251,7 +251,7 @@
   flex-direction: row;
   justify-content: center;
   gap: 10px;
-  height: 15%;
+  height: 8%;
 }
 
 .number-buttons button {
@@ -276,10 +276,9 @@
 }
 
 .unit-nav-next {
-  align-self: end;
-  margin-right: 15%;
+  align-self: center;
+  padding-left: 43%;
   display: flex;
-  //align-items: center;
   margin-top: 2%;
   height: 30%;
 
