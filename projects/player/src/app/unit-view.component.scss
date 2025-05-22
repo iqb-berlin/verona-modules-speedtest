@@ -143,6 +143,10 @@
   p span.selected {
     text-decoration: line-through;
   }
+
+  button {
+    font-size: 24px;
+  }
 }
 
 .word-select .question p span {
@@ -166,6 +170,11 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  font-family: inherit;
+}
+
+inline-answer-buttons button {
+  font-family: inherit;
 }
 
 .answers {
@@ -185,7 +194,7 @@
   }
 
   button:not(.image-button):not(.audio-button) {
-    font-size: larger;
+    font-size: 24px;
     padding: 10px 25px;
   }
 
@@ -260,6 +269,7 @@
   justify-content: center;
   gap: 10px;
   height: 8%;
+  font-family: inherit;
 }
 
 .number-buttons button {
@@ -270,6 +280,7 @@
   border: 1px solid black;
   border-radius: 5px;
   color: black;
+  font-family: inherit;
 }
 
 .number-buttons .backspace-button {
