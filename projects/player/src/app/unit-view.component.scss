@@ -150,6 +150,10 @@
   cursor: pointer;
 }
 
+.word-select .question p button mat-icon {
+  height: 20px;
+}
+
 .inner-wrapper.inline-answers .question {
   flex-direction: row;
   justify-content: center;

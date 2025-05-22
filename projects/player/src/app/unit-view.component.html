@@ -30,6 +30,14 @@
             }
             @if (unit.questionType === 'word-select') {
                 <p>
+                @if (question.src !== undefined) {
+                  <audio #audioElement [src]=question.src
+                         (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
+                  <button class="audio-button" [class.in-progress]="isAudioActive"
+                          [disabled]="isAudioActive" (click)="audioElement.play();">
+                    <mat-icon>play_arrow</mat-icon>
+                  </button>
+                }
                     @for (word of textParts; track $index) {
                         <span [class.selected]="word.wordIndex !== undefined && selectedAnswers.includes(word.wordIndex)"
                               (click)="word.isSelectable && onAnswerClick($any(word.wordIndex))">
