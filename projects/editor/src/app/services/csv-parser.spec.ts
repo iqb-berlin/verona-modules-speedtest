@@ -93,6 +93,19 @@ Frage 2; 2`;
     });
   });
 
+  it('reads inline-answers format', () => {
+    const csv = `frage; antwortpositionsindex; antwort_1; antwort_2; loesung
+                 Die lebt im Wald; 1; Oile; Eule; 1`;
+    const questions = csvParser.parseQuestions(csv, 'inline-answers');
+    expect(questions.length).toBe(1);
+    expect(questions[0]).toEqual({
+      text: 'Die lebt im Wald',
+      answers: [{ text: 'Oile', splitPosition: undefined }, { text: 'Eule', splitPosition: undefined }],
+      correctAnswer: 1,
+      answerPosition: 1
+    });
+  });
+
   it('reads number format', () => {
     const csv = `frage; loesung
 Frage 1; 1234

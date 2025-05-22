@@ -25,7 +25,9 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
             .split(',').map(val => parseInt(val, 10)) :
           parseInt(cellValues[headerItems.indexOf('loesung')].trim(), 10),
         answers: generateAnswers(headerItems, cellValues),
-        answerPosition: questionType === 'inline-answers' ? parseInt(cellValues[1], 10) : undefined
+        answerPosition: questionType === 'inline-answers' ?
+          parseInt(cellValues[headerItems.indexOf('antwortpositionsindex')], 10) :
+          undefined
       };
     });
 }
@@ -46,7 +48,10 @@ function generateAnswers(headers: string[], cellValues: string[]): Answer[] {
 
 function getInvalidHeaderLabels(headerItems: string[]): string[] {
   return headerItems.filter(
-    item => item !== 'frage' && item !== 'loesung' && !/^antwort_\d+$/.test(item) &&
+    item => item !== 'frage' &&
+      item !== 'loesung' &&
+      item !== 'antwortpositionsindex' &&
+      !/^antwort_\d+$/.test(item) &&
       !/^teilungsposition_\d+$/.test(item)
   );
 }
