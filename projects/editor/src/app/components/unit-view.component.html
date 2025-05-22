@@ -63,7 +63,9 @@
         </mat-form-field>
 
         <label [style.margin-top.px]="5" [style.margin-bottom.px]="3">Antwortknopffarbe</label>
-        <input matInput type="color" [disabled]="unit.answerType !== 'text' || unit.questionType === 'word-select'"
+        <input matInput type="color" [disabled]="unit.answerType === 'image' ||
+                                                 unit.answerType === 'number' ||
+                                                 unit.questionType === 'word-select'"
                [(ngModel)]="unit.buttonColor"
                (change)="unitService.updateUnitDef()">
       </mat-card-content>
