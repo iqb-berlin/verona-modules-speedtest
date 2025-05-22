@@ -96,12 +96,14 @@
                         }
                     }
                 } @else {
-                    @for (number of numberAnswer; track $index) {
-                        <div class="number-result-box" [class.active]="$index === activeNumberIndex">
-                            {{ number }}
-                        </div>
-                    }
-                }
+                    <div class="number-result-box-container">
+                        @for (number of numberAnswer; track $index) {
+                            <div class="number-result-box" [class.active]="$index === activeNumberIndex">
+                                {{ number }}
+                            </div>
+                        }
+                    </div>
+               }
             </div>
         }
     </div>
