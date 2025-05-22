@@ -82,10 +82,6 @@
   &.text-audio-only .answers {
     height: 47%;
   }
-
-  .audio-button {
-    // align-self: center;
-  }
 }
 
 .row {
@@ -226,14 +222,22 @@ inline-answer-buttons button {
   align-items: start;
 }
 
-.audio-button {
+.audio-button-wrapper .audio-button {
   border: none;
   background: transparent;
   padding: 7px 15px;
+}
 
+.audio-button {
   &:hover, &.in-progress {
     opacity: 0.5;
   }
+}
+
+.audio-button-big {
+  align-self: center;
+  background-color: transparent;
+  border: none;
 }
 
 .inner-wrapper.numbers {
