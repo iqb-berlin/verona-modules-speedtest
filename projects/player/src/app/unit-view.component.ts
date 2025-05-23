@@ -127,9 +127,9 @@ export class UnitViewComponent implements OnInit, OnChanges {
     const parts: TextPart[] = [];
     let wordIndex = 0;
     // Regex: match words, punctuation, and spaces separately
-    const tokens = sentence.match(/\w+|[^\w\s]+|\s+/g) || [];
+    const tokens = sentence.match(/\p{L}+\p{M}*|\p{N}+|[^\p{L}\p{N}\s]+|\s+/gu) || [];
     tokens.forEach(token => {
-      const isWord = /^\w+$/.test(token);
+      const isWord = /^\p{L}+$/u.test(token);
       const isSpace = /^\s+$/.test(token);
       const part: TextPart = {
         text: isSpace ? '\u00A0' : token,
