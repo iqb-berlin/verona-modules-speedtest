@@ -1,12 +1,12 @@
 import {
-  Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren
+  Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChildren
 } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { Question, Unit } from 'common/interfaces/unit';
 import { FormsModule } from '@angular/forms';
 import { SplitWordPipe } from './split-word.pipe';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'speedtest-player-unit-view',
@@ -158,9 +158,12 @@ export class UnitViewComponent implements OnInit, OnChanges {
     }
   }
 
-  deleteDigit() {
-    this.numberAnswer[this.activeNumberIndex] = undefined;
+  moveCursorBackward() {
     if (this.activeNumberIndex > 0) this.activeNumberIndex -= 1;
+  }
+
+  moveCorsorForward() {
+    if (this.activeNumberIndex <= this.numberAnswer.length - 2) this.activeNumberIndex += 1;
   }
 }
 
