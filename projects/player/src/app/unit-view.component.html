@@ -18,10 +18,10 @@
                 </figure>
             }
             @if (unit.questionType === 'audio') {
-                <div class="big-audio-button-wrapper">
+                <div>
                     <audio #audioElement [src]=question.src
                            (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
-                    <button class="audio-button audio-button-big" [class.in-progress]="isAudioActive"
+                    <button class="audio-button large-audio-button" [class.in-progress]="isAudioActive"
                             [disabled]="isAudioActive" (click)="audioElement.play();">
                       <svg _ngcontent-ng-c3234747999="" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180px" height="180px" viewBox="0 0 64 64" xml:space="preserve"><g _ngcontent-ng-c3234747999=""><polygon _ngcontent-ng-c3234747999="" fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="27,21 41,32 27,43"></polygon><path _ngcontent-ng-c3234747999="" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M53.92,10.081 c12.107,12.105,12.107,31.732,0,43.838c-12.106,12.108-31.734,
                                        12.108-43.839,0c-12.107-12.105-12.107-31.732,0-43.838 C22.186-2.027,41.813-2.027,
@@ -32,14 +32,14 @@
             }
             @if (unit.questionType === 'word-select') {
                 <p>
-                @if (question.src !== undefined) {
-                  <audio #audioElement [src]=question.src
-                         (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
-                  <button class="audio-button" [class.in-progress]="isAudioActive"
-                          [disabled]="isAudioActive" (click)="audioElement.play();">
-                    <mat-icon>play_arrow</mat-icon>
-                  </button>
-                }
+                    @if (question.src !== undefined) {
+                      <audio #audioElement [src]=question.src
+                             (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
+                      <button class="audio-button" [class.in-progress]="isAudioActive"
+                              [disabled]="isAudioActive" (click)="audioElement.play();">
+                        <mat-icon>play_arrow</mat-icon>
+                      </button>
+                    }
                     @for (word of textParts; track $index) {
                         <span [class.selected]="word.wordIndex !== undefined && selectedAnswers.includes(word.wordIndex)"
                               (click)="word.isSelectable && onAnswerClick($any(word.wordIndex))">

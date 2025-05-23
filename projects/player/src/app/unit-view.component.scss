@@ -223,26 +223,26 @@ inline-answer-buttons button {
 }
 
 .audio-button-wrapper .audio-button {
-  border: none;
-  background: transparent;
   padding: 7px 15px;
 }
 
 .audio-button {
+  border: none;
+  background: transparent;
+
   &:hover, &.in-progress {
     opacity: 0.5;
   }
 }
 
-.audio-button-big {
+.question .audio-button {
   align-self: center;
   background-color: transparent;
   border: none;
 }
 
-.inner-wrapper.numbers {
-  //max-height: 63%;
-  // TODO make right
+.question .audio-button:not(.large-audio-button) {
+  margin-right: 15px;
 }
 
 .number-result-box-container {
