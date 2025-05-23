@@ -49,6 +49,14 @@
                 </p>
             }
             @if (unit.questionType === 'inline-answers') {
+                @if (question.src !== undefined) {
+                  <audio #audioElement [src]=question.src
+                         (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
+                  <button class="audio-button" [class.in-progress]="isAudioActive"
+                          [disabled]="isAudioActive" (click)="audioElement.play();">
+                    <mat-icon>play_arrow</mat-icon>
+                  </button>
+                }
                 <span>{{ textParts[0].text }}</span>
                 <div class="inline-answer-buttons">
                     @for (answer of question.answers; let answerIndex = $index; track answerIndex) {

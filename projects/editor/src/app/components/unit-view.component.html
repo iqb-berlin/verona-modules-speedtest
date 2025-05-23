@@ -155,7 +155,7 @@
                         <img *ngIf="question.src" [src]="question.src" [alt]="question.text">
                     </div>
                 }
-                @if (unit.questionType === 'audio' || unit.questionType === 'word-select') {
+                @if (unit.questionType === 'audio' || unit.questionType === 'word-select' || unit.questionType === 'inline-answers') {
                     <h4>Audio</h4>
                     <audio *ngIf="question.src" controls [src]=question.src></audio>
                     <button mat-icon-button [matTooltip]="'Audio hinzufügen/ändern'" (click)="audioUpload.click();">
