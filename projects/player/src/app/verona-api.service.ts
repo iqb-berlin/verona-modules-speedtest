@@ -7,7 +7,7 @@ export class VeronaAPIService {
   static handleMessage(messageData: StartCommand): void {
     switch (messageData.type) {
       case 'vopStartCommand':
-        VeronaAPIService.sessionID = messageData.sessionID;
+        VeronaAPIService.sessionID = messageData.sessionId;
         VeronaAPIService.startCommand.next(messageData as StartCommand);
         break;
       // no default
@@ -68,7 +68,7 @@ export class VeronaAPIService {
 // Incoming
 export interface StartCommand {
   type: 'vopStartCommand';
-  sessionID: string;
+  sessionId: string;
   unitDefinition: string;
   unitState?: {
     dataParts: Record<string, string>;
