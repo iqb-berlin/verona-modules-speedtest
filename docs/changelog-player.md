@@ -1,5 +1,9 @@
-Player
+#Player
 ======
+## 3.0.6
+### Fehlerbehebungen
+- Session ID von der Hostanwendung wird korrekt gelesen
+
 ## 2.1.1
 ## Änderungen
 - Umstellung auf Schriftart ABeeZee
