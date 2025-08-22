@@ -1,5 +1,16 @@
 Player
 ======
+## 2.1.2
+### Fehlerbehebungen
+- Session ID von der Hostanwendung wird korrekt gelesen
+
+## 2.1.1
+## Änderungen
+- Umstellung auf Schriftart ABeeZee
+## Fehlerbehebungen
+- Einlesen von Unit-Zustandsdaten korrigiert
+- Antworten werden nicht mehr als falsch gewertet, wenn die richtige Antwort nicht hinterlegt ist
+
 ## 2.0.2
 - Antwortdaten verwenden subform (hoffentlich) korrekt
 
