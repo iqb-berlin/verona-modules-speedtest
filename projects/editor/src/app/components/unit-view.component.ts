@@ -42,7 +42,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
     MatIcon,
     MatLabel,
     MatTooltip,
-    MatFabButton,
     FormsModule,
     NgIf,
     MatIconButton,
