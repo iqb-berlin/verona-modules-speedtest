@@ -60,6 +60,7 @@ mat-card.csv-import-card {
 .question-delete-button {
   margin-left: auto;
   box-shadow: none;
+  color: #f44336;
 }
 
 .expansion-panel-content {

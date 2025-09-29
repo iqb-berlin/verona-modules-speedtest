@@ -107,7 +107,7 @@
             <mat-panel-title>
                 <h2>{{ questionIndex + 1 }}: {{ question.text }}</h2>
                 <img *ngIf="unit.questionType === 'image'" [src]="question.src" [alt]="question.text">
-                <button mat-fab class="question-delete-button" color="warn" [matTooltip]="'Frage löschen'"
+                <button class="question-delete-button" [matTooltip]="'Frage löschen'"
                         (click)="deleteQuestion(questionIndex)">
                     <mat-icon>delete</mat-icon>
                 </button>
