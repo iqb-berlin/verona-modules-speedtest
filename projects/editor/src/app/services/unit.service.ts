@@ -4,8 +4,8 @@ import packageInfo from 'packageInfo';
 import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import * as csvParser from 'editor/src/app/services/csv-parser';
-import { VeronaAPIService } from './verona-api.service';
 import { MessageService } from 'editor/src/app/services/message.service';
+import { VeronaAPIService } from './verona-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +23,19 @@ export class UnitService {
 
   missingCorrectAnswerIndices: number[] = [];
 
-  constructor(private messageService: MessageService) {
-  }
+  constructor(private messageService: MessageService) { }
 
   loadUnitDefinition(unitDefinition: string): void {
-    if (unitDefinition) this.unit = JSON.parse(unitDefinition);
+    if (unitDefinition) {
+      const parsedUnit = JSON.parse(unitDefinition);
+      const readMajor = parsedUnit.version.split('.')[0];
+      const currentMajor = this.unitDefVersion.split('.')[0];
+      if (readMajor !== currentMajor) {
+        this.messageService.showError('Inkompatible Unit-Version festgestellt.');
+        return;
+      }
+      this.unit = parsedUnit;
+    }
   }
 
   saveUnitToFile(): void {
