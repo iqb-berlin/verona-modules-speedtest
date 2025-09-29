@@ -52,13 +52,16 @@ mat-card.csv-import-card {
   height: 40px;
 }
 
+mat-panel-title button {
+  margin-right: 5px;
+}
+
 .text-button-panel {
   display: flex;
   flex-direction: row;
 }
 
 .question-delete-button {
-  margin-left: auto;
   box-shadow: none;
   color: #f44336;
 }

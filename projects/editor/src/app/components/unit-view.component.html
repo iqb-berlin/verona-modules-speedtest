@@ -107,6 +107,16 @@
             <mat-panel-title>
                 <h2>{{ questionIndex + 1 }}: {{ question.text }}</h2>
                 <img *ngIf="unit.questionType === 'image'" [src]="question.src" [alt]="question.text">
+                <button [style.margin-left]="'auto'" [disabled]="questionIndex == 0"
+                        [matTooltip]="'Frage nach oben verschieben'"
+                        (click)="moveQuestion(questionIndex, 'up')">
+                    <mat-icon>arrow_upward</mat-icon>
+                </button>
+                <button [disabled]="questionIndex == unit.questions.length - 1"
+                        [matTooltip]="'Frage nach unten verschieben'"
+                        (click)="moveQuestion(questionIndex, 'down')">
+                    <mat-icon>arrow_downward</mat-icon>
+                </button>
                 <button class="question-delete-button" [matTooltip]="'Frage löschen'"
                         (click)="deleteQuestion(questionIndex)">
                     <mat-icon>delete</mat-icon>
