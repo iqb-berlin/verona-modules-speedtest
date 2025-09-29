@@ -7,10 +7,9 @@ import { UnitService } from './services/unit.service';
 import { UnitViewComponent } from './components/unit-view.component';
 
 @Component({
-  selector: 'speedtest-editor',
-  standalone: true,
-  imports: [CommonModule, ToolbarComponent, UnitViewComponent],
-  template: `
+    selector: 'speedtest-editor',
+    imports: [CommonModule, ToolbarComponent, UnitViewComponent],
+    template: `
     <speedtest-toolbar *ngIf="isStandalone"
                        (saveUnit)="unitService.saveUnitToFile()"
                        (unitLoaded)="unitService.loadUnitDefinition($event)">

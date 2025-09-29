@@ -30,7 +30,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
 
 @Component({
   selector: 'speedtest-unit-view',
-  standalone: true,
   imports: [
     NgForOf,
     MatAccordion,
@@ -47,7 +46,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
     FormsModule,
     NgIf,
     MatIconButton,
-    SlicePipe,
     MatOption,
     MatSelect,
     AnswerPanelComponent,

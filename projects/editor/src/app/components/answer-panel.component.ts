@@ -12,23 +12,22 @@ import { Answer } from 'common/interfaces/unit';
 import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'speedtest-answer-panel',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatIcon,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    ReactiveFormsModule,
-    FormsModule,
-    MatTooltip,
-    MatMiniFabButton,
-    MatIconButton,
-    MatRadioButton,
-    MatCheckbox
-  ],
-  template: `
+    selector: 'speedtest-answer-panel',
+    imports: [
+        MatButton,
+        MatIcon,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        ReactiveFormsModule,
+        FormsModule,
+        MatTooltip,
+        MatMiniFabButton,
+        MatIconButton,
+        MatRadioButton,
+        MatCheckbox
+    ],
+    template: `
       @if (unitService.unit.answerType !== 'number' && unitService.unit.questionType !== 'word-select') {
           <div class="text-answer-list">
               <h4 [style.grid-row-start]="1" [style.grid-column-start]="1">richtige Antwort</h4>
@@ -132,7 +131,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
           </mat-form-field>
       }
   `,
-  styles: `
+    styles: `
     :host {
       display: flex; flex-direction: column;
     }
