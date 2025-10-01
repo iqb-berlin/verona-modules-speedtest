@@ -6,6 +6,9 @@ export type CSVHeaderLabels = 'frage' | 'loesung' | `antwort_${number}`;
 
 export function parseQuestions(csv: string, questionType: QuestionType, multiSelect: boolean = false): Question[] {
   const cleanedCsv = csv.replace(/\r/g, '');
+  if (cleanedCsv.includes('\uFFFD')) {
+    throw new Error('Datei ist nicht UTF-8 kodiert.');
+  }
   const headerItems = cleanedCsv.split(/\n/)[0].split(';').map(h => h.trim());
   const invalidHeaders = getInvalidHeaderLabels(headerItems);
   if (invalidHeaders.length > 0) throw Error(`Nicht erlaubte Kopfzeilenelement(e): ${invalidHeaders}`);
