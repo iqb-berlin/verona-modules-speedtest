@@ -5,11 +5,12 @@ import {
 export type CSVHeaderLabels = 'frage' | 'loesung' | `antwort_${number}`;
 
 export function parseQuestions(csv: string, questionType: QuestionType, multiSelect: boolean = false): Question[] {
-  const headerItems = csv.split(/\n/)[0].split(';').map(h => h.trim());
+  const cleanedCsv = csv.replace(/\r/g, '');
+  const headerItems = cleanedCsv.split(/\n/)[0].split(';').map(h => h.trim());
   const invalidHeaders = getInvalidHeaderLabels(headerItems);
   if (invalidHeaders.length > 0) throw Error(`Nicht erlaubte Kopfzeilenelement(e): ${invalidHeaders}`);
 
-  return csv.split(/\n/)
+  return cleanedCsv.split(/\n/)
     .filter(text => text.trim())
     .slice(1) // skip header line
     .map((line: string) => {
@@ -18,17 +19,21 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
         throw Error(`Zeilenlänge passt nicht zur Kopfzeile!
                      Länge Kopfzeile: ${headerItems.length}; Zeilenlänge: ${cellValues.length}`);
       }
-      return {
+      const question: Question = {
         text: cellValues[headerItems.indexOf('frage')].trim(),
-        correctAnswer: multiSelect || questionType === 'word-select' ?
-          cellValues[headerItems.indexOf('loesung')]
-            .split(',').map(val => parseInt(val, 10)) :
-          parseInt(cellValues[headerItems.indexOf('loesung')].trim(), 10),
-        answers: generateAnswers(headerItems, cellValues),
-        answerPosition: questionType === 'inline-answers' ?
-          parseInt(cellValues[headerItems.indexOf('antwortpositionsindex')], 10) :
-          undefined
+        answers: generateAnswers(headerItems, cellValues)
       };
+      if (headerItems.includes('loesung')) {
+        if (multiSelect || questionType === 'word-select') {
+          question.correctAnswer = cellValues[headerItems.indexOf('loesung')].split(',').map(val => parseInt(val, 10));
+        } else {
+          question.correctAnswer = parseInt(cellValues[headerItems.indexOf('loesung')].trim(), 10);
+        }
+      }
+      if (headerItems.includes('antwortpositionsindex') && questionType === 'inline-answers') {
+        question.answerPosition = parseInt(cellValues[headerItems.indexOf('antwortpositionsindex')], 10);
+      }
+      return question;
     });
 }
 
