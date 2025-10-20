@@ -10,7 +10,7 @@
 - Repariert Windows-spezifische Zeilenendungen, sodass Probleme beim CSV-Import vermieden werden
 - Erkennt Probleme bei der Zeichensatzkodierung und zeigt Warnung, wenn nicht UTF-8 verwendet wird
 ### Fehlerbehebungen
-- CSV-Import funktioniert auch, wenn nicht alle Zeilen (Lösungen etc.) angegeben werden
+- CSV-Import funktioniert auch, wenn nicht alle Spalten (Lösungen etc.) angegeben werden
 
 # 3.0.6
 ### Fehlerbehebungen
