@@ -1,3 +1,7 @@
+# 3.1.1
+### Fehlerbehebungen
+- Einbindung neuen Fonts korrigiert
+
 # 3.1.0
 ### Änderungen
 - Neuer Font: "IQBprimar"
