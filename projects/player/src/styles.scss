@@ -1,4 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
+@font-face {
+  font-family: 'IQBprimar';
+  font-style: normal;
+  font-weight: normal;
+  src: url(assets/fonts/IQBprimar-Regular.woff2) format('woff2');
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: 'IQBprimar', sans-serif; }
