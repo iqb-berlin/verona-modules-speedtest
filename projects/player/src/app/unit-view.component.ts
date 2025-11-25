@@ -1,5 +1,5 @@
 import {
-  Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChildren
+  Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, QueryList, ViewChildren
 } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { MatButton } from '@angular/material/button';
@@ -163,6 +163,22 @@ export class UnitViewComponent implements OnInit, OnChanges {
 
   moveCorsorForward() {
     if (this.activeNumberIndex <= this.numberAnswer.length - 2) this.activeNumberIndex += 1;
+  }
+
+  // This method allows for keyboard input on number answers.
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (this.unit.answerType === 'number') {
+      if (/^\d$/.test(event.key)) {
+        this.enterDigit(Number.parseInt(event.key, 10));
+      }
+      if (event.key === 'ArrowLeft') {
+        this.moveCursorBackward();
+      }
+      if (event.key === 'ArrowRight') {
+        this.moveCorsorForward();
+      }
+    }
   }
 }
 
