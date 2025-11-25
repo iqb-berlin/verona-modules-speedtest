@@ -278,14 +278,18 @@ inline-answer-buttons button {
 }
 
 .number-buttons button {
-  font-size: larger;
-  width: 45px;
-  height: 40px;
+  font-size: 25px;
+  width: 55px;
+  height: 50px;
   cursor: pointer;
   border: 1px solid black;
   border-radius: 5px;
   color: black;
   font-family: inherit;
+}
+
+.number-buttons button mat-icon {
+  height: 20px;
 }
 
 .unit-nav-next {
