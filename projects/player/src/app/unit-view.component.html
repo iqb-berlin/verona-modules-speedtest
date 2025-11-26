@@ -108,7 +108,8 @@
                 } @else {
                     <div class="number-result-box-container">
                         @for (number of numberAnswer; track $index) {
-                            <div class="number-result-box" [class.active]="$index === activeNumberIndex">
+                            <div class="number-result-box" [class.active]="$index === activeNumberIndex"
+                                 (click)="selectResultBox($index)">
                                 {{ number }}
                             </div>
                         }

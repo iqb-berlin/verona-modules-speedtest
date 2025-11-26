@@ -180,6 +180,10 @@ export class UnitViewComponent implements OnInit, OnChanges {
       }
     }
   }
+
+  selectResultBox(boxIndex: number): void {
+    this.activeNumberIndex = boxIndex;
+  }
 }
 
 export interface TextPart {
