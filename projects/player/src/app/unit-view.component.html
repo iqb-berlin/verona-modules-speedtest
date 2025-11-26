@@ -23,9 +23,7 @@
                            (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                     <button class="audio-button large-audio-button" [class.in-progress]="isAudioActive"
                             [disabled]="isAudioActive" (click)="audioElement.play();">
-                      <svg _ngcontent-ng-c3234747999="" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180px" height="180px" viewBox="0 0 64 64" xml:space="preserve"><g _ngcontent-ng-c3234747999=""><polygon _ngcontent-ng-c3234747999="" fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="bevel" stroke-miterlimit="10" points="27,21 41,32 27,43"></polygon><path _ngcontent-ng-c3234747999="" fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" d="M53.92,10.081 c12.107,12.105,12.107,31.732,0,43.838c-12.106,12.108-31.734,
-                                       12.108-43.839,0c-12.107-12.105-12.107-31.732,0-43.838 C22.186-2.027,41.813-2.027,
-                                       53.92,10.081z"></path></g></svg>
+                      <img src="assets/audio-icon.svg" alt="audio-icon">
                     </button>
                     <p>{{ question.text }}</p>
                 </div>
@@ -37,7 +35,7 @@
                              (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                       <button class="audio-button" [class.in-progress]="isAudioActive"
                               [disabled]="isAudioActive" (click)="audioElement.play();">
-                        <mat-icon>play_arrow</mat-icon>
+                        <img src="assets/audio-icon.svg" alt="audio-icon">
                       </button>
                     }
                     @for (word of textParts; track $index) {
@@ -54,7 +52,7 @@
                          (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                   <button class="audio-button" [class.in-progress]="isAudioActive"
                           [disabled]="isAudioActive" (click)="audioElement.play();">
-                    <mat-icon>play_arrow</mat-icon>
+                    <img src="assets/audio-icon.svg" alt="audio-icon">
                   </button>
                 }
                 <span>{{ textParts[0].text }}</span>
@@ -95,7 +93,7 @@
                                        (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                                 <button class="audio-button" [class.in-progress]="isAudioActive"
                                         [disabled]="isAudioActive" (click)="playAnswerAudio(answerIndex)">
-                                        <mat-icon>play_arrow</mat-icon>
+                                  <img src="assets/audio-icon.svg" alt="audio-icon">
                                 </button>
                                 <button mat-raised-button [style.background-color]="unit.buttonColor"
                                         [class.selected]="selectedAnswers.includes(answerIndex)"
