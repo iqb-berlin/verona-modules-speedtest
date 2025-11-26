@@ -125,11 +125,8 @@
                     {{ number }}
                 </button>
             }
-            <button (click)="moveCursorBackward()">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <button (click)="moveCorsorForward()">
-                <mat-icon>arrow_forward</mat-icon>
+            <button class="icon-button" (click)="deleteDigit()">
+                <mat-icon>backspace</mat-icon>
             </button>
         </div>
     }

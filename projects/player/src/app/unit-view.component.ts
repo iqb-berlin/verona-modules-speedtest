@@ -157,6 +157,13 @@ export class UnitViewComponent implements OnInit, OnChanges {
     }
   }
 
+  deleteDigit(): void {
+    if (this.numberAnswer[this.activeNumberIndex] === undefined) {
+      this.moveCursorBackward();
+    }
+    this.numberAnswer[this.activeNumberIndex] = undefined;
+  }
+
   moveCursorBackward() {
     if (this.activeNumberIndex > 0) this.activeNumberIndex -= 1;
   }
