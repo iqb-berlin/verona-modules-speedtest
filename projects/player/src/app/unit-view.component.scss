@@ -195,6 +195,8 @@ inline-answer-buttons button {
     padding: 10px 25px;
     height: 80px;
     border-radius: 10px;
+    box-shadow: 7px 6px 8px #0003;
+    border: 1px solid lightgray;
   }
 
   button span.button-label-1 {
