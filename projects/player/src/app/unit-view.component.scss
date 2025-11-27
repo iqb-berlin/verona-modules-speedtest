@@ -194,7 +194,7 @@
   button:not(.image-button):not(.audio-button) {
     font-size: var(--font-size-base);
     padding: 10px 25px;
-    height: 80px;
+    height: 90px;
     border-radius: 10px;
     box-shadow: 7px 6px 8px #0003;
     border: 1px solid lightgray;
@@ -230,7 +230,7 @@
 
 .audio-button-wrapper .audio-button {
   padding: 10px;
-  height: 80px;
+  height: 90px;
 }
 
 .audio-button {
