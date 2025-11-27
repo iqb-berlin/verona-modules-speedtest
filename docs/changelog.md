@@ -1,3 +1,19 @@
+# 3.2.0
+### Neue Funktionen
+- Neue globale Einstellung: Knopfbreite
+  Hierrüber kann eine feste Breite für Antwortknöpfe eingestellt werden. Das alte Verhalten kann wiederhergestellt werden, wenn das Feld geleert wird.
+## Player
+### Neue Funktionen
+- Antworttyp: Zahlen
+  - Überarbeitung des Löschmechanismus:
+    - Es gibt keine Cursortasten zur Navigation der Ergebnisfelder mehr, sondern nur noch eine Löschtaste. Diese entfernt den Wert aus dem ausgewählten Feld. Insofern das Feld bereits leer ist, springt die Auswahl zum vorherigen Feld und löscht dort den Wert. Dieses Verhalten soll dem von normalen Eingabefeldern ähneln.
+  - Zifferneingabe kann via Hardware-Tastatur vorgenommen werden. Ebenso die Navigation zwischen den Felder via Cursortasten.
+  - Ergebnisfelder können direkt ausgewählt werden (ohne separate Cursortasten; diese gäbe es ohnehin nicht mehr)
+### Änderungen
+- Knöpfe bei Text- und Zahlenantworten vergrößert
+- Schrift vergrößert
+- Audio-Icon und Weiter-Icon ausgetauscht
+
 # 3.1.1
 ### Fehlerbehebungen
 - Einbindung neuen Fonts korrigiert
