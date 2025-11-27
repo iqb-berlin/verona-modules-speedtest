@@ -9,17 +9,17 @@ import { FormsModule } from '@angular/forms';
 import { SplitWordPipe } from './split-word.pipe';
 
 @Component({
-    selector: 'speedtest-player-unit-view',
-    imports: [
-        NgIf,
-        MatButton,
-        NgClass,
-        FormsModule,
-        SplitWordPipe,
-        MatIcon
-    ],
-    templateUrl: 'unit-view.component.html',
-    styleUrls: ['unit-view.component.scss']
+  selector: 'speedtest-player-unit-view',
+  imports: [
+    NgIf,
+    MatButton,
+    NgClass,
+    FormsModule,
+    SplitWordPipe,
+    MatIcon
+  ],
+  templateUrl: 'unit-view.component.html',
+  styleUrls: ['unit-view.component.scss']
 })
 export class UnitViewComponent implements OnInit, OnChanges {
   @Input() question!: Question;
