@@ -68,6 +68,14 @@
                                                  unit.questionType === 'word-select'"
                [(ngModel)]="unit.buttonColor"
                (change)="unitService.updateUnitDef()">
+        <mat-form-field>
+          <label>Antwortknopfbreite in px</label>
+          <input matInput [type]="'number'" [disabled]="unit.answerType === 'image' ||
+                                                        unit.answerType === 'number' ||
+                                                        unit.questionType === 'word-select'"
+                 [(ngModel)]="unit.buttonWidth"
+                 (change)="unitService.updateUnitDef()">
+        </mat-form-field>
       </mat-card-content>
     </mat-card>
 

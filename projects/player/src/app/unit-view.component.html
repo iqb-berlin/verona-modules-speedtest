@@ -74,8 +74,9 @@
                 @if (unit.answerType !== 'number') {
                     @for (answer of question.answers; let answerIndex = $index; track answerIndex) {
                         @if (unit.answerType === 'text') {
-                            <button mat-raised-button [style.background-color]="unit.buttonColor"
-                                    [class.selected]="selectedAnswers.includes(answerIndex)"
+                            <button mat-raised-button [class.selected]="selectedAnswers.includes(answerIndex)"
+                                    [style.background-color]="unit.buttonColor"
+                                    [style.width.px]="unit.buttonWidth"
                                     (click)="onAnswerClick(answerIndex)">
                                 @if (answer.splitPosition) {
                                     <span class="button-label-1">{{ (answer.text | splitWord: answer.splitPosition)[0] }}</span>
@@ -96,6 +97,7 @@
                                   <img src="assets/audio-icon.svg" alt="audio-icon">
                                 </button>
                                 <button mat-raised-button [style.background-color]="unit.buttonColor"
+                                        [style.width.px]="unit.buttonWidth"
                                         [class.selected]="selectedAnswers.includes(answerIndex)"
                                         (click)="onAnswerClick(answerIndex)">
                                     {{ answer.text }}

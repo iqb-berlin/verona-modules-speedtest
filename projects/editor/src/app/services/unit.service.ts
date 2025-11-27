@@ -15,6 +15,7 @@ export class UnitService {
   unit: Unit = {
     type: 'speedtest-unit-defintion',
     version: this.unitDefVersion,
+    buttonWidth: 350,
     questions: [],
     layout: 'column',
     questionType: 'text',
