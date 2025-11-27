@@ -132,12 +132,7 @@
     }
     @if (unit.answerType === 'number' || unit.multipleSelection || unit.questionType === 'word-select') {
         <div class="unit-nav-next">
-            <span class="svg-container" (click)="onNext()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 100 100">
-                <circle cx="50%" cy="50%" r="50" fill="#b3fe5b"/>
-                <path d="M 45 35 L 60 50 L 45 65" stroke="black" stroke-width="5" fill="none"/>
-            </svg>
-          </span>
+          <img src="assets/next-unit-icon.svg" alt="next-unit-icon" (click)="onNext()">
         </div>
     }
 </div>
