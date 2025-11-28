@@ -11,15 +11,15 @@ fi
 ng build --project $1 --output-hashing=none
 
 # Pack JS and CSS
-node node_modules/iqb-dev-components/src/js_css_packer.js dist $1 dist
+node node_modules/iqb-dev-components/src/js_css_packer.js dist $1 dist/$1
 
 # Use prepared HTML
-cp projects/$1/src/index-prod.html dist/index.html
+cp projects/$1/src/index-prod.html dist/$1/index.html
 
 # Set correct version to JSON description
-sed -i -e 's/version-placeholder/'${2}'/g' dist/index.html
+sed -i -e 's/version-placeholder/'${2}'/g' dist/$1/index.html
 
 # Pack dist
-node scripts/distpacker.js dist iqb-$1-speedtest-$2.html $1
+node scripts/distpacker.js dist/$1 iqb-$1-speedtest-$2.html
 #
-#cp dist/iqb-$1-speedtest-$2.html dist/
+mv dist/$1/iqb-$1-speedtest-$2.html dist/
