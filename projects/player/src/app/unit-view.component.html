@@ -23,7 +23,7 @@
                            (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                     <button class="audio-button large-audio-button" [class.in-progress]="isAudioActive"
                             [disabled]="isAudioActive" (click)="audioElement.play();">
-                      <img src="assets/audio-icon.svg" alt="audio-icon">
+                            <ng-container *ngTemplateOutlet="audioIcon"></ng-container>
                     </button>
                     <p>{{ question.text }}</p>
                 </div>
@@ -35,7 +35,7 @@
                              (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                       <button class="audio-button" [class.in-progress]="isAudioActive"
                               [disabled]="isAudioActive" (click)="audioElement.play();">
-                        <img src="assets/audio-icon.svg" alt="audio-icon">
+                              <ng-container *ngTemplateOutlet="audioIcon"></ng-container>
                       </button>
                     }
                     @for (word of textParts; track $index) {
@@ -52,7 +52,7 @@
                          (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                   <button class="audio-button" [class.in-progress]="isAudioActive"
                           [disabled]="isAudioActive" (click)="audioElement.play();">
-                    <img src="assets/audio-icon.svg" alt="audio-icon">
+                          <ng-container *ngTemplateOutlet="audioIcon"></ng-container>
                   </button>
                 }
                 <span>{{ textParts[0].text }}</span>
@@ -94,7 +94,7 @@
                                        (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
                                 <button class="audio-button" [class.in-progress]="isAudioActive"
                                         [disabled]="isAudioActive" (click)="playAnswerAudio(answerIndex)">
-                                  <img src="assets/audio-icon.svg" alt="audio-icon">
+                                        <ng-container *ngTemplateOutlet="audioIcon"></ng-container>
                                 </button>
                                 <button mat-raised-button [style.background-color]="unit.buttonColor"
                                         [style.width.px]="unit.buttonWidth"
@@ -132,7 +132,56 @@
     }
     @if (unit.answerType === 'number' || unit.multipleSelection || unit.questionType === 'word-select') {
         <div class="unit-nav-next">
-          <img src="assets/next-unit-icon.svg" alt="next-unit-icon" (click)="onNext()">
+          <button (click)="onNext()">
+            <ng-container *ngTemplateOutlet="nextUnitIcon"></ng-container>
+          </button>
         </div>
     }
 </div>
+
+<ng-template #audioIcon>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" version="1.1" id="svg3" sodipodi:docname="Ohr ohne_Schatten_neu.svg" inkscape:version="1.4 (86a8ad7, 2024-10-11)" inkscape:export-filename="Ohr ohne_Schatten.png" inkscape:export-xdpi="96" inkscape:export-ydpi="96" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <rect width="80" height="80" rx="40" fill="#0050E5" id="rect1" style="" x="0" y="0"/>
+  <path d="m 27.868615,24.651897 c 0.642564,-0.805026 0.652,-1.97959 -0.07528,-2.709026 -0.730359,-0.732513 -1.924205,-0.737436 -2.585026,0.05826 -2.962974,3.567282 -4.744308,8.157333 -4.744308,13.16882 0,5.011384 1.781334,9.601538 4.744308,13.168717 0.660821,0.795693 1.854667,0.790667 2.584923,0.05815 0.727282,-0.729436 0.717846,-1.903897 0.07528,-2.708923 -2.301436,-2.882974 -3.674256,-6.539487 -3.674256,-10.517846 0,-3.978461 1.372923,-7.635076 3.674359,-10.518153 z" fill="#ffffff" id="path1" style=""/>
+  <path d="m 46.575999,55.747999 c -0.531487,0 -1.053744,-0.112206 -1.426872,-0.280718 -1.314872,-0.701539 -2.266154,-1.655487 -3.189436,-4.461744 -0.960513,-2.909025 -2.741743,-4.283897 -4.467077,-5.621538 -1.473435,-1.141231 -3.002871,-2.319898 -4.317846,-4.723795 -0.979179,-1.795795 -1.52,-3.750974 -1.52,-5.490564 0,-5.247487 4.093949,-9.353846 9.325744,-9.353846 4.596923,0 8.315589,3.170257 9.150256,7.499282 0.195077,1.011487 1.010667,1.854564 2.040718,1.854564 1.030154,0 1.878974,-0.839692 1.740102,-1.86041 -0.875282,-6.431179 -6.241128,-11.234974 -12.930974,-11.234974 -7.320717,0 -13.056204,5.752615 -13.056204,13.095384 0,2.366564 0.708717,4.957538 1.986358,7.295897 1.697334,3.096103 3.702359,4.639487 5.315693,5.892821 1.510769,1.169231 2.601948,2.011282 3.198769,3.825641 1.119077,3.395692 2.564513,5.312923 5.082564,6.641128 0.969846,0.439692 1.995692,0.664307 3.068205,0.664307 3.477641,0 6.408512,-2.40123 7.230666,-5.636717 0.253744,-0.998359 -0.605128,-1.846359 -1.635179,-1.846359 -1.030154,0 -1.826359,0.884615 -2.318462,1.789538 -0.63241,1.163282 -1.862461,1.952103 -3.277025,1.952103 z" fill="#ffffff" id="path2" style=""/>
+  <path d="m 46.675486,35.218768 c -6.805538,0.804 -4.629333,10.425333 1.786974,9.525539" stroke="#ffffff" stroke-width="4.10256" stroke-linecap="round" id="path3"/>
+  <defs id="defs3"/>
+</svg>
+</ng-template>
+
+<ng-template #nextUnitIcon>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none"
+     version="1.1" id="svg4" sodipodi:docname="Pfeil_ohne_Schatten_neu.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)" inkscape:export-filename="Pfeil_ohne_Schatten.png"
+   inkscape:export-xdpi="96" inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <defs id="defs4">
+    <filter id="filter0_d_816_483" x="0" y="0" width="79" height="79" filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" id="feFlood2" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+         result="hardAlpha" id="feColorMatrix2" />
+      <feMorphology radius="4" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_816_483"
+                    id="feMorphology2" />
+      <feOffset dx="5" dy="5" id="feOffset2" />
+      <feComposite in2="hardAlpha" operator="out" id="feComposite2" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.678431 0 0 0 0 0.713726 0 0 0 0 0.843137 0 0 0 1 0"
+                     id="feColorMatrix3" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_816_483"
+               id="feBlend3" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_816_483" result="shape"
+               id="feBlend4" />
+    </filter>
+  </defs>
+  <circle style="fill:#196175;fill-opacity:1;stroke-width:0;stroke-linecap:round;stroke-linejoin:round"
+          id="path4" cx="40" cy="39.999992" inkscape:label="path4" r="40" />
+  <path style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:5.71429;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+        d="M 43.199998,54.857141 58.057141,39.999999 43.199998,25.142856" id="path5"
+        sodipodi:nodetypes="ccc" />
+  <path style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:5.71429;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+        d="m 21.942856,39.999999 c 11.42865,0.0663 22.857006,-0.05206 34.285713,0"
+        id="path6" sodipodi:nodetypes="cc" />
+</svg>
+</ng-template>

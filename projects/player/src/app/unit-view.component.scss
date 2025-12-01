@@ -236,13 +236,14 @@
 .audio-button {
   border: none;
   background: transparent;
+  height: 45px;
 
   &:hover, &.in-progress {
     opacity: 0.5;
   }
 }
 
-.audio-button img {
+.audio-button svg {
   height: 45px;
 }
 
@@ -257,8 +258,9 @@
   vertical-align: middle;
 }
 
-.large-audio-button img {
+.large-audio-button svg {
   height: 180px;
+  width: 180px;
   object-fit: contain;
 }
 
@@ -320,10 +322,12 @@
   margin-top: 2%;
   height: 30%;
 
-  img {
+  button {
     width: 60px;
     height: 60px;
     margin: 5px;
+    border: none;
+    background: transparent;
 
     &:hover {
       filter: brightness(90%);

@@ -1,7 +1,7 @@
 import {
   Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, QueryList, ViewChildren
 } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Question, Unit } from 'common/interfaces/unit';
@@ -16,7 +16,8 @@ import { SplitWordPipe } from './split-word.pipe';
     NgClass,
     FormsModule,
     SplitWordPipe,
-    MatIcon
+    MatIcon,
+    NgTemplateOutlet
   ],
   templateUrl: 'unit-view.component.html',
   styleUrls: ['unit-view.component.scss']
