@@ -15,6 +15,15 @@
   &.numbers-row > * {
     height: unset;
   }
+
+  &.numbers-row .inner-wrapper {
+    margin-top: auto;
+  }
+
+  &.numbers-row .unit-nav-next {
+    margin-bottom: auto;
+  }
+
 }
 
 .instruction-text {
