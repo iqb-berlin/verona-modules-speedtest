@@ -190,7 +190,7 @@
   justify-content: center;
   gap: 30px;
 
-  & button.selected, & img.selected {
+  & button.selected:not(.image-button):not(.audio-button), & img.selected {
     border: 5px solid blueviolet;
   }
 
