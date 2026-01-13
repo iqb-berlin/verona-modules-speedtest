@@ -29,7 +29,7 @@
 .instruction-text {
   text-align: center;
   margin-top: 0;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   font-size: 24px;
 }
 
@@ -188,7 +188,7 @@
 .answers {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 25px;
 
   & button.selected:not(.image-button):not(.audio-button), & img.selected {
     border: 5px solid blueviolet;
@@ -329,8 +329,8 @@
   align-self: center;
   padding-left: 43%;
   display: flex;
-  margin-top: 2%;
-  height: 30%;
+  margin-top: 1%;
+  height: 20%;
 
   button {
     width: 60px;
