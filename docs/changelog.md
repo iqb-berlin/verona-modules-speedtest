@@ -1,3 +1,10 @@
+# 3.4.0-beta
+## Player
+### Änderungen
+- Automatische Abstände im Zahleneingabeformat entfernt.
+  - Diese Abstände sind auf iPads fehlerhaft und wachsen bei jeder eingegebenen Ziffer an.
+  - Dies ist eine temporäre Lösung für ein Format mit Bildern bestimmter Größe und nicht zum generellen Gebrauch gedacht. Die Version behält deswegen auch das Beta-Suffix.
+
 # 3.3.0
 ## Player
 ### Änderungen
