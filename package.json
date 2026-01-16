@@ -1,7 +1,7 @@
 {
   "name": "verona-modules-speedtest",
   "config": {
-    "player_version": "3.2.0",
+    "player_version": "3.3.0",
     "editor_version": "3.2.0",
     "unit_definition_version": "2.1.0"
   },

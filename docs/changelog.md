@@ -1,3 +1,8 @@
+# 3.3.0
+## Player
+### Änderungen
+- Vertikale Abstände verschiedener Elemente verringert, sodass 3-4 Antwortknöpfe in vertikaler Ansicht angezeigrt werden können, ohne Beschnitten zu werden.
+
 # 3.2.0
 ### Neue Funktionen
 - Neue globale Einstellung: Knopfbreite
