@@ -7,13 +7,13 @@
              [style.height.%]="unit.layout == 'column' && unit.questionSpaceRatio"
              [style.width.%]="unit.layout == 'row' && unit.questionSpaceRatio">
             @if (unit.questionType === 'text') {
-                <p>{{ question.text }}</p>
+                <p data-cy="question-text">{{ question.text }}</p>
             }
             @if (unit.questionType === 'image') {
                 <figure class="text-image-wrapper">
                     <img *ngIf="question.src" [src]="question.src" [alt]="question.text">
                     @if (question.text) {
-                        <figcaption>{{ question.text }}</figcaption>
+                        <figcaption data-cy="image-question-text">{{ question.text }}</figcaption>
                     }
                 </figure>
             }
@@ -74,7 +74,7 @@
                 @if (unit.answerType !== 'number') {
                     @for (answer of question.answers; let answerIndex = $index; track answerIndex) {
                         @if (unit.answerType === 'text') {
-                            <button mat-raised-button [class.selected]="selectedAnswers.includes(answerIndex)"
+                            <button mat-raised-button [attr.data-cy]="'answer-button-' + answerIndex" [class.selected]="selectedAnswers.includes(answerIndex)"
                                     [style.background-color]="unit.buttonColor"
                                     [style.width.px]="unit.buttonWidth"
                                     (click)="onAnswerClick(answerIndex)">
@@ -92,11 +92,11 @@
                             <div class="audio-button-wrapper">
                                 <audio #audioRef [id]="'audioElement' + answerIndex" [src]=answer.src
                                        (play)="isAudioActive = true" (ended)="isAudioActive = false"></audio>
-                                <button class="audio-button" [class.in-progress]="isAudioActive"
+                                <button class="audio-button" [attr.data-cy]="'audio-answer-play-' + answerIndex" [class.in-progress]="isAudioActive"
                                         [disabled]="isAudioActive" (click)="playAnswerAudio(answerIndex)">
                                         <ng-container *ngTemplateOutlet="audioIcon"></ng-container>
                                 </button>
-                                <button mat-raised-button [style.background-color]="unit.buttonColor"
+                                <button mat-raised-button [attr.data-cy]="'audio-answer-select-' + answerIndex" [style.background-color]="unit.buttonColor"
                                         [style.width.px]="unit.buttonWidth"
                                         [class.selected]="selectedAnswers.includes(answerIndex)"
                                         (click)="onAnswerClick(answerIndex)">
@@ -121,18 +121,18 @@
     @if (unit.answerType === 'number') {
         <div class="number-buttons">
             @for (number of mathInputs; track number) {
-                <button (click)="enterDigit(number)">
+                <button [attr.data-cy]="'math-input-button-' + number" (click)="enterDigit(number)">
                     {{ number }}
                 </button>
             }
-            <button class="icon-button" (click)="deleteDigit()">
+            <button class="icon-button" data-cy="math-backspace-button" (click)="deleteDigit()">
                 <mat-icon>backspace</mat-icon>
             </button>
         </div>
     }
     @if (unit.answerType === 'number' || unit.multipleSelection || unit.questionType === 'word-select') {
         <div class="unit-nav-next">
-          <button (click)="onNext()">
+          <button data-cy="unit-next-button" (click)="onNext()">
             <ng-container *ngTemplateOutlet="nextUnitIcon"></ng-container>
           </button>
         </div>
