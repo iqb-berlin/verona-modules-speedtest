@@ -43,15 +43,12 @@ export class UnitService {
     FileService.saveUnitToFile(UnitService.stringifyUnit(this.unit));
   }
 
+  /* Replaces the questions; every global setting of the current unit is kept. */
   loadUnitFromCSV(unitString: string) {
     this.unit = {
-      type: 'speedtest-unit-defintion',
+      ...this.unit,
       version: this.unitDefVersion,
-      layout: this.unit.layout,
-      questions: csvParser.parseQuestions(unitString, this.unit.questionType, this.unit.multipleSelection),
-      questionType: this.unit.questionType,
-      answerType: this.unit.answerType,
-      multipleSelection: this.unit.multipleSelection
+      questions: csvParser.parseQuestions(unitString, this.unit.questionType, this.unit.multipleSelection)
     };
     this.updateUnitDef();
   }

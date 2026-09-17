@@ -2,6 +2,9 @@
 ## Player
 ### Fehlerbehebungen
 - Beim Fortsetzen einer Unit wird die Summe der falschen Antworten wieder korrekt gelesen. Zuvor wurde sie durch den Index der zuletzt beantworteten Frage ersetzt.
+## Editor
+### Fehlerbehebungen
+- Globale Einstellungen (Knopffarbe, Knopfbreite, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
 
 # 3.4.0-beta
 ## Player
