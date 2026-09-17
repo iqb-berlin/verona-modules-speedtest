@@ -7,6 +7,7 @@
 - Globale Einstellungen (Knopffarbe, Knopfbreite, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
 - Das Verschieben von Fragen wird an das Hostsystem gemeldet. Zuvor blieb der Speichern-Knopf des Hostsystems inaktiv, sodass die neue Reihenfolge nicht gespeichert werden konnte.
 - Das Ausschalten der Mehrfachauswahl löst keinen Fehler mehr aus, wenn Fragen ohne hinterlegte Lösung vorhanden sind.
+- Die an das Hostsystem gemeldete Version des Unit-Definitionsformats ist nicht mehr fest auf 1.0.0, sondern entspricht der tatsächlichen Version.
 
 # 3.4.0-beta
 ## Player

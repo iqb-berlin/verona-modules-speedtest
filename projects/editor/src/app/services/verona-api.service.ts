@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs';
 import { VariableInfo } from '@iqb/responses';
+import packageInfo from 'packageInfo';
 
 export class VeronaAPIService {
   static sessionID: string | undefined;
@@ -30,7 +31,7 @@ export class VeronaAPIService {
       sessionId: VeronaAPIService.sessionID as string,
       timeStamp: String(Date.now()),
       unitDefinition: unitDefinitionString,
-      unitDefinitionType: 'speedtest-unit-definition@1.0.0',
+      unitDefinitionType: `speedtest-unit-definition@${packageInfo.config.unit_definition_version}`,
       variables: variableInfo
     });
   }
