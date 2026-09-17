@@ -13,14 +13,12 @@ describe('CSVParser', () => {
     expect(questions[0]).toEqual({
       text: 'Frage 1',
       answers: [{ text: 'richtig', splitPosition: undefined }, { text: 'falsch', splitPosition: undefined }],
-      correctAnswer: 1,
-      answerPosition: undefined
+      correctAnswer: 1
     });
     expect(questions[1]).toEqual({
       text: 'Frage 2',
       answers: [{ text: 'antwort 1', splitPosition: undefined }, { text: 'antwort2', splitPosition: undefined }],
-      correctAnswer: 2,
-      answerPosition: undefined
+      correctAnswer: 2
     });
   });
 
@@ -33,8 +31,7 @@ describe('CSVParser', () => {
     expect(questions[0]).toEqual({
       text: 'Frage 1',
       answers: [{ text: 'richtig', splitPosition: undefined }, { text: 'falsch', splitPosition: undefined }],
-      correctAnswer: 1,
-      answerPosition: undefined
+      correctAnswer: 1
     });
   });
 
@@ -47,14 +44,12 @@ describe('CSVParser', () => {
     expect(questions[0]).toEqual({
       text: 'Frage 1',
       answers: [{ text: 'richtig', splitPosition: undefined }, { text: 'falsch', splitPosition: undefined }],
-      correctAnswer: [1],
-      answerPosition: undefined
+      correctAnswer: [1]
     });
     expect(questions[1]).toEqual({
       text: 'Frage 2',
       answers: [{ text: 'antwort 1', splitPosition: undefined }, { text: 'antwort2', splitPosition: undefined }],
-      correctAnswer: [0, 1],
-      answerPosition: undefined
+      correctAnswer: [0, 1]
     });
   });
 
@@ -67,8 +62,7 @@ describe('CSVParser', () => {
     expect(questions[0]).toEqual({
       text: 'Frage 1',
       answers: [{ text: 'richtig', splitPosition: 3 }, { text: 'falsch', splitPosition: 2 }],
-      correctAnswer: [1],
-      answerPosition: undefined
+      correctAnswer: [1]
     });
   });
 
@@ -88,8 +82,7 @@ Frage 2; 2`;
     expect(questions[0]).toEqual({
       text: 'Frage mit mehreren Worten',
       answers: [],
-      correctAnswer: [1, 3],
-      answerPosition: undefined
+      correctAnswer: [1, 3]
     });
   });
 
@@ -116,8 +109,7 @@ Frage 3; 2`;
     expect(questions[0]).toEqual({
       text: 'Frage 1',
       answers: [],
-      correctAnswer: 1234,
-      answerPosition: undefined
+      correctAnswer: 1234
     });
   });
 
@@ -129,8 +121,7 @@ Frage 3; 2`;
     expect(questions[0]).toEqual({
       text: 'Frage 1',
       answers: [],
-      correctAnswer: 2,
-      answerPosition: undefined
+      correctAnswer: 2
     });
   });
 
