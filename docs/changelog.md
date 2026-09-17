@@ -5,6 +5,7 @@
 ## Editor
 ### Fehlerbehebungen
 - Globale Einstellungen (Knopffarbe, Knopfbreite, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
+- Das Verschieben von Fragen wird an das Hostsystem gemeldet. Zuvor blieb der Speichern-Knopf des Hostsystems inaktiv, sodass die neue Reihenfolge nicht gespeichert werden konnte.
 
 # 3.4.0-beta
 ## Player

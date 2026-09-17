@@ -88,8 +88,9 @@ export class UnitViewComponent {
     const question = this.unit.questions.splice(questionIndex, 1)[0];
     const newIndex = direction === 'up' ? -1 : 1;
     this.unit.questions.splice(questionIndex + newIndex, 0, question);
+    this.unitService.updateUnitDef();
+    this.unitService.calculateMissingCorrectAnswerIndeces();
   }
-
 
   async onLoadCSVClick(event: Event) {
     const unitString = await FileService.readFileAsText((event.target as HTMLInputElement).files?.[0] as File);
