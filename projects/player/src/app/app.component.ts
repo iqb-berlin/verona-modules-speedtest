@@ -72,11 +72,12 @@ export class AppComponent implements OnInit {
         setTimeout(() => {
           this.unit = JSON.parse(message.unitDefinition) as Unit;
           if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
+            const { dataParts } = message.unitState;
+            const sums = JSON.parse(dataParts['sums']);
             // Add 1 because the activeQuestionIndex has already been seen and answered
-            this.activeQuestionIndex =
-              Number(JSON.parse(message.unitState?.dataParts['activeQuestionIndex'])[0].value) + 1;
-            this.sumCorrect = Number(JSON.parse(message.unitState?.dataParts['sums'])[0].value);
-            this.sumWrong = Number(JSON.parse(message.unitState?.dataParts['activeQuestionIndex'])[0].value);
+            this.activeQuestionIndex = Number(JSON.parse(dataParts['activeQuestionIndex'])[0].value) + 1;
+            this.sumCorrect = Number(sums[0].value);
+            this.sumWrong = Number(sums[1].value);
             if (this.activeQuestionIndex >= this.unit!.questions.length) this.showOutroPage = true;
           }
           VeronaAPIService.sendState({});
