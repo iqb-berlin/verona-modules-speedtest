@@ -18,10 +18,14 @@ In `package.json`, under `config`:
 
 A version that is not considered ready for general use carries a `-beta` suffix, numbered if there is more than one (`3.2.0-beta`, `3.2.0-beta2`, `3.2.0-beta3`).
 
+## The changelog
+
+Entries are written as the changes are made, not at release time: every change adds its entry under the `# next` heading at the top of [changelog.md](changelog.md), in the same commit. German, grouped under `## Player` / `## Editor` and then `### Neue Funktionen` / `### Änderungen` / `### Fehlerbehebungen`. Releasing only swaps `# next` for the version number.
+
 ## Steps
 
 1. Bump `player_version` or `editor_version` in `package.json`.
-2. Add a section at the top of [changelog.md](changelog.md) — German, newest first, grouped under `### Neue Funktionen` / `### Änderungen` / `### Fehlerbehebungen`. If the unit definition changed, add an entry to [changelog-unit-def.md](changelog-unit-def.md) as well.
+2. Rename the `# next` heading at the top of [changelog.md](changelog.md) to the version being released. If the unit definition changed, add an entry to [changelog-unit-def.md](changelog-unit-def.md) as well.
 3. `npm run build-player` (or `build-editor`). This writes the packed HTML to `dist/`.
 4. Commit, and tag the commit with the bare version number: `git tag 3.4.0 && git push --tags`.
 5. Create a GitHub release on that tag, with the new changelog section as its notes and the built file(s) from `dist/` attached. Mark it as a pre-release if the version has a `-beta` suffix.
