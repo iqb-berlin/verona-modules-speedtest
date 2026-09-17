@@ -136,11 +136,12 @@ export class UnitViewComponent {
   onToggleMultiselect() {
     this.unit.multipleSelection = !this.unit.multipleSelection;
     this.unit.questions.forEach(question => {
+      const { correctAnswer } = question;
       if (this.unit.multipleSelection) {
-        question.correctAnswer = question.correctAnswer === undefined ? [] : [(question.correctAnswer as number)];
+        question.correctAnswer = typeof correctAnswer === 'number' ? [correctAnswer] : [];
       } else {
-        question.correctAnswer =
-          (question.correctAnswer as number[]).length > 1 ? undefined : (question.correctAnswer as number[])[0];
+        question.correctAnswer = Array.isArray(correctAnswer) && correctAnswer.length === 1 ?
+          correctAnswer[0] : undefined;
       }
     });
     this.unitService.calculateMissingCorrectAnswerIndeces();

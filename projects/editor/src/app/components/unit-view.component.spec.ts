@@ -19,6 +19,11 @@ describe('UnitViewComponent', () => {
     return component.unit.questions.map(singleQuestion => singleQuestion.text);
   }
 
+  function setAllSolutions(correctAnswer: number | number[] | undefined): void {
+    component.unit.questions = component.unit.questions
+      .map(singleQuestion => ({ ...singleQuestion, correctAnswer: correctAnswer }));
+  }
+
   beforeEach(() => {
     TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
     unitService = TestBed.inject(UnitService);
@@ -56,6 +61,45 @@ describe('UnitViewComponent', () => {
       component.moveQuestion(0, 'down');
 
       expect(unitService.missingCorrectAnswerIndices).toEqual([2]);
+    });
+  });
+
+  describe('onToggleMultiselect', () => {
+    it('wraps a single solution in a list when switching on', () => {
+      setAllSolutions(1);
+
+      component.onToggleMultiselect();
+
+      expect(component.unit.multipleSelection).toBeTrue();
+      expect(component.unit.questions[0].correctAnswer).toEqual([1]);
+    });
+
+    it('unwraps a one element list when switching off', () => {
+      component.unit.multipleSelection = true;
+      setAllSolutions([1]);
+
+      component.onToggleMultiselect();
+
+      expect(component.unit.multipleSelection).toBeFalse();
+      expect(component.unit.questions[0].correctAnswer).toBe(1);
+    });
+
+    it('drops a solution that cannot be expressed as a single answer', () => {
+      component.unit.multipleSelection = true;
+      setAllSolutions([0, 1]);
+
+      component.onToggleMultiselect();
+
+      expect(component.unit.questions[0].correctAnswer).toBeUndefined();
+    });
+
+    it('keeps questions without a solution when switching off', () => {
+      component.unit.multipleSelection = true;
+      setAllSolutions(undefined);
+
+      component.onToggleMultiselect();
+
+      expect(component.unit.questions[0].correctAnswer).toBeUndefined();
     });
   });
 });
