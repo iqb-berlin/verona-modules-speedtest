@@ -85,6 +85,7 @@
               "zone.js/testing"
             ],
             "tsConfig": "projects/editor/tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/editor/src/favicon.ico",
@@ -182,6 +183,7 @@
               "zone.js/testing"
             ],
             "tsConfig": "projects/player/tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/player/src/favicon.ico",
