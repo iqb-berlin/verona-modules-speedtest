@@ -4,7 +4,6 @@ import { VariableInfo } from '@iqb/responses';
 export class VeronaAPIService {
   static sessionID: string | undefined;
   static startCommand = new Subject<StartCommand>();
-  static getDefinitionCommand = new Subject<GetDefinitionCommand>();
 
   static handleMessage(messageData: GetDefinitionCommand | StartCommand): void {
     if (messageData.type === 'voeStartCommand') {

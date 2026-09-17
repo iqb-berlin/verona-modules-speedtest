@@ -9,9 +9,9 @@ import { UnitViewComponent } from './unit-view.component';
 import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
 @Component({
-    selector: 'speedtest-player',
-    imports: [CommonModule, UnitViewComponent, MatButton, MatIcon, MatButton],
-    template: `
+  selector: 'speedtest-player',
+  imports: [CommonModule, UnitViewComponent, MatButton, MatIcon, MatButton],
+  template: `
     <button *ngIf="isStandalone" mat-raised-button class="load-button" (click)="upload.click()">
       Unit laden
       <mat-icon>file_upload</mat-icon>
@@ -30,7 +30,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
       Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
     </div>
   `,
-    styles: `
+  styles: `
     :host {
       display: flex;
       flex-direction: column;

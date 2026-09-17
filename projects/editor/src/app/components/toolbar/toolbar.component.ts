@@ -5,8 +5,8 @@ import { MatIcon } from '@angular/material/icon';
 import { FileService } from 'common/services/file.service';
 
 @Component({
-    selector: 'speedtest-toolbar',
-    template: `
+  selector: 'speedtest-toolbar',
+  template: `
     <mat-toolbar>
       <button mat-raised-button (click)="upload.click()">
         Unit laden
@@ -20,15 +20,15 @@ import { FileService } from 'common/services/file.service';
       </button>
     </mat-toolbar>
   `,
-    imports: [
-        MatToolbar,
-        MatButton,
-        MatIcon
-    ],
-    styles: [
-        'mat-toolbar {background-color: #696969}',
-        'mat-toolbar button {margin: 15px}'
-    ]
+  imports: [
+    MatToolbar,
+    MatButton,
+    MatIcon
+  ],
+  styles: [
+    'mat-toolbar {background-color: #696969}',
+    'mat-toolbar button {margin: 15px}'
+  ]
 })
 export class ToolbarComponent {
   @Output() unitLoaded = new EventEmitter<string>();

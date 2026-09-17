@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { NgForOf, NgIf, SlicePipe } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -9,7 +9,7 @@ import {
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import {
-  MatButton, MatFabButton, MatIconButton
+  MatButton, MatIconButton
 } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -62,7 +62,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
 export class UnitViewComponent {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
-  csvImportVisible = false;
   activeRatioDefault = textOnly;
 
   constructor(public unitService: UnitService, private messageService: MessageService) { }

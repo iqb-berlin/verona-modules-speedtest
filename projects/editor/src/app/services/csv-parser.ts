@@ -2,8 +2,6 @@ import {
   Answer, Question, QuestionType
 } from 'common/interfaces/unit';
 
-export type CSVHeaderLabels = 'frage' | 'loesung' | `antwort_${number}`;
-
 export function parseQuestions(csv: string, questionType: QuestionType, multiSelect: boolean = false): Question[] {
   const cleanedCsv = csv.replace(/\r/g, '');
   if (cleanedCsv.includes('\uFFFD')) {

@@ -12,126 +12,126 @@ import { Answer } from 'common/interfaces/unit';
 import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
-    selector: 'speedtest-answer-panel',
-    imports: [
-        MatButton,
-        MatIcon,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        ReactiveFormsModule,
-        FormsModule,
-        MatTooltip,
-        MatMiniFabButton,
-        MatIconButton,
-        MatRadioButton,
-        MatCheckbox
-    ],
-    template: `
-      @if (unitService.unit.answerType !== 'number' && unitService.unit.questionType !== 'word-select') {
-          <div class="text-answer-list">
-              <h4 [style.grid-row-start]="1" [style.grid-column-start]="1">richtige Antwort</h4>
-              <h4 [style.grid-row-start]="1" [style.grid-column-start]="2">Antwort</h4>
-              @for (answer of answers; let answerIndex = $index; track answer) {
-                  @if (!unitService.unit.multipleSelection) {
-                      <mat-radio-button [name]="'radio_' + questionIndex + answerIndex"
-                                        [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
-                                        [checked]="unitService.unit.questions[questionIndex]
-                                                     .correctAnswer == answerIndex"
-                                        (change)="onSelectCorrectAnswer(answerIndex)">
-                      </mat-radio-button>
-                  } @else {
-                      <mat-checkbox [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
-                                    [checked]="isArray(unitService.unit.questions[questionIndex].correctAnswer) &&
-                                                   $any(unitService.unit.questions[questionIndex].correctAnswer)
-                                                     .includes(answerIndex)"
-                                    (change)="onSelectCorrectAnswer(answerIndex)">
-                      </mat-checkbox>
-                  }
-                  <mat-form-field [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="2">
-                      <mat-label>Frage</mat-label>
-                      <input matInput [value]="answer.text"
-                             (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
-                  </mat-form-field>
-                  @if (unitService.unit.answerType === 'image') {
-                      <div class="image-answer" [style.grid-row-start]="answerIndex + 2"
-                           [style.grid-column-start]="3">
-                          @if (answer) {
-                              <img [src]="answer.src">
-                          } @else {
-                              kein Bild definiert
-                          }
-                          <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
-                              <mat-icon>image</mat-icon>
-                          </button>
-                          <input type="file" hidden accept="image/*" #imageUpload
-                                 (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
-                          <button mat-icon-button [matTooltip]="'Bild entfernen'"
-                                  [disabled]="!answer.src"
-                                  (click)="removeAnswerSrc(questionIndex, answerIndex);">
-                              <mat-icon>backspace</mat-icon>
-                          </button>
-                      </div>
-                  }
-                  @if (unitService.unit.answerType === 'audio') {
-                      <div [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
-                          @if (answer.src) {
-                              <audio controls [src]=answer.src></audio>
-                          } @else {
-                              kein Audio definiert
-                          }
-                          <button mat-icon-button [matTooltip]="'Audio hinzufügen'" (click)="audioUpload.click();">
-                              <mat-icon>volume_up</mat-icon>
-                          </button>
-                          <input type="file" hidden accept="audio/*" #audioUpload
-                                 (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
-                          <button mat-icon-button [matTooltip]="'Audio entfernen'"
-                                  [disabled]="!answer.src"
-                                  (click)="removeAnswerSrc(questionIndex, answerIndex);">
-                              <mat-icon>backspace</mat-icon>
-                          </button>
-                      </div>
-                  }
-                  @if (unitService.unit.answerType === 'text') {
-                      <mat-form-field class="split-pos-field"
-                                      [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
-                          <mat-label>Teilungsposition</mat-label>
-                          <input matInput type="number" [(ngModel)]="answer.splitPosition">
-                      </mat-form-field>
-                  }
-                  <button mat-mini-fab color="warn"
-                          [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="4"
-                          [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
-                      <mat-icon>delete</mat-icon>
-                  </button>
-              }
-          </div>
-          <button mat-raised-button class="add-button" [matTooltip]="'Antwort hinzu'"
-                  (click)="addAnswer()">
-              Neue Antwort
-              <mat-icon>add</mat-icon>
-          </button>
-      } @else if (unitService.unit.questionType === 'word-select') {
-          <mat-form-field>
-              <mat-label>
-                  Erwartete Antwortindizes, getrennt mit Komma
-              </mat-label>
-              <input matInput type="text" required
-                     [ngModel]="unitService.unit.questions[questionIndex].correctAnswer"
-                     (change)="setCorrectAnswerWordSelect($any($event).target.value)">
-          </mat-form-field>
-      } @else {
-          <mat-form-field>
-              <mat-label>
-                  Erwartete Antwort - Hierüber wird ebenfalls die Anzahl der dargestellten Felder gesteuert.
-              </mat-label>
-              <input matInput type="number" required
-                     [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
-                     (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
-          </mat-form-field>
-      }
+  selector: 'speedtest-answer-panel',
+  imports: [
+    MatButton,
+    MatIcon,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule,
+    FormsModule,
+    MatTooltip,
+    MatMiniFabButton,
+    MatIconButton,
+    MatRadioButton,
+    MatCheckbox
+  ],
+  template: `
+    @if (unitService.unit.answerType !== 'number' && unitService.unit.questionType !== 'word-select') {
+        <div class="text-answer-list">
+            <h4 [style.grid-row-start]="1" [style.grid-column-start]="1">richtige Antwort</h4>
+            <h4 [style.grid-row-start]="1" [style.grid-column-start]="2">Antwort</h4>
+            @for (answer of answers; let answerIndex = $index; track answer) {
+                @if (!unitService.unit.multipleSelection) {
+                    <mat-radio-button [name]="'radio_' + questionIndex + answerIndex"
+                                      [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
+                                      [checked]="unitService.unit.questions[questionIndex]
+                                                   .correctAnswer == answerIndex"
+                                      (change)="onSelectCorrectAnswer(answerIndex)">
+                    </mat-radio-button>
+                } @else {
+                    <mat-checkbox [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
+                                  [checked]="isArray(unitService.unit.questions[questionIndex].correctAnswer) &&
+                                                 $any(unitService.unit.questions[questionIndex].correctAnswer)
+                                                   .includes(answerIndex)"
+                                  (change)="onSelectCorrectAnswer(answerIndex)">
+                    </mat-checkbox>
+                }
+                <mat-form-field [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="2">
+                    <mat-label>Frage</mat-label>
+                    <input matInput [value]="answer.text"
+                           (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
+                </mat-form-field>
+                @if (unitService.unit.answerType === 'image') {
+                    <div class="image-answer" [style.grid-row-start]="answerIndex + 2"
+                         [style.grid-column-start]="3">
+                        @if (answer) {
+                            <img [src]="answer.src">
+                        } @else {
+                            kein Bild definiert
+                        }
+                        <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
+                            <mat-icon>image</mat-icon>
+                        </button>
+                        <input type="file" hidden accept="image/*" #imageUpload
+                               (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
+                        <button mat-icon-button [matTooltip]="'Bild entfernen'"
+                                [disabled]="!answer.src"
+                                (click)="removeAnswerSrc(questionIndex, answerIndex);">
+                            <mat-icon>backspace</mat-icon>
+                        </button>
+                    </div>
+                }
+                @if (unitService.unit.answerType === 'audio') {
+                    <div [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
+                        @if (answer.src) {
+                            <audio controls [src]=answer.src></audio>
+                        } @else {
+                            kein Audio definiert
+                        }
+                        <button mat-icon-button [matTooltip]="'Audio hinzufügen'" (click)="audioUpload.click();">
+                            <mat-icon>volume_up</mat-icon>
+                        </button>
+                        <input type="file" hidden accept="audio/*" #audioUpload
+                               (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
+                        <button mat-icon-button [matTooltip]="'Audio entfernen'"
+                                [disabled]="!answer.src"
+                                (click)="removeAnswerSrc(questionIndex, answerIndex);">
+                            <mat-icon>backspace</mat-icon>
+                        </button>
+                    </div>
+                }
+                @if (unitService.unit.answerType === 'text') {
+                    <mat-form-field class="split-pos-field"
+                                    [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="3">
+                        <mat-label>Teilungsposition</mat-label>
+                        <input matInput type="number" [(ngModel)]="answer.splitPosition">
+                    </mat-form-field>
+                }
+                <button mat-mini-fab color="warn"
+                        [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="4"
+                        [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            }
+        </div>
+        <button mat-raised-button class="add-button" [matTooltip]="'Antwort hinzu'"
+                (click)="addAnswer()">
+            Neue Antwort
+            <mat-icon>add</mat-icon>
+        </button>
+    } @else if (unitService.unit.questionType === 'word-select') {
+        <mat-form-field>
+            <mat-label>
+                Erwartete Antwortindizes, getrennt mit Komma
+            </mat-label>
+            <input matInput type="text" required
+                   [ngModel]="unitService.unit.questions[questionIndex].correctAnswer"
+                   (change)="setCorrectAnswerWordSelect($any($event).target.value)">
+        </mat-form-field>
+    } @else {
+        <mat-form-field>
+            <mat-label>
+                Erwartete Antwort - Hierüber wird ebenfalls die Anzahl der dargestellten Felder gesteuert.
+            </mat-label>
+            <input matInput type="number" required
+                   [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
+                   (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
+        </mat-form-field>
+    }
   `,
-    styles: `
+  styles: `
     :host {
       display: flex; flex-direction: column;
     }
