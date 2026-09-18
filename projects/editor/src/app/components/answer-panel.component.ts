@@ -127,7 +127,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
             </mat-label>
             <input matInput type="number" required
                    [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
-                   (ngModelChange)="unitService.calculateMissingCorrectAnswerIndeces(); unitService.updateUnitDef()">
+                   (ngModelChange)="unitService.calculateMissingCorrectAnswerPositions(); unitService.updateUnitDef()">
         </mat-form-field>
     }
   `,
@@ -216,14 +216,14 @@ export class AnswerPanelComponent {
     } else {
       this.unitService.unit.questions[this.questionIndex].correctAnswer = answerIndex;
     }
-    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerPositions();
     this.unitService.updateUnitDef();
   }
 
   setCorrectAnswerWordSelect(value: string) {
     this.unitService.unit.questions[this.questionIndex].correctAnswer =
       value.split(',').map(val => parseInt(val, 10));
-    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerPositions();
     this.unitService.updateUnitDef();
   }
 

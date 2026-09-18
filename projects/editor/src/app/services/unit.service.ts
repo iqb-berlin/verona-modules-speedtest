@@ -22,7 +22,7 @@ export class UnitService {
     answerType: 'text'
   };
 
-  missingCorrectAnswerIndices: number[] = [];
+  missingCorrectAnswerPositions: number[] = [];
 
   constructor(private messageService: MessageService) { }
 
@@ -134,21 +134,19 @@ export class UnitService {
   deleteAnswer(questionIndex: number, answerIndex: number) {
     this.unit.questions[questionIndex].answers.splice(answerIndex, 1);
     this.updateUnitDef();
-    this.calculateMissingCorrectAnswerIndeces();
+    this.calculateMissingCorrectAnswerPositions();
   }
 
-  /* Gets all the question indices with missing correct answers. */
-  calculateMissingCorrectAnswerIndeces(): void {
-    this.missingCorrectAnswerIndices = this.unit.questions
-      .map((question, index) => (question.correctAnswer === undefined ||
+  /* Gets the 1-based positions of all questions with missing correct answers. */
+  calculateMissingCorrectAnswerPositions(): void {
+    this.missingCorrectAnswerPositions = this.unit.questions
+      .flatMap((question, index) => (question.correctAnswer === undefined ||
         (Array.isArray(question.correctAnswer) && question.correctAnswer.length === 0) ?
-        index : -1))
-      .filter(index => index !== -1)
-      .map(index => index + 1);
-    if (this.missingCorrectAnswerIndices.length > 0) {
+        [index + 1] : []));
+    if (this.missingCorrectAnswerPositions.length > 0) {
       this.messageService.showPermanently(
         `Es fehlen Lösungen für mindestens folgende Fragen:
-                    ${this.missingCorrectAnswerIndices.slice(0, 9).join(', ')}`
+                    ${this.missingCorrectAnswerPositions.slice(0, 9).join(', ')}`
       );
     } else {
       this.messageService.hideMessage();

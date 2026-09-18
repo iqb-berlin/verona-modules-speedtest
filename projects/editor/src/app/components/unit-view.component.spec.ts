@@ -55,12 +55,12 @@ describe('UnitViewComponent', () => {
 
     it('updates the reported positions of questions without a solution', () => {
       component.unit.questions[0].correctAnswer = undefined;
-      unitService.calculateMissingCorrectAnswerIndeces();
-      expect(unitService.missingCorrectAnswerIndices).toEqual([1]);
+      unitService.calculateMissingCorrectAnswerPositions();
+      expect(unitService.missingCorrectAnswerPositions).toEqual([1]);
 
       component.moveQuestion(0, 'down');
 
-      expect(unitService.missingCorrectAnswerIndices).toEqual([2]);
+      expect(unitService.missingCorrectAnswerPositions).toEqual([2]);
     });
   });
 

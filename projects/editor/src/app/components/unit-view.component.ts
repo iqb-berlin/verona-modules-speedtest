@@ -74,13 +74,13 @@ export class UnitViewComponent {
     });
     this.latestQuestionIndex = this.unit.questions.length - 1;
     this.unitService.updateUnitDef();
-    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerPositions();
   }
 
   deleteQuestion(index: number) {
     this.unit.questions.splice(index, 1);
     this.unitService.updateUnitDef();
-    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerPositions();
   }
 
   moveQuestion(questionIndex: number, direction: 'up' | 'down'): void {
@@ -88,7 +88,7 @@ export class UnitViewComponent {
     const newIndex = direction === 'up' ? -1 : 1;
     this.unit.questions.splice(questionIndex + newIndex, 0, question);
     this.unitService.updateUnitDef();
-    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerPositions();
   }
 
   async onLoadCSVClick(event: Event) {
@@ -144,7 +144,7 @@ export class UnitViewComponent {
           correctAnswer[0] : undefined;
       }
     });
-    this.unitService.calculateMissingCorrectAnswerIndeces();
+    this.unitService.calculateMissingCorrectAnswerPositions();
     this.unitService.updateUnitDef();
   }
 }
