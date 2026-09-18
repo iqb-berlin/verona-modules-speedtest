@@ -4,14 +4,14 @@ The unit definition is the contract between editor and player. The editor produc
 
 The authoritative source is [`projects/common/interfaces/unit.ts`](../projects/common/interfaces/unit.ts). Version history is in [changelog-unit-def.md](changelog-unit-def.md).
 
-Current version: **2.1.0** (`package.json` → `config.unit_definition_version`).
+Current version: **2.2.0** (`package.json` → `config.unit_definition_version`).
 
 ## Structure
 
 ```jsonc
 {
-  "type": "speedtest-unit-defintion",   // note: literal, contains a typo that is now baked in
-  "version": "2.1.0",
+  "type": "speedtest-unit-definition",  // literal; units before 2.2.0 spell it "speedtest-unit-defintion"
+  "version": "2.2.0",
   "layout": "column",                   // "column" = question above answers, "row" = side by side
   "questionType": "text",
   "answerType": "text",
@@ -52,6 +52,14 @@ Current version: **2.1.0** (`package.json` → `config.unit_definition_version`)
 `splitPosition` splits a text answer label at that character index and colors the two halves (blue / red) — used for word-part tasks.
 
 For `answerType: "number"` the `answers` array is stripped on save (`unit.service.ts:stringifyUnit`).
+
+## Validation on load
+
+Both modules read a unit through `parseUnitDefinition` ([`projects/common/services/unit-validation.ts`](../projects/common/services/unit-validation.ts)), which rejects a definition that is not valid JSON, does not carry a speedtest `type`, has no `version`, or whose version major differs from the module's own. The editor shows the reason in a snackbar; the player shows an error screen instead of the unit.
+
+This is a diagnostic, not the contract: under Verona the host is responsible for pairing a unit with a module that can read it, and neither module declares `supportedUnitDefinitionTypes` in its Verona metadata.
+
+The validator also contains the only code that knows about the pre-2.2.0 spelling of `type`. It accepts that spelling and rewrites it to the canonical one, so a unit adopts the correct value the next time it is saved. That block is marked for deletion at the next major version.
 
 ## Type combinations
 

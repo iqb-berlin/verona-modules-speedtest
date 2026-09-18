@@ -175,4 +175,37 @@ describe('AppComponent', () => {
       expect(component.showOutroPage).toBeTrue();
     }));
   });
+
+  /* Which definitions are rejected, and why, is covered in unit-validation.spec.ts.
+     These only pin down what the player does with the outcome. */
+  describe('a unit that cannot be read', () => {
+    function startWith(unitDefinition: string): void {
+      VeronaAPIService.startCommand.next({
+        type: 'vopStartCommand', sessionId: 'session-1', unitDefinition
+      } as StartCommand);
+      tick();
+    }
+
+    it('shows the error instead of the unit', fakeAsync(() => {
+      startWith('{ not json');
+
+      expect(component.loadError).toBeTrue();
+      expect(component.unit).toBeUndefined();
+    }));
+
+    it('still answers the host so it does not keep waiting', fakeAsync(() => {
+      startWith('{ not json');
+
+      expect(sendState).toHaveBeenCalled();
+    }));
+
+    it('clears the error when a valid unit follows', fakeAsync(() => {
+      startWith('{ not json');
+
+      startWith(JSON.stringify(unitWithoutSolutions(2)));
+
+      expect(component.loadError).toBeFalse();
+      expect(component.unit).toBeDefined();
+    }));
+  });
 });

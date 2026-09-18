@@ -1,8 +1,12 @@
 # next
 ## Player
+### Änderungen
+- Unit-Definitionen werden vor dem Laden geprüft. Kann eine Unit nicht gelesen werden, erscheint ein Hinweis statt einer leeren oder fehlerhaft dargestellten Seite.
 ### Fehlerbehebungen
 - Beim Fortsetzen einer Unit wird die Summe der falschen Antworten wieder korrekt gelesen. Zuvor wurde sie durch den Index der zuletzt beantworteten Frage ersetzt.
 ## Editor
+### Änderungen
+- Unit-Definitionen werden vor dem Laden geprüft. Fehlerhafte Dateien, Units anderer Module und Units ohne Version werden mit einer passenden Meldung abgelehnt, statt einen Fehler auszulösen.
 ### Fehlerbehebungen
 - Globale Einstellungen (Knopffarbe, Knopfbreite, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
 - Das Verschieben von Fragen wird an das Hostsystem gemeldet. Zuvor blieb der Speichern-Knopf des Hostsystems inaktiv, sodass die neue Reihenfolge nicht gespeichert werden konnte.

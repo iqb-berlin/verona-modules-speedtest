@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { fromEvent } from 'rxjs';
+import packageInfo from 'packageInfo';
 import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
+import { parseUnitDefinition } from 'common/services/unit-validation';
 import { UnitViewComponent } from './unit-view.component';
 import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
@@ -29,6 +31,11 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
     <div *ngIf="showOutroPage" class="outro">
       Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
     </div>
+
+    <div *ngIf="loadError" class="load-error">
+      Diese Unit kann nicht geladen werden.<br>
+      (Kein gültiges Speedtest-Format.)
+    </div>
   `,
   styles: `
     :host {
@@ -45,6 +52,11 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
       margin: auto;
       font-size: x-large;
     }
+    .load-error {
+      margin: auto;
+      font-size: x-large;
+      text-align: center;
+    }
   `
 })
 export class AppComponent implements OnInit {
@@ -53,6 +65,8 @@ export class AppComponent implements OnInit {
   activeQuestionIndex: number = 0;
   activeQuestionStartTime: number = Date.now();
   showOutroPage: boolean = false;
+  loadError: boolean = false;
+  private unitDefMajor = packageInfo.config.unit_definition_version.split('.')[0];
   sumCorrect: number = 0;
   sumWrong: number = 0;
 
@@ -70,7 +84,13 @@ export class AppComponent implements OnInit {
         this.resetUnitState();
         // Wait for the child component to be destroyed, before loading the new unit.
         setTimeout(() => {
-          this.unit = JSON.parse(message.unitDefinition) as Unit;
+          const result = parseUnitDefinition(message.unitDefinition, this.unitDefMajor);
+          if (result.error) {
+            this.loadError = true;
+            VeronaAPIService.sendState({});
+            return;
+          }
+          this.unit = result.unit;
           if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
             const { dataParts } = message.unitState;
             const sums = JSON.parse(dataParts['sums']);
@@ -89,11 +109,17 @@ export class AppComponent implements OnInit {
   async loadUnitFromFile(eventTarget: EventTarget | null): Promise<void> {
     this.resetUnitState();
     const loadedUnit = await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File);
-    this.unit = JSON.parse(loadedUnit);
+    const result = parseUnitDefinition(loadedUnit, this.unitDefMajor);
+    if (result.error) {
+      this.loadError = true;
+      return;
+    }
+    this.unit = result.unit;
   }
 
   private resetUnitState(): void {
     this.unit = undefined;
+    this.loadError = false;
     this.activeQuestionIndex = 0;
     this.activeQuestionStartTime = Date.now();
     this.showOutroPage = false;
