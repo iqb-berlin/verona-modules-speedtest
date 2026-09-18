@@ -70,7 +70,6 @@
   }
 
   &.text-audio-only .question,
-  &.audio .question,
   &.numbers .question,
   &.image-answers .question {
     height: 50%;
@@ -87,7 +86,6 @@
   }
 
   &.image-answers .answers,
-  &.audio .answers,
   &.text-audio-only .answers {
     height: 47%;
   }

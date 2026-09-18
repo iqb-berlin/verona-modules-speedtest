@@ -41,6 +41,4 @@ The `example/` folder holds units for most of these combinations (untracked — 
 
 **Percentage margins resolve against width, not height.** `margin-top: 3%` on `.number-buttons` is 3% of the containing block's *inline* size, so on a landscape iPad it is far larger than it reads. Prefer fixed pixel values for vertical spacing.
 
-**`&.audio` is dead.** `.column &.audio .question` and `.column &.audio .answers` in the stylesheet match nothing: no `audio` class is ever set on `.inner-wrapper` — an audio question gets `text-audio-only` instead. The rules happen to duplicate the neighbouring `text-audio-only` values, so removing them changes nothing, but do not reach for `.audio` expecting it to work.
-
 **Component styles must stay under 8 kB** (`anyComponentStyle` budget in `angular.json`) or the production build fails.
