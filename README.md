@@ -17,6 +17,7 @@ Both conform to the Verona API definition:
 ## Documentation
 - [Unit definition format](docs/unit-definition.md) — the contract between editor and player, including the CSV import columns and the result data the player sends.
 - [Player layout](docs/player-layout.md) — how the player's CSS is keyed on question/answer type combinations, and the traps to avoid when changing it.
+- [Layout fixtures](fixtures/README.md) — a unit for every format combination with layout edge cases, for checking the player by hand.
 - [Releasing](docs/releasing.md) — where the versions live, and the steps from a version bump to an upload.
 - [Changelog](docs/changelog.md) — module releases.
 - [Unit definition changelog](docs/changelog-unit-def.md) — format versions.

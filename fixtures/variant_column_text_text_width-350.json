@@ -1,0 +1,95 @@
+{
+  "type": "speedtest-unit-definition",
+  "version": "2.2.0",
+  "layout": "column",
+  "questionType": "text",
+  "answerType": "text",
+  "instructionText": "Tippe auf die richtige Antwort.",
+  "buttonWidth": 350,
+  "questions": [
+    {
+      "answers": [
+        {
+          "text": "Sie hat am Ende der Woche noch genau vierzehn Murmeln übrig."
+        },
+        {
+          "text": "Sie hat am Ende der Woche noch genau dreizehn Murmeln übrig."
+        },
+        {
+          "text": "Sie hat am Ende der Woche keine einzige Murmel mehr."
+        },
+        {
+          "text": "Das lässt sich aus den Angaben nicht eindeutig bestimmen."
+        }
+      ],
+      "text": "Wie viele Beine hat eine Spinne?",
+      "correctAnswer": 0
+    },
+    {
+      "answers": [
+        {
+          "text": "Sie hat am Ende der Woche noch genau vierzehn Murmeln übrig."
+        },
+        {
+          "text": "Sie hat am Ende der Woche noch genau dreizehn Murmeln übrig."
+        },
+        {
+          "text": "Sie hat am Ende der Woche keine einzige Murmel mehr."
+        },
+        {
+          "text": "Das lässt sich aus den Angaben nicht eindeutig bestimmen."
+        }
+      ],
+      "text": "Lena hat am Montag 12 Murmeln, am Dienstag schenkt ihr Oma noch einmal halb so viele, und am Mittwoch verliert sie auf dem Schulweg drei davon. Am Donnerstag tauscht sie zwei Murmeln gegen einen Sticker. Wie viele Murmeln hat Lena am Ende der Woche noch übrig?",
+      "correctAnswer": 0
+    },
+    {
+      "answers": [
+        {
+          "text": "ja"
+        },
+        {
+          "text": "nein"
+        }
+      ],
+      "text": "Wie viele Beine hat eine Spinne?",
+      "correctAnswer": 0
+    },
+    {
+      "answers": [
+        {
+          "text": "bei"
+        },
+        {
+          "text": "ein"
+        },
+        {
+          "text": "auf"
+        },
+        {
+          "text": "mit"
+        }
+      ],
+      "text": "Wie viele Beine hat eine Spinne?",
+      "correctAnswer": 0
+    },
+    {
+      "answers": [
+        {
+          "text": "Haustür",
+          "splitPosition": 4
+        },
+        {
+          "text": "Baumhaus",
+          "splitPosition": 4
+        },
+        {
+          "text": "Fensterbank",
+          "splitPosition": 7
+        }
+      ],
+      "text": "Wie viele Beine hat eine Spinne?",
+      "correctAnswer": 0
+    }
+  ]
+}

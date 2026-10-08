@@ -1,0 +1,56 @@
+{
+  "type": "speedtest-unit-definition",
+  "version": "2.2.0",
+  "layout": "column",
+  "questionType": "inline-answers",
+  "answerType": "text",
+  "instructionText": "Tippe auf die richtige Antwort.",
+  "questions": [
+    {
+      "text": "Der Ball liegt dem Tisch.",
+      "answerPosition": 3,
+      "answers": [
+        {
+          "text": "unter"
+        },
+        {
+          "text": "über"
+        }
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "text": "Nach der Schule geht Lena mit ihrem kleinen Bruder und den beiden Nachbarskindern noch eine Weile den Spielplatz hinter der großen Turnhalle, bevor sie zum Mittagessen nach Hause laufen.",
+      "answerPosition": 15,
+      "answers": [
+        {
+          "text": "auf"
+        },
+        {
+          "text": "in"
+        },
+        {
+          "text": "über"
+        },
+        {
+          "text": "durch"
+        }
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "text": "Die Katze springt das Sofa.",
+      "answerPosition": 3,
+      "src": "data:audio/wav;base64,UklGRuQSAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YcASAACAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3KAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3KAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3KAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3KAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3KAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3KAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3KAjpmip6ijmo+BdGdeWVhcZXB9i5ihp6iknJGEdmpgWlhbY257iZWgpqilnpOGeWxhWlhaYWx5hpOepaimoJWJe25jW1haYGp2hJGcpKinoZiLfXBlXFhZXmd0gY+ao6inopmOgHJnXllYXWZxf4yZoqeopJuQg3VoX1lYXGRvfIqWoKaopZ2ShXdrYFpYW2JteoeUn6aopp+Uh3ptYltYWmBrd4WSnaWopqCWinxvZFxYWV9odYOQm6Sop6KZjH9xZl1YWV5ncoCOmaKnqKOaj4F0Z15ZWFxlcH2LmKGnqKSckYR2amBaWFtjbnuJlaCmqKWek4Z5bGFaWFphbHmGk56lqKaglYl7bmNbWFpganaEkZykqKehmIt9cGVcWFleZ3SBj5qjqKeimY6AcmdeWVhdZnF/jJmip6ikm5CDdWhfWVhcZG98ipagpqilnZKFd2tgWlhbYm16h5Sfpqimn5SHem1iW1haYGt3hZKdpaimoJaKfG9kXFhZX2h1g5CbpKinopmMf3FmXVhZXmdygI6Zoqeoo5qPgXRnXllYXGVwfYuYoaeopJyRhHZqYFpYW2Nue4mVoKaopZ6ThnlsYVpYWmFseYaTnqWopqCViXtuY1tYWmBqdoSRnKSop6GYi31wZVxYWV5ndIGPmqOop6KZjoByZ15ZWF1mcX+MmaKnqKSbkIN1aF9ZWFxkb3yKlqCmqKWdkoV3a2BaWFtibXqHlJ+mqKaflId6bWJbWFpga3eFkp2lqKaglop8b2RcWFlfaHWDkJukqKeimYx/cWZdWFleZ3I=",
+      "answers": [
+        {
+          "text": "auf"
+        },
+        {
+          "text": "unter"
+        }
+      ],
+      "correctAnswer": 0
+    }
+  ]
+}

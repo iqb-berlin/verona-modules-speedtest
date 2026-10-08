@@ -1,0 +1,30 @@
+{
+  "type": "speedtest-unit-definition",
+  "version": "2.2.0",
+  "layout": "column",
+  "questionType": "text",
+  "answerType": "number",
+  "instructionText": "Tippe auf die richtige Antwort.",
+  "questions": [
+    {
+      "answers": [],
+      "text": "Wie viele Beine hat eine Spinne?",
+      "correctAnswer": 123456
+    },
+    {
+      "answers": [],
+      "text": "Lena hat am Montag 12 Murmeln, am Dienstag schenkt ihr Oma noch einmal halb so viele, und am Mittwoch verliert sie auf dem Schulweg drei davon. Am Donnerstag tauscht sie zwei Murmeln gegen einen Sticker. Wie viele Murmeln hat Lena am Ende der Woche noch übrig?",
+      "correctAnswer": 123456
+    },
+    {
+      "answers": [],
+      "text": "Wie viele Beine hat eine Spinne?",
+      "correctAnswer": 7
+    },
+    {
+      "answers": [],
+      "text": "Wie viele Beine hat eine Spinne?",
+      "correctAnswer": 1234
+    }
+  ]
+}

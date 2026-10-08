@@ -33,7 +33,7 @@ There is no automated coverage of any of this. A layout change needs a manual pa
 - with and without `instructionText`
 - images both larger and smaller than the space reserved for them
 
-The `example/` folder holds units for most of these combinations (untracked — local only).
+[`fixtures/`](../fixtures/README.md) holds a unit for every combination, with these edge cases as items, and describes how to check them.
 
 ## Known traps
 
