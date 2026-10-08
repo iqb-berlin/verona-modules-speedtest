@@ -1,0 +1,69 @@
+/* The screen is shared out by grid, not by percentage heights. Every area may shrink below its content
+   (min-height/min-width: 0) and scrolls if the content cannot fit (#32). */
+
+:host {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
+.screen {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 1%;
+  display: grid;
+  grid-template-rows: [instruction] auto [stage] minmax(0, 1fr) [footer] auto;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.instruction-text {
+  grid-row: instruction;
+  text-align: center;
+  margin: 0 0 1%;
+  font-size: 24px;
+}
+
+.stage {
+  grid-row: stage;
+  display: grid;
+  gap: 3%;
+  min-height: 0;
+  min-width: 0;
+}
+
+.area {
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  display: grid;
+  // Fixed tracks, so the content cannot size the area.
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+/* Question and answers lean towards each other. Auto margins rather than alignment properties:
+   they collapse to 0 when the content overflows, so a scrolled area still starts at its beginning. */
+.column {
+  .question > * {
+    margin: auto auto 0;
+  }
+
+  .answers > * {
+    margin: 0 auto auto;
+  }
+}
+
+.row {
+  .question > * {
+    margin: auto 0 auto auto;
+  }
+
+  .answers > * {
+    margin: auto auto auto 0;
+  }
+}
+
+.footer {
+  grid-row: footer;
+  display: flex;
+  justify-content: flex-end;
+}

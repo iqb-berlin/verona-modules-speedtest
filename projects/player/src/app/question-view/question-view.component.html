@@ -1,0 +1,25 @@
+<div class="screen">
+    @if (unit.instructionText) {
+        <p class="instruction-text">{{ unit.instructionText }}</p>
+    }
+    <div class="stage" [class]="unit.layout"
+         [style.grid-template-rows]="unit.layout === 'column' ? stageTracks : null"
+         [style.grid-template-columns]="unit.layout === 'row' ? stageTracks : null">
+        <div class="area question">
+            <speedtest-player-text-question [text]="question.text ?? ''"></speedtest-player-text-question>
+        </div>
+        <div class="area answers">
+            <speedtest-player-text-answers [answers]="question.answers"
+                                           [layout]="unit.layout"
+                                           [buttonColor]="unit.buttonColor"
+                                           [selectedAnswers]="selectedAnswers"
+                                           (answerClick)="onAnswerClick($event)">
+            </speedtest-player-text-answers>
+        </div>
+    </div>
+    @if (needsNextButton) {
+        <div class="footer">
+            <speedtest-player-next-button (click)="onNext()"></speedtest-player-next-button>
+        </div>
+    }
+</div>

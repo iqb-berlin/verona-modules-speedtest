@@ -8,11 +8,12 @@ import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
 import { parseUnitDefinition } from 'common/services/unit-validation';
 import { UnitViewComponent } from './unit-view.component';
+import { QuestionViewComponent } from './question-view/question-view.component';
 import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
 @Component({
   selector: 'speedtest-player',
-  imports: [CommonModule, UnitViewComponent, MatButton, MatIcon, MatButton],
+  imports: [CommonModule, UnitViewComponent, QuestionViewComponent, MatButton, MatIcon, MatButton],
   template: `
     <button *ngIf="isStandalone" mat-raised-button class="load-button" (click)="upload.click()">
       Unit laden
@@ -22,11 +23,20 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
     <input type="file" hidden accept=".json, .voud" #upload
            (change)="loadUnitFromFile($event.target)">
 
-    <speedtest-player-unit-view *ngIf="unit && unit.questions.length > 0 && !showOutroPage"
-                                [question]="unit.questions[activeQuestionIndex]"
-                                [unit]="unit"
-                                (responseGiven)="onResponse($event)">
-    </speedtest-player-unit-view>
+    <ng-container *ngIf="unit && unit.questions.length > 0 && !showOutroPage">
+      <!-- During the layout rework, formats the new view supports go to it, the rest to the old view. -->
+      <speedtest-player-question-view *ngIf="usesQuestionView; else oldView"
+                                      [question]="unit.questions[activeQuestionIndex]"
+                                      [unit]="unit"
+                                      (responseGiven)="onResponse($event)">
+      </speedtest-player-question-view>
+      <ng-template #oldView>
+        <speedtest-player-unit-view [question]="unit.questions[activeQuestionIndex]"
+                                    [unit]="unit"
+                                    (responseGiven)="onResponse($event)">
+        </speedtest-player-unit-view>
+      </ng-template>
+    </ng-container>
 
     <div *ngIf="showOutroPage" class="outro">
       Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
@@ -69,6 +79,11 @@ export class AppComponent implements OnInit {
   private unitDefMajor = packageInfo.config.unit_definition_version.split('.')[0];
   sumCorrect: number = 0;
   sumWrong: number = 0;
+
+  // Temporary routing during the layout rework; removed together with the old view.
+  get usesQuestionView(): boolean {
+    return !!this.unit && QuestionViewComponent.supports(this.unit);
+  }
 
   constructor() {
     fromEvent(window, 'message')
