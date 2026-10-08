@@ -2,6 +2,8 @@
 ## Player
 ### Änderungen
 - Unit-Definitionen werden vor dem Laden geprüft. Kann eine Unit nicht gelesen werden, erscheint ein Hinweis statt einer leeren oder fehlerhaft dargestellten Seite.
+- Automatische Abstände im Zahleneingabeformat wiederhergestellt (Rücknahme der Änderung aus 3.4.0-beta). Der Instruktionstext steht wieder oben.
+  - Der zugrundeliegende Fehler (Bild wird auf iPads mit jedem Item kleiner) ist für iPadOS 26.0 und 26.1 gemeldet und ab iPadOS 26.2 nicht mehr nachvollziehbar.
 ### Fehlerbehebungen
 - Beim Fortsetzen einer Unit wird die Summe der falschen Antworten wieder korrekt gelesen. Zuvor wurde sie durch den Index der zuletzt beantworteten Frage ersetzt.
 ## Editor
