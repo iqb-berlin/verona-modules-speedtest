@@ -44,14 +44,12 @@ describe('UnitService', () => {
 
     it('keeps the styling settings', () => {
       service.unit.buttonColor = '#ff0000';
-      service.unit.buttonWidth = 200;
       service.unit.instructionText = 'Kreuze die richtige Antwort an';
       service.unit.questionSpaceRatio = 65;
 
       service.loadUnitFromCSV(csv);
 
       expect(service.unit.buttonColor).toBe('#ff0000');
-      expect(service.unit.buttonWidth).toBe(200);
       expect(service.unit.instructionText).toBe('Kreuze die richtige Antwort an');
       expect(service.unit.questionSpaceRatio).toBe(65);
     });

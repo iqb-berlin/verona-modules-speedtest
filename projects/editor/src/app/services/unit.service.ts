@@ -23,7 +23,6 @@ export class UnitService {
   unit: Unit = {
     type: UNIT_DEFINITION_TYPE,
     version: this.unitDefVersion,
-    buttonWidth: 350,
     questions: [],
     layout: 'column',
     questionType: 'text',

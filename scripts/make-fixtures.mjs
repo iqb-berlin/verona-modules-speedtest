@@ -218,8 +218,6 @@ for (const layout of ['column', 'row']) {
     fixtures[`variant_${layout}_image_text_ratio-${ratio}`] =
       unit(layout, 'image', 'text', itemsFor('image', 'text', false), { questionSpaceRatio: ratio });
   }
-  fixtures[`variant_${layout}_text_text_width-350`] =
-    unit(layout, 'text', 'text', itemsFor('text', 'text', false), { buttonWidth: 350 });
 }
 
 // Only the generated units are replaced, so a renamed or dropped fixture does not linger.

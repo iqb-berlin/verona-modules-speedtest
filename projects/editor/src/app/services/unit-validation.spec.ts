@@ -4,8 +4,9 @@ import { Unit } from 'common/interfaces/unit';
 import { UNIT_DEFINITION_TYPE, parseUnitDefinition } from 'common/services/unit-validation';
 
 describe('parseUnitDefinition', () => {
-  /* A minimal but complete unit. type and version are overridden per spec. */
-  function unitDefinition(overrides: Partial<Unit> = {}): string {
+  /* A minimal but complete unit. type and version are overridden per spec; buttonWidth is only
+     possible in units written before 2.3.0. */
+  function unitDefinition(overrides: Partial<Unit> & { buttonWidth?: number } = {}): string {
     return JSON.stringify({
       type: UNIT_DEFINITION_TYPE,
       version: '2.2.0',
@@ -80,6 +81,24 @@ describe('parseUnitDefinition', () => {
 
       expect(result.unit?.instructionText).toBe('Kreuze an');
       expect(result.unit?.questions[0].text).toBe('Frage 1');
+    });
+  });
+
+  /* Remove together with the compatibility block in unit-validation.ts. */
+  describe('units written before 2.3.0', () => {
+    it('drops the button width', () => {
+      const result = parseUnitDefinition(unitDefinition({ version: '2.2.0', buttonWidth: 350 }), '2');
+
+      expect(result.error).toBeUndefined();
+      expect(Object.keys(result.unit ?? {})).not.toContain('buttonWidth');
+    });
+
+    it('keeps the other styling settings', () => {
+      const result = parseUnitDefinition(
+        unitDefinition({ version: '2.2.0', buttonWidth: 350, buttonColor: '#ff0000' }), '2'
+      );
+
+      expect(result.unit?.buttonColor).toBe('#ff0000');
     });
   });
 });

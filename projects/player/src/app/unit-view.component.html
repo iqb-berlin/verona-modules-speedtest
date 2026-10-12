@@ -76,7 +76,6 @@
                         @if (unit.answerType === 'text') {
                             <button mat-raised-button [class.selected]="selectedAnswers.includes(answerIndex)"
                                     [style.background-color]="unit.buttonColor"
-                                    [style.width.px]="unit.buttonWidth"
                                     (click)="onAnswerClick(answerIndex)">
                                 @if (answer.splitPosition) {
                                     <span class="button-label-1">{{ (answer.text | splitWord: answer.splitPosition)[0] }}</span>
@@ -97,7 +96,6 @@
                                         <ng-container *ngTemplateOutlet="audioIcon"></ng-container>
                                 </button>
                                 <button mat-raised-button [style.background-color]="unit.buttonColor"
-                                        [style.width.px]="unit.buttonWidth"
                                         [class.selected]="selectedAnswers.includes(answerIndex)"
                                         (click)="onAnswerClick(answerIndex)">
                                     {{ answer.text }}

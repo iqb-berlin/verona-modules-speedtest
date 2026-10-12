@@ -8,7 +8,7 @@ In `package.json`, under `config`:
 "config": {
   "player_version": "3.4.0-beta",
   "editor_version": "3.2.0",
-  "unit_definition_version": "2.2.0"
+  "unit_definition_version": "2.3.0"
 }
 ```
 

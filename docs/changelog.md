@@ -4,13 +4,15 @@
 - Unit-Definitionen werden vor dem Laden geprüft. Kann eine Unit nicht gelesen werden, erscheint ein Hinweis statt einer leeren oder fehlerhaft dargestellten Seite.
 - Automatische Abstände im Zahleneingabeformat wiederhergestellt (Rücknahme der Änderung aus 3.4.0-beta). Der Instruktionstext steht wieder oben.
   - Der zugrundeliegende Fehler (Bild wird auf iPads mit jedem Item kleiner) ist für iPadOS 26.0 und 26.1 gemeldet und ab iPadOS 26.2 nicht mehr nachvollziehbar.
+- Die Einstellung Antwortknopfbreite wird nicht mehr ausgewertet. Sie wird durch Antwortknöpfe ersetzt, die innerhalb eines Items alle so breit sind wie der breiteste.
 ### Fehlerbehebungen
 - Beim Fortsetzen einer Unit wird die Summe der falschen Antworten wieder korrekt gelesen. Zuvor wurde sie durch den Index der zuletzt beantworteten Frage ersetzt.
 ## Editor
 ### Änderungen
 - Unit-Definitionen werden vor dem Laden geprüft. Fehlerhafte Dateien, Units anderer Module und Units ohne Version werden mit einer passenden Meldung abgelehnt, statt einen Fehler auszulösen.
+- Die Einstellung Antwortknopfbreite entfällt, auch die bisherige Standardbreite von 350px. Ältere Units lassen sich weiterhin laden; die Einstellung wird dabei entfernt. Units werden im Unit-Definitionsformat 2.3.0 gespeichert.
 ### Fehlerbehebungen
-- Globale Einstellungen (Knopffarbe, Knopfbreite, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
+- Globale Einstellungen (Knopffarbe, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
 - Das Verschieben von Fragen wird an das Hostsystem gemeldet. Zuvor blieb der Speichern-Knopf des Hostsystems inaktiv, sodass die neue Reihenfolge nicht gespeichert werden konnte.
 - Das Ausschalten der Mehrfachauswahl löst keinen Fehler mehr aus, wenn Fragen ohne hinterlegte Lösung vorhanden sind.
 - Die an das Hostsystem gemeldete Version des Unit-Definitionsformats ist nicht mehr fest auf 1.0.0, sondern entspricht der tatsächlichen Version.

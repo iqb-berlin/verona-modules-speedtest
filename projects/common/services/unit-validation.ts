@@ -25,26 +25,32 @@ export function parseUnitDefinition(unitDefinition: string, expectedMajor: strin
   if (!isSupportedType(parsedUnit.type)) return { error: 'wrong-type' };
   if (typeof parsedUnit.version !== 'string') return { error: 'missing-version' };
   if (parsedUnit.version.split('.')[0] !== expectedMajor) return { error: 'incompatible-version' };
-  return { unit: toCanonicalType(parsedUnit) };
+  return { unit: toCurrentForm(parsedUnit) };
 }
 
 /* --------------------------------------------------------------------------------------------
    Backwards compatibility. Delete this block at the next major unit definition version.
 
-   Units written before 2.2.0 carry a misspelled type. They are still accepted, and are rewritten
-   to the canonical spelling on load so that every unit converges the next time it is saved.
+   Older units are still accepted and rewritten to the current form on load, so that every unit
+   converges the next time it is saved:
+   - Units written before 2.2.0 carry a misspelled type, which is rewritten to the canonical one.
+   - Units written before 2.3.0 may carry buttonWidth, a fixed answer button width. It was replaced
+     by answer buttons that are all as wide as the widest one, and is dropped.
    To remove: delete this block, replace the isSupportedType call above with
-   `parsedUnit.type !== UNIT_DEFINITION_TYPE` and the toCanonicalType call with `parsedUnit`.
+   `parsedUnit.type !== UNIT_DEFINITION_TYPE` and the toCurrentForm call with `parsedUnit`.
    -------------------------------------------------------------------------------------------- */
 
 const LEGACY_UNIT_DEFINITION_TYPE = 'speedtest-unit-defintion';
+
+type LegacyUnit = Unit & { buttonWidth?: number };
 
 function isSupportedType(type: unknown): boolean {
   return type === UNIT_DEFINITION_TYPE || type === LEGACY_UNIT_DEFINITION_TYPE;
 }
 
-function toCanonicalType(unit: Unit): Unit {
-  return unit.type === UNIT_DEFINITION_TYPE ? unit : { ...unit, type: UNIT_DEFINITION_TYPE };
+function toCurrentForm(unit: LegacyUnit): Unit {
+  const { buttonWidth, ...current } = unit;
+  return { ...current, type: UNIT_DEFINITION_TYPE };
 }
 
 /* ------------------------------------- end of compatibility --------------------------------- */

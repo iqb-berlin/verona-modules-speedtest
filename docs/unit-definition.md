@@ -4,21 +4,20 @@ The unit definition is the contract between editor and player. The editor produc
 
 The authoritative source is [`projects/common/interfaces/unit.ts`](../projects/common/interfaces/unit.ts). Version history is in [changelog-unit-def.md](changelog-unit-def.md).
 
-Current version: **2.2.0** (`package.json` → `config.unit_definition_version`).
+Current version: **2.3.0** (`package.json` → `config.unit_definition_version`).
 
 ## Structure
 
 ```jsonc
 {
   "type": "speedtest-unit-definition",  // literal; units before 2.2.0 spell it "speedtest-unit-defintion"
-  "version": "2.2.0",
+  "version": "2.3.0",
   "layout": "column",                   // "column" = question above answers, "row" = side by side
   "questionType": "text",
   "answerType": "text",
   "multipleSelection": false,           // optional
   "instructionText": "…",               // optional, shown above every question
   "buttonColor": "#aabbcc",             // optional, answer button background
-  "buttonWidth": 350,                   // optional, fixed answer button width in px
   "questionSpaceRatio": 50,             // optional, % of screen given to the question area
   "questions": [ … ]
 }
@@ -59,7 +58,7 @@ Both modules read a unit through `parseUnitDefinition` ([`projects/common/servic
 
 This is a diagnostic, not the contract: under Verona the host is responsible for pairing a unit with a module that can read it, and neither module declares `supportedUnitDefinitionTypes` in its Verona metadata.
 
-The validator also contains the only code that knows about the pre-2.2.0 spelling of `type`. It accepts that spelling and rewrites it to the canonical one, so a unit adopts the correct value the next time it is saved. That block is marked for deletion at the next major version.
+The validator also contains the only code that knows about older forms of the format: the pre-2.2.0 spelling of `type`, which it rewrites to the canonical one, and the pre-2.3.0 `buttonWidth`, which it drops. Either way a unit adopts the current form the next time it is saved. That block is marked for deletion at the next major version.
 
 ## Type combinations
 
