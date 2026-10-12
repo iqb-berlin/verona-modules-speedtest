@@ -68,6 +68,18 @@ describe('QuestionViewComponent', () => {
     expect(answerButton(0).classList).not.toContain('selected');
   });
 
+  it('shows an image question with its caption', () => {
+    const unit: Unit = {
+      ...textUnit(false),
+      questionType: 'image',
+      questions: [{ ...question('Was siehst du?'), src: 'data:image/png;base64,AAAA' }]
+    };
+    show(unit);
+    const image: HTMLImageElement = fixture.nativeElement.querySelector('speedtest-player-image-question img');
+    expect(image.getAttribute('src')).toBe('data:image/png;base64,AAAA');
+    expect(fixture.nativeElement.querySelector('figcaption').textContent).toContain('Was siehst du?');
+  });
+
   it('starts every question with an empty selection', () => {
     const unit = textUnit(true);
     show(unit, 0);

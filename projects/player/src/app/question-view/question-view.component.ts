@@ -4,6 +4,7 @@ import {
 import { Question, Unit } from 'common/interfaces/unit';
 import { defaultQuestionSpaceRatio } from 'common/constants';
 import { TextQuestionComponent } from './text-question.component';
+import { ImageQuestionComponent } from './image-question.component';
 import { TextAnswersComponent } from './text-answers.component';
 import { NextButtonComponent } from './next-button.component';
 
@@ -11,7 +12,7 @@ import { NextButtonComponent } from './next-button.component';
    Owns the selection and decides when an answer is submitted. */
 @Component({
   selector: 'speedtest-player-question-view',
-  imports: [TextQuestionComponent, TextAnswersComponent, NextButtonComponent],
+  imports: [TextQuestionComponent, ImageQuestionComponent, TextAnswersComponent, NextButtonComponent],
   templateUrl: 'question-view.component.html',
   styleUrls: ['question-view.component.scss']
 })
@@ -26,7 +27,7 @@ export class QuestionViewComponent implements OnChanges {
 
   /* The format combinations this view handles so far; the app routes everything else to the old view. */
   static supports(unit: Unit): boolean {
-    return unit.questionType === 'text' && unit.answerType === 'text';
+    return ['text', 'image'].includes(unit.questionType) && unit.answerType === 'text';
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -37,12 +38,14 @@ export class QuestionViewComponent implements OnChanges {
     if (changes['question']) this.selectedAnswers = [];
   }
 
-  /* Grid tracks of the stage: question first, answers second, split by the question space ratio.
-     Stacked text answers keep at least their own height, so the question gives way instead. */
+  /* Grid tracks of the stage: question first, answers second. Each is as big as its content, at most its
+     share by the question space ratio (minus half the gap between them), so small content stays together
+     instead of being spread over the stage. Stacked answers always keep their own height; the question
+     only gets what is left. */
   private static stageTracksFor(unit: Unit): string {
     const ratio = unit.questionSpaceRatio ?? defaultQuestionSpaceRatio(unit.questionType, unit.answerType);
-    const answersMin = unit.layout === 'column' ? 'min-content' : '0';
-    return `minmax(0, ${ratio}fr) minmax(${answersMin}, ${100 - ratio}fr)`;
+    const answers = unit.layout === 'column' ? 'min-content' : `fit-content(calc(${100 - ratio}% - 25px))`;
+    return `fit-content(calc(${ratio}% - 25px)) ${answers}`;
   }
 
   onAnswerClick(answerIndex: number): void {

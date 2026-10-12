@@ -23,12 +23,24 @@
   font-size: 24px;
 }
 
+/* Question and answer tracks are sized by their content (see stageTracksFor), and the pair is centred, so
+   free space goes around them rather than between them. The gap is part of the track limits. */
 .stage {
   grid-row: stage;
   display: grid;
-  gap: 3%;
+  gap: 50px;
   min-height: 0;
   min-width: 0;
+
+  &.column {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+  }
+
+  &.row {
+    grid-template-rows: minmax(0, 1fr);
+    justify-content: center;
+  }
 }
 
 .area {
@@ -36,30 +48,14 @@
   min-width: 0;
   overflow: auto;
   display: grid;
-  // Fixed tracks, so the content cannot size the area.
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
 }
 
-/* Question and answers lean towards each other. Auto margins rather than alignment properties:
-   they collapse to 0 when the content overflows, so a scrolled area still starts at its beginning. */
-.column {
-  .question > * {
-    margin: auto auto 0;
-  }
-
-  .answers > * {
-    margin: 0 auto auto;
-  }
-}
-
-.row {
-  .question > * {
-    margin: auto 0 auto auto;
-  }
-
-  .answers > * {
-    margin: auto auto auto 0;
-  }
+/* Centred by auto margins rather than alignment properties: they collapse to 0 when the content overflows,
+   so a scrolled area still starts at its beginning. Content marked .fill (an image) takes the whole area
+   instead and places itself within it. */
+.area > :not(.fill) {
+  margin: auto;
 }
 
 .footer {

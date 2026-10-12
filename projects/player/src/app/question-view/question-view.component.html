@@ -6,7 +6,17 @@
          [style.grid-template-rows]="unit.layout === 'column' ? stageTracks : null"
          [style.grid-template-columns]="unit.layout === 'row' ? stageTracks : null">
         <div class="area question">
-            <speedtest-player-text-question [text]="question.text ?? ''"></speedtest-player-text-question>
+            @switch (unit.questionType) {
+                @case ('image') {
+                    <speedtest-player-image-question class="fill"
+                                                     [src]="question.src ?? ''"
+                                                     [caption]="question.text ?? ''">
+                    </speedtest-player-image-question>
+                }
+                @default {
+                    <speedtest-player-text-question [text]="question.text ?? ''"></speedtest-player-text-question>
+                }
+            }
         </div>
         <div class="area answers">
             <speedtest-player-text-answers [answers]="question.answers"

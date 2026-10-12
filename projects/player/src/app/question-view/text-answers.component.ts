@@ -35,6 +35,9 @@ import { SplitWordPipe } from '../split-word.pipe';
       gap: 25px;
       grid-auto-flow: column;
       grid-auto-columns: minmax(0, 1fr);
+      // Room for the button shadow, which the scrolling answer area would cut off. Equal on both sides,
+      // so the buttons stay centred.
+      padding: 0 15px 15px;
     }
     // Answers beside the question are stacked; a single column is as wide as its widest button.
     .buttons.stacked {

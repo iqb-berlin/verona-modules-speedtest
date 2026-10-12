@@ -57,7 +57,7 @@ const LONG_QUESTION = 'Lena hat am Montag 12 Murmeln, am Dienstag schenkt ihr Om
 
 const questionCases = {
   text: [
-    { name: 'short', text: 'Wie viele Beine hat eine Spinne?' },
+    { name: 'short', text: 'Wie viele Räder hat ein Fahrrad?' },
     { name: 'long', text: LONG_QUESTION }
   ],
   image: [
