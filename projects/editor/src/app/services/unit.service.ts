@@ -5,20 +5,13 @@ import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import * as csvParser from 'editor/src/app/services/csv-parser';
 import { MessageService } from 'editor/src/app/services/message.service';
-import { UnitParseError, UNIT_DEFINITION_TYPE, parseUnitDefinition } from 'common/services/unit-validation';
+import { UNIT_DEFINITION_TYPE, UNIT_PARSE_ERROR_MESSAGES, parseUnitDefinition } from 'common/services/unit-validation';
 import { VeronaAPIService } from './verona-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UnitService {
-  private static readonly errorMessages: Record<UnitParseError, string> = {
-    'invalid-json': 'Die Unit-Definition konnte nicht gelesen werden.',
-    'wrong-type': 'Die Unit-Definition gehört nicht zum Speedtest-Modul.',
-    'missing-version': 'Die Unit-Definition enthält keine Version.',
-    'incompatible-version': 'Inkompatible Unit-Version festgestellt.'
-  };
-
   unitDefVersion = packageInfo.config.unit_definition_version;
   unit: Unit = {
     type: UNIT_DEFINITION_TYPE,
@@ -35,9 +28,9 @@ export class UnitService {
 
   loadUnitDefinition(unitDefinition: string): void {
     if (!unitDefinition) return;
-    const result = parseUnitDefinition(unitDefinition, this.unitDefVersion.split('.')[0]);
+    const result = parseUnitDefinition(unitDefinition);
     if (result.error) {
-      this.messageService.showError(UnitService.errorMessages[result.error]);
+      this.messageService.showError(UNIT_PARSE_ERROR_MESSAGES[result.error]);
       return;
     }
     this.unit = result.unit;

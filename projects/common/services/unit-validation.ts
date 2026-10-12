@@ -1,5 +1,6 @@
 /* Tests live in editor/src/app/services/unit-validation.spec.ts: Angular's karma builder only picks
    up spec files under a project's own src folder, so a spec next to this file would never run. */
+import packageInfo from 'packageInfo';
 import { Unit } from 'common/interfaces/unit';
 
 export const UNIT_DEFINITION_TYPE = 'speedtest-unit-definition';
@@ -10,11 +11,21 @@ export type UnitParseResult =
   { unit: Unit, error?: undefined } |
   { unit?: undefined, error: UnitParseError };
 
-/* Reads a stored unit definition and checks that this module can interpret it.
-   expectedMajor is the major of the reading module's own unit definition version; a unit of any
-   other major is rejected. The host is supposed to pair a unit with a matching module, so these
-   checks are a diagnostic for when that goes wrong, not the primary contract. */
-export function parseUnitDefinition(unitDefinition: string, expectedMajor: string): UnitParseResult {
+/* Shown to the user by both modules: the editor in a snackbar, the player on its error screen. */
+export const UNIT_PARSE_ERROR_MESSAGES: Record<UnitParseError, string> = {
+  'invalid-json': 'Die Unit-Definition konnte nicht gelesen werden.',
+  'wrong-type': 'Die Unit-Definition gehört nicht zum Speedtest-Modul.',
+  'missing-version': 'Die Unit-Definition enthält keine Version.',
+  'incompatible-version': 'Inkompatible Unit-Version festgestellt.'
+};
+
+const expectedMajor = packageInfo.config.unit_definition_version.split('.')[0];
+
+/* Reads a stored unit definition and checks that this module can interpret it. A unit whose major
+   version differs from the module's own unit definition version is rejected. The host is supposed to
+   pair a unit with a matching module, so these checks are a diagnostic for when that goes wrong,
+   not the primary contract. */
+export function parseUnitDefinition(unitDefinition: string): UnitParseResult {
   let parsedUnit: Unit;
   try {
     parsedUnit = JSON.parse(unitDefinition);

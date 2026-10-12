@@ -54,7 +54,7 @@ For `answerType: "number"` the `answers` array is stripped on save (`unit.servic
 
 ## Validation on load
 
-Both modules read a unit through `parseUnitDefinition` ([`projects/common/services/unit-validation.ts`](../projects/common/services/unit-validation.ts)), which rejects a definition that is not valid JSON, does not carry a speedtest `type`, has no `version`, or whose version major differs from the module's own. The editor shows the reason in a snackbar; the player shows an error screen instead of the unit.
+Both modules read a unit through `parseUnitDefinition` ([`projects/common/services/unit-validation.ts`](../projects/common/services/unit-validation.ts)), which rejects a definition that is not valid JSON, does not carry a speedtest `type`, has no `version`, or whose version major differs from the module's own. Each reason has one message (`UNIT_PARSE_ERROR_MESSAGES`, next to the validator). The editor shows it in a snackbar; the player shows it on an error screen instead of the unit and also logs it to the console, so it reaches the host's logs.
 
 This is a diagnostic, not the contract: under Verona the host is responsible for pairing a unit with a module that can read it, and neither module declares `supportedUnitDefinitionTypes` in its Verona metadata.
 

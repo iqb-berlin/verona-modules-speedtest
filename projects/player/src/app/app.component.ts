@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { fromEvent } from 'rxjs';
-import packageInfo from 'packageInfo';
 import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
-import { parseUnitDefinition } from 'common/services/unit-validation';
+import { UnitParseError, UNIT_PARSE_ERROR_MESSAGES, parseUnitDefinition } from 'common/services/unit-validation';
 import { UnitViewComponent } from './unit-view.component';
 import { QuestionViewComponent } from './question-view/question-view.component';
 import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
@@ -42,9 +41,9 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
       Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
     </div>
 
-    <div *ngIf="loadError" class="load-error">
+    <div *ngIf="loadErrorMessage" class="load-error">
       Diese Unit kann nicht geladen werden.<br>
-      (Kein gültiges Speedtest-Format.)
+      ({{ loadErrorMessage }})
     </div>
   `,
   styles: `
@@ -75,8 +74,7 @@ export class AppComponent implements OnInit {
   activeQuestionIndex: number = 0;
   activeQuestionStartTime: number = Date.now();
   showOutroPage: boolean = false;
-  loadError: boolean = false;
-  private unitDefMajor = packageInfo.config.unit_definition_version.split('.')[0];
+  loadErrorMessage: string | undefined;
   sumCorrect: number = 0;
   sumWrong: number = 0;
 
@@ -99,9 +97,9 @@ export class AppComponent implements OnInit {
         this.resetUnitState();
         // Wait for the child component to be destroyed, before loading the new unit.
         setTimeout(() => {
-          const result = parseUnitDefinition(message.unitDefinition, this.unitDefMajor);
+          const result = parseUnitDefinition(message.unitDefinition);
           if (result.error) {
-            this.loadError = true;
+            this.showLoadError(result.error);
             VeronaAPIService.sendState({});
             return;
           }
@@ -124,17 +122,24 @@ export class AppComponent implements OnInit {
   async loadUnitFromFile(eventTarget: EventTarget | null): Promise<void> {
     this.resetUnitState();
     const loadedUnit = await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File);
-    const result = parseUnitDefinition(loadedUnit, this.unitDefMajor);
+    const result = parseUnitDefinition(loadedUnit);
     if (result.error) {
-      this.loadError = true;
+      this.showLoadError(result.error);
       return;
     }
     this.unit = result.unit;
   }
 
+  // Logged as well, so the reason also reaches the host's logs, where the screen is not seen.
+  private showLoadError(error: UnitParseError): void {
+    this.loadErrorMessage = UNIT_PARSE_ERROR_MESSAGES[error];
+    // eslint-disable-next-line no-console
+    console.error(`Speedtest-Player: ${this.loadErrorMessage}`);
+  }
+
   private resetUnitState(): void {
     this.unit = undefined;
-    this.loadError = false;
+    this.loadErrorMessage = undefined;
     this.activeQuestionIndex = 0;
     this.activeQuestionStartTime = Date.now();
     this.showOutroPage = false;
