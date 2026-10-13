@@ -153,9 +153,9 @@ describe('QuestionViewComponent', () => {
     };
     show(unit);
     const boxes = (): string[] => findAll('speedtest-player-number-boxes button')
-      .map(box => box.textContent!.trim());
+      .map(box => box.textContent.trim());
     const key = (label: string): HTMLElement => findAll('speedtest-player-keypad button')
-      .find(button => button.textContent!.trim() === label)!;
+      .find(button => button.textContent.trim() === label)!;
     expect(boxes()).toEqual(['', '']);
     key('4').click();
     window.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
