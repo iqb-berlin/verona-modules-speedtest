@@ -1,4 +1,4 @@
-# next
+# 3.5.0-beta
 ## Player
 ### Neue Funktionen
 - LaTeX in Fragetexten (auch Bildunterschriften und Text unter Audiofragen) und Antworttexten (Text- und Audioantworten), wenn die Unit es einschaltet. Formeln stehen zwischen `$`-Zeichen. Ein Dollarzeichen, das nicht zu einer Formel gehört, wird als `\$` geschrieben, z. B. `5 \$`. Nicht im Instruktionstext, bei Wortauswahl und bei Antworten im Satz.
@@ -22,7 +22,7 @@
 - Beim CSV-Import trennt `\;` (Leerraum in LaTeX-Formeln) keine Spalten mehr.
 ### Änderungen
 - Unit-Definitionen werden vor dem Laden geprüft. Fehlerhafte Dateien, Units anderer Module und Units ohne Version werden mit einer passenden Meldung abgelehnt, statt einen Fehler auszulösen.
-- Die Einstellung Antwortknopfbreite entfällt, auch die bisherige Standardbreite von 350px. Ältere Units lassen sich weiterhin laden; die Einstellung wird dabei entfernt. Units werden im Unit-Definitionsformat 2.3.0 gespeichert.
+- Die Einstellung Antwortknopfbreite entfällt, auch die bisherige Standardbreite von 350px. Ältere Units lassen sich weiterhin laden; die Einstellung wird dabei entfernt. Units werden im Unit-Definitionsformat 2.4.0 gespeichert.
 ### Fehlerbehebungen
 - Der Platzhalter für den Größenanteil Fragebereich zeigt für jedes Format den Standardwert, den der Player verwendet. Zuvor blieb bei manchen Formatwechseln der Wert des vorherigen Formats stehen, und eine geladene Unit zeigte zunächst immer 50.
 - Globale Einstellungen (Knopffarbe, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
