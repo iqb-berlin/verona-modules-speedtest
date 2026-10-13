@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 /* The host element takes the click; the parent binds (click) on it. */
 @Component({
@@ -15,6 +15,7 @@ import { Component } from '@angular/core';
       </svg>
     </button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     button {
       display: block;

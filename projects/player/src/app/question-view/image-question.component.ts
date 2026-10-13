@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 /* Fills the question area and scales the image down into it, never up. Image and caption stay together
    and are centred in the area: the image box is at most as big as the image, the caption centred below it.
@@ -13,6 +13,7 @@ import { Component, Input } from '@angular/core';
       }
     </figure>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;

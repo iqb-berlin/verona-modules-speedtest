@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -54,6 +54,7 @@ import { AnswerPanelComponent } from './answer-panel.component';
     MatCardContent
   ],
   templateUrl: 'unit-view.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./unit-view.component.css']
 })
 export class UnitViewComponent implements OnChanges {

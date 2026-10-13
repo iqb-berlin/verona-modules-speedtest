@@ -1,6 +1,7 @@
 /* eslint-disable @stylistic/max-len */ // SVG path data
 import {
-  Component, EventEmitter, Input, Output
+  Component, EventEmitter, Input, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 /* Plays one audio. Reports when playback starts and stops; the parent decides whether any audio may
@@ -25,6 +26,7 @@ import {
       </svg>
     </button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;

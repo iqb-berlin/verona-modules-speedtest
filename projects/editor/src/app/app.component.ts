@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { VeronaAPIService, StartCommand, GetDefinitionCommand } from './services/verona-api.service';
@@ -8,6 +8,7 @@ import { UnitViewComponent } from './components/unit-view.component';
 @Component({
   selector: 'speedtest-editor',
   imports: [ToolbarComponent, UnitViewComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     @if (isStandalone) {
       <speedtest-toolbar (saveUnit)="unitService.saveUnitToFile()"

@@ -1,5 +1,6 @@
 import {
-  Component, EventEmitter, HostListener, Input, OnChanges, SimpleChanges, Output
+  Component, EventEmitter, HostListener, Input, OnChanges, SimpleChanges, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Question, Unit } from 'common/interfaces/unit';
 import { defaultQuestionSpaceRatio } from 'common/constants';
@@ -25,6 +26,7 @@ import { NumberEntry } from './number-entry';
     TextAnswersComponent, ImageAnswersComponent, NumberBoxesComponent, KeypadComponent, NextButtonComponent
   ],
   templateUrl: 'question-view.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['question-view.component.scss']
 })
 export class QuestionViewComponent implements OnChanges {

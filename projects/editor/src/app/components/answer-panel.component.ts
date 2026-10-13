@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { UnitService } from 'editor/src/app/services/unit.service';
@@ -131,6 +131,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
         </mat-form-field>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: flex; flex-direction: column;

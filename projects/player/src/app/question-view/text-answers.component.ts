@@ -1,5 +1,6 @@
 import {
-  Component, EventEmitter, Input, OnChanges, Output
+  Component, EventEmitter, Input, OnChanges, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
 import { SplitWordPipe } from '../split-word.pipe';
@@ -35,6 +36,7 @@ import { AudioButtonComponent } from './audio-button.component';
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;

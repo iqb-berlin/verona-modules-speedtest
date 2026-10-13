@@ -1,5 +1,6 @@
 import {
-  Component, EventEmitter, Input, OnChanges, Output
+  Component, EventEmitter, Input, OnChanges, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
 import { AudioButtonComponent } from './audio-button.component';
@@ -28,6 +29,7 @@ import { AudioButtonComponent } from './audio-button.component';
       <span>{{ after }}</span>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;

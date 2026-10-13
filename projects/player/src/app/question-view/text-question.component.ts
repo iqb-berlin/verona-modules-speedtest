@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'speedtest-player-text-question',
   template: '<p>{{ text }}</p>',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;

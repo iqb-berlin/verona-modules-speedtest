@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
@@ -25,6 +25,7 @@ import { FileService } from 'common/services/file.service';
     MatButton,
     MatIcon
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [
     'mat-toolbar {background-color: #696969}',
     'mat-toolbar button {margin: 15px}'

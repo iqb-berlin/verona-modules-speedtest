@@ -1,5 +1,6 @@
 import {
-  Component, EventEmitter, Input, Output
+  Component, EventEmitter, Input, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 /* One box per digit on a common base line; the active box is highlighted and any box can be chosen. */
@@ -14,6 +15,7 @@ import {
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;

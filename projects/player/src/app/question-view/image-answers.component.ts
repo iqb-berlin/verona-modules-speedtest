@@ -1,5 +1,6 @@
 import {
-  Component, EventEmitter, Input, OnChanges, Output
+  Component, EventEmitter, Input, OnChanges, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
 
@@ -17,6 +18,7 @@ import { Answer } from 'common/interfaces/unit';
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;

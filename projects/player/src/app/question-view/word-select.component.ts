@@ -1,5 +1,6 @@
 import {
-  Component, EventEmitter, Input, OnChanges, Output
+  Component, EventEmitter, Input, OnChanges, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { AudioButtonComponent } from './audio-button.component';
 
@@ -31,6 +32,7 @@ interface TextPart {
       }
     </p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
       display: block;
