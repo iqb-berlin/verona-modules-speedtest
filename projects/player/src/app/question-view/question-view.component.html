@@ -27,12 +27,24 @@
             }
         </div>
         <div class="area answers">
-            <speedtest-player-text-answers [answers]="question.answers"
-                                           [layout]="unit.layout"
-                                           [buttonColor]="unit.buttonColor"
-                                           [selectedAnswers]="selectedAnswers"
-                                           (answerClick)="onAnswerClick($event)">
-            </speedtest-player-text-answers>
+            @switch (unit.answerType) {
+                @case ('image') {
+                    <speedtest-player-image-answers class="fill"
+                                                    [answers]="question.answers"
+                                                    [layout]="unit.layout"
+                                                    [selectedAnswers]="selectedAnswers"
+                                                    (answerClick)="onAnswerClick($event)">
+                    </speedtest-player-image-answers>
+                }
+                @default {
+                    <speedtest-player-text-answers [answers]="question.answers"
+                                                   [layout]="unit.layout"
+                                                   [buttonColor]="unit.buttonColor"
+                                                   [selectedAnswers]="selectedAnswers"
+                                                   (answerClick)="onAnswerClick($event)">
+                    </speedtest-player-text-answers>
+                }
+            }
         </div>
     </div>
     @if (needsNextButton) {

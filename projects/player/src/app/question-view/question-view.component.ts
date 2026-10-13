@@ -7,6 +7,7 @@ import { TextQuestionComponent } from './text-question.component';
 import { ImageQuestionComponent } from './image-question.component';
 import { AudioQuestionComponent } from './audio-question.component';
 import { TextAnswersComponent } from './text-answers.component';
+import { ImageAnswersComponent } from './image-answers.component';
 import { NextButtonComponent } from './next-button.component';
 
 /* Shows one question: instruction, a stage split into question and answer area, and a footer.
@@ -15,7 +16,8 @@ import { NextButtonComponent } from './next-button.component';
 @Component({
   selector: 'speedtest-player-question-view',
   imports: [
-    TextQuestionComponent, ImageQuestionComponent, AudioQuestionComponent, TextAnswersComponent, NextButtonComponent
+    TextQuestionComponent, ImageQuestionComponent, AudioQuestionComponent,
+    TextAnswersComponent, ImageAnswersComponent, NextButtonComponent
   ],
   templateUrl: 'question-view.component.html',
   styleUrls: ['question-view.component.scss']
@@ -32,7 +34,7 @@ export class QuestionViewComponent implements OnChanges {
 
   /* The format combinations this view handles so far; the app routes everything else to the old view. */
   static supports(unit: Unit): boolean {
-    return ['text', 'image', 'audio'].includes(unit.questionType) && unit.answerType === 'text';
+    return ['text', 'image', 'audio'].includes(unit.questionType) && ['text', 'image'].includes(unit.answerType);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -49,11 +51,11 @@ export class QuestionViewComponent implements OnChanges {
 
   /* Grid tracks of the stage: question first, answers second. Each is as big as its content, at most its
      share by the question space ratio (minus half the gap between them), so small content stays together
-     instead of being spread over the stage. Stacked answers always keep their own height; the question
-     only gets what is left. */
+     instead of being spread over the stage. Stacked text answers always keep their own height; the
+     question only gets what is left. Image answers give way like an image question. */
   private static stageTracksFor(unit: Unit): string {
     const ratio = unit.questionSpaceRatio ?? defaultQuestionSpaceRatio(unit.questionType, unit.answerType);
-    const answers = unit.layout === 'column' ? 'min-content' : `fit-content(calc(${100 - ratio}% - 25px))`;
+    const answers = unit.layout === 'column' && unit.answerType === 'text' ? 'min-content' : `fit-content(calc(${100 - ratio}% - 25px))`;
     return `fit-content(calc(${ratio}% - 25px)) ${answers}`;
   }
 

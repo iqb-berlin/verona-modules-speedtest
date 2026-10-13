@@ -80,6 +80,21 @@ describe('QuestionViewComponent', () => {
     expect(fixture.nativeElement.querySelector('figcaption').textContent).toContain('Was siehst du?');
   });
 
+  it('selects image answers and marks the selected image', () => {
+    const unit: Unit = {
+      ...textUnit(true),
+      answerType: 'image',
+      questions: [{ text: 'Was passt?', answers: [{ text: '', src: 'data:image/png;base64,AAAA' }, { text: '', src: 'data:image/png;base64,BBBB' }] }]
+    };
+    show(unit);
+    const cells = fixture.nativeElement.querySelectorAll('speedtest-player-image-answers button');
+    cells[1].click();
+    fixture.detectChanges();
+    expect(cells[1].querySelector('img').classList).toContain('selected');
+    nextButton()!.click();
+    expect(responses).toEqual([[1]]);
+  });
+
   it('disables the audio button while the audio plays, and enables it for the next question', () => {
     const unit: Unit = {
       ...textUnit(false),
