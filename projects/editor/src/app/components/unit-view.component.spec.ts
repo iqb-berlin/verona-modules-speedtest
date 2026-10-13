@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { Question } from 'common/interfaces/unit';
 import { MessageService } from '../services/message.service';
 import { UnitService } from '../services/unit.service';
@@ -25,7 +25,9 @@ describe('UnitViewComponent', () => {
   }
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
+    TestBed.configureTestingModule({
+      providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }]
+    });
     unitService = TestBed.inject(UnitService);
     // These tests only exercise logic, so the component is built without compiling its template.
     component = new UnitViewComponent(unitService, TestBed.inject(MessageService));

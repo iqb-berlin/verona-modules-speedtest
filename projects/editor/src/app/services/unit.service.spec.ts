@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { UNIT_DEFINITION_TYPE } from 'common/services/unit-validation';
 import { UnitService } from './unit.service';
 import { MessageService } from './message.service';
@@ -15,7 +15,9 @@ describe('UnitService', () => {
   let showError: jasmine.Spy;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideNoopAnimations()] });
+    TestBed.configureTestingModule({
+      providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }]
+    });
     service = TestBed.inject(UnitService);
     sendChange = spyOn(VeronaAPIService, 'sendChange');
     showError = spyOn(TestBed.inject(MessageService), 'showError');

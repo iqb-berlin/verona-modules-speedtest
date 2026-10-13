@@ -22,7 +22,7 @@ Both conform to the Verona API definition:
 - [Unit definition changelog](docs/changelog-unit-def.md) — format versions.
 
 ## Build & Run
-To build the packages or run the local development environment, first install the NPM packages. Angular 19 requires Node 18.19+, 20.11+ or 22.11+ (developed against Node 22).
+To build the packages or run the local development environment, first install the NPM packages. Angular 20 requires Node 20.19+, 22.12+ or 24+ (developed against Node 22).
 > npm install
 
 ### Run development server
