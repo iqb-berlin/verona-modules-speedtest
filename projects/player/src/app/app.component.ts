@@ -11,7 +11,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
 @Component({
   selector: 'speedtest-player',
-  imports: [CommonModule, QuestionViewComponent, MatButton, MatIcon, MatButton],
+  imports: [CommonModule, QuestionViewComponent, MatButton, MatIcon],
   template: `
     <button *ngIf="isStandalone" mat-raised-button class="load-button" (click)="upload.click()">
       Unit laden

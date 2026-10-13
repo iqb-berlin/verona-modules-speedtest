@@ -84,7 +84,10 @@ describe('QuestionViewComponent', () => {
     const unit: Unit = {
       ...textUnit(true),
       answerType: 'image',
-      questions: [{ text: 'Was passt?', answers: [{ text: '', src: 'data:image/png;base64,AAAA' }, { text: '', src: 'data:image/png;base64,BBBB' }] }]
+      questions: [{
+        text: 'Was passt?',
+        answers: [{ text: '', src: 'data:image/png;base64,AAAA' }, { text: '', src: 'data:image/png;base64,BBBB' }]
+      }]
     };
     show(unit);
     const cells = fixture.nativeElement.querySelectorAll('speedtest-player-image-answers button');
@@ -105,7 +108,8 @@ describe('QuestionViewComponent', () => {
       ]
     };
     show(unit, 0);
-    const audioButton = (): HTMLButtonElement => fixture.nativeElement.querySelector('speedtest-player-audio-button button');
+    const audioButton = (): HTMLButtonElement => fixture.nativeElement
+      .querySelector('speedtest-player-audio-button button');
     expect(audioButton().disabled).toBeFalse();
     fixture.nativeElement.querySelector('audio').dispatchEvent(new Event('play'));
     fixture.detectChanges();
@@ -118,10 +122,18 @@ describe('QuestionViewComponent', () => {
     const unit: Unit = {
       ...textUnit(false),
       answerType: 'audio',
-      questions: [{ text: 'Was hörst du?', answers: [{ text: 'bei', src: 'data:audio/wav;base64,AAAA' }, { text: 'ein', src: 'data:audio/wav;base64,BBBB' }] }]
+      questions: [{
+        text: 'Was hörst du?',
+        answers: [
+          { text: 'bei', src: 'data:audio/wav;base64,AAAA' },
+          { text: 'ein', src: 'data:audio/wav;base64,BBBB' }
+        ]
+      }]
     };
     show(unit);
-    const audioButtons = (): HTMLButtonElement[] => [...fixture.nativeElement.querySelectorAll('speedtest-player-audio-button button')];
+    const audioButtons = (): HTMLButtonElement[] => [
+      ...fixture.nativeElement.querySelectorAll('speedtest-player-audio-button button')
+    ];
     fixture.nativeElement.querySelectorAll('audio')[0].dispatchEvent(new Event('play'));
     fixture.detectChanges();
     expect(audioButtons().map(button => button.disabled)).toEqual([true, true]);
@@ -138,8 +150,9 @@ describe('QuestionViewComponent', () => {
     show(unit);
     const boxes = (): string[] => [...fixture.nativeElement.querySelectorAll('speedtest-player-number-boxes button')]
       .map((box: HTMLElement) => box.textContent!.trim());
-    const key = (label: string): HTMLButtonElement => [...fixture.nativeElement.querySelectorAll('speedtest-player-keypad button')]
-      .find((button: HTMLElement) => button.textContent!.trim() === label);
+    const key = (label: string): HTMLButtonElement => [
+      ...fixture.nativeElement.querySelectorAll('speedtest-player-keypad button')
+    ].find((button: HTMLElement) => button.textContent!.trim() === label);
     expect(boxes()).toEqual(['', '']);
     key('4').click();
     window.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));

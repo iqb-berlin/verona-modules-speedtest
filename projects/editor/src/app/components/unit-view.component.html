@@ -7,7 +7,7 @@
         <mat-form-field>
             <mat-label>Stimulustyp</mat-label>
             <mat-select required [(ngModel)]="unit.questionType"
-                        (ngModelChange)="updateRatioDeault(); unitService.updateUnitDef()">
+                        (ngModelChange)="updateRatioDefault(); unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="audio">Audio</mat-option>
@@ -20,7 +20,7 @@
             <mat-select required
                         [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
                         [(ngModel)]="unit.answerType"
-                        (ngModelChange)="updateRatioDeault(); unitService.updateUnitDef()">
+                        (ngModelChange)="updateRatioDefault(); unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="audio">Audio</mat-option>
