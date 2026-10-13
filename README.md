@@ -35,7 +35,7 @@ The editor serves on port 4201, the player on 4202. Started standalone (not insi
 ### Build
 >npm run build-<editor/player>
 
-This produces an HTML file in the `dist` folder, named `iqb-{module}-speedtest-{version}.html`. The file is fully self-contained: `scripts/distpacker.js` inlines all JavaScript, CSS, fonts and images as base64. Upload it to IQB-Studio via `scripts/upload.sh <file>`.
+This produces an HTML file in the `dist` folder, named `iqb-{module}-speedtest-{version}.html`. The file is fully self-contained: `scripts/distpacker.js` inlines all JavaScript, CSS, fonts and images as base64. Upload it to IQB-Studio through the Studio UI.
 
 The version comes from `config.player_version` / `config.editor_version` in `package.json`.
 

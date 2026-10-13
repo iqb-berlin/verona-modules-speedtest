@@ -29,4 +29,4 @@ Entries are written as the changes are made, not at release time: every change a
 3. `npm run build-player` (or `build-editor`). This writes the packed HTML to `dist/`.
 4. Commit, and tag the commit with the bare version number: `git tag 3.4.0 && git push --tags`.
 5. Create a GitHub release on that tag, with the new changelog section as its notes and the built file(s) from `dist/` attached. Mark it as a pre-release if the version has a `-beta` suffix.
-6. Optionally upload the built file to IQB-Studio, either through the Studio UI or with `scripts/upload.sh dist/iqb-player-speedtest-3.4.0.html`, which asks for the password or reads `IQB_STUDIO_PW` from the environment.
+6. Optionally upload the built file to IQB-Studio through the Studio UI.
