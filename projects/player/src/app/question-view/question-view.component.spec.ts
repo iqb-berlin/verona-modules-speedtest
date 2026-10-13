@@ -129,6 +129,28 @@ describe('QuestionViewComponent', () => {
     expect(responses).toEqual([1]);
   });
 
+  it('enters a number by keypad and keyboard, one box per digit of the correct answer', () => {
+    const unit: Unit = {
+      ...textUnit(false),
+      answerType: 'number',
+      questions: [{ text: '12 + 30', answers: [], correctAnswer: 42 }]
+    };
+    show(unit);
+    const boxes = (): string[] => [...fixture.nativeElement.querySelectorAll('speedtest-player-number-boxes button')]
+      .map((box: HTMLElement) => box.textContent!.trim());
+    const key = (label: string): HTMLButtonElement => [...fixture.nativeElement.querySelectorAll('speedtest-player-keypad button')]
+      .find((button: HTMLElement) => button.textContent!.trim() === label);
+    expect(boxes()).toEqual(['', '']);
+    key('4').click();
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: '2' }));
+    fixture.detectChanges();
+    expect(boxes()).toEqual(['4', '2']);
+    nextButton()!.click();
+    expect(responses).toEqual([42]);
+  });
+
   it('starts every question with an empty selection', () => {
     const unit = textUnit(true);
     show(unit, 0);

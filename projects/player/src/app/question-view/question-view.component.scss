@@ -12,7 +12,7 @@
   height: 100%;
   padding: 1%;
   display: grid;
-  grid-template-rows: [instruction] auto [stage] minmax(0, 1fr) [footer] auto;
+  grid-template-rows: [instruction] auto [stage] minmax(0, 1fr);
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -23,24 +23,58 @@
   font-size: 24px;
 }
 
-/* Question and answer tracks are sized by their content (see stageTracksFor), and the pair is centred, so
-   free space goes around them rather than between them. The gap is part of the track limits. */
+/* The tracks are sized by their content (see stageTracksFor), and everything is centred together, so free
+   space goes around the content rather than between its parts. The gap is part of the track limits. */
 .stage {
   grid-row: stage;
   display: grid;
-  gap: 50px;
+  // Only between rows; the outer columns must not add gaps (see stageTracksFor).
+  row-gap: 50px;
+  place-content: center;
   min-height: 0;
   min-width: 0;
+}
 
-  &.column {
-    grid-template-columns: minmax(0, 1fr);
-    align-content: center;
+// Content between the empty outer columns; in row, the gap between question and answers is a track of its
+// own (see stageTracksFor).
+.stage.column {
+  .question,
+  .answers {
+    grid-column: 2;
+  }
+}
+
+.stage.row {
+  .question {
+    grid-column: 2;
   }
 
-  &.row {
-    grid-template-rows: minmax(0, 1fr);
-    justify-content: center;
+  .answers {
+    grid-column: 4;
   }
+}
+
+// Keypad and next button below the content; the next button ends where the content ends.
+.stage-keypad {
+  grid-column: 2 / 5;
+}
+
+.stage-next {
+  justify-self: end;
+}
+
+.column .stage-next {
+  grid-column: 2;
+}
+
+.row .stage-next {
+  grid-column: 2 / 5;
+}
+
+.number-entry {
+  display: grid;
+  justify-items: center;
+  gap: 25px;
 }
 
 .area {
@@ -56,10 +90,4 @@
    instead and places itself within it. */
 .area > :not(.fill) {
   margin: auto;
-}
-
-.footer {
-  grid-row: footer;
-  display: flex;
-  justify-content: flex-end;
 }

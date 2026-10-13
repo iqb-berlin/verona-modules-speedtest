@@ -3,8 +3,8 @@
         <p class="instruction-text">{{ unit.instructionText }}</p>
     }
     <div class="stage" [class]="unit.layout"
-         [style.grid-template-rows]="unit.layout === 'column' ? stageTracks : null"
-         [style.grid-template-columns]="unit.layout === 'row' ? stageTracks : null">
+         [style.grid-template-rows]="stageRows"
+         [style.grid-template-columns]="stageColumns">
         <div class="area question">
             @switch (unit.questionType) {
                 @case ('image') {
@@ -36,6 +36,19 @@
                                                     (answerClick)="onAnswerClick($event)">
                     </speedtest-player-image-answers>
                 }
+                @case ('number') {
+                    <div class="number-entry">
+                        <speedtest-player-number-boxes [digits]="numberEntry.digits"
+                                                       [activeIndex]="numberEntry.activeIndex"
+                                                       (boxClick)="numberEntry.select($event)">
+                        </speedtest-player-number-boxes>
+                        @if (!keypadBelowStage) {
+                            <speedtest-player-keypad (digitClick)="numberEntry.enter($event)"
+                                                     (deleteClick)="numberEntry.delete()">
+                            </speedtest-player-keypad>
+                        }
+                    </div>
+                }
                 @default {
                     <speedtest-player-text-answers [answers]="question.answers"
                                                    [layout]="unit.layout"
@@ -49,10 +62,14 @@
                 }
             }
         </div>
+        @if (keypadBelowStage) {
+            <speedtest-player-keypad class="stage-keypad"
+                                     (digitClick)="numberEntry.enter($event)"
+                                     (deleteClick)="numberEntry.delete()">
+            </speedtest-player-keypad>
+        }
+        @if (needsNextButton) {
+            <speedtest-player-next-button class="stage-next" (click)="onNext()"></speedtest-player-next-button>
+        }
     </div>
-    @if (needsNextButton) {
-        <div class="footer">
-            <speedtest-player-next-button (click)="onNext()"></speedtest-player-next-button>
-        </div>
-    }
 </div>
