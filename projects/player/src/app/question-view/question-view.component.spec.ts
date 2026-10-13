@@ -114,6 +114,21 @@ describe('QuestionViewComponent', () => {
     expect(audioButton().disabled).toBeFalse();
   });
 
+  it('lets only one audio answer play at a time and submits by the label button', () => {
+    const unit: Unit = {
+      ...textUnit(false),
+      answerType: 'audio',
+      questions: [{ text: 'Was hörst du?', answers: [{ text: 'bei', src: 'data:audio/wav;base64,AAAA' }, { text: 'ein', src: 'data:audio/wav;base64,BBBB' }] }]
+    };
+    show(unit);
+    const audioButtons = (): HTMLButtonElement[] => [...fixture.nativeElement.querySelectorAll('speedtest-player-audio-button button')];
+    fixture.nativeElement.querySelectorAll('audio')[0].dispatchEvent(new Event('play'));
+    fixture.detectChanges();
+    expect(audioButtons().map(button => button.disabled)).toEqual([true, true]);
+    fixture.nativeElement.querySelectorAll('.answer > button')[1].click();
+    expect(responses).toEqual([1]);
+  });
+
   it('starts every question with an empty selection', () => {
     const unit = textUnit(true);
     show(unit, 0);

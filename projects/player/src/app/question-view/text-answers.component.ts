@@ -3,26 +3,35 @@ import {
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
 import { SplitWordPipe } from '../split-word.pipe';
+import { AudioButtonComponent } from './audio-button.component';
 
 /* Answer buttons that are all as wide as the widest one (#26): equal 1fr grid tracks, sized by the
-   widest label. If that does not fit, the tracks shrink equally and the labels wrap. */
+   widest label. If that does not fit, the tracks shrink equally and the labels wrap. For audio answers,
+   each button has its audio button in front of it; whether audio may play is the parent's decision. */
 @Component({
   selector: 'speedtest-player-text-answers',
-  imports: [SplitWordPipe],
+  imports: [SplitWordPipe, AudioButtonComponent],
   template: `
     <div class="buttons" [class.stacked]="layout === 'row'">
       @for (answer of answers; let answerIndex = $index; track answerIndex) {
-        <button
-                [class.selected]="isSelected[answerIndex]"
-                [style.background-color]="buttonColor"
-                (click)="answerClick.emit(answerIndex)">
-          @if (answer.splitPosition) {
-            <span class="label-1">{{ (answer.text | splitWord: answer.splitPosition)[0] }}</span>
-            <span class="label-2">{{ (answer.text | splitWord: answer.splitPosition)[1] }}</span>
-          } @else {
-            {{ answer.text }}
+        <div class="answer">
+          @if (withAudio) {
+            <speedtest-player-audio-button [src]="answer.src ?? ''"
+                                           [disabled]="audioPlaying"
+                                           (playingChange)="playingChange.emit($event)">
+            </speedtest-player-audio-button>
           }
-        </button>
+          <button [class.selected]="isSelected[answerIndex]"
+                  [style.background-color]="buttonColor"
+                  (click)="answerClick.emit(answerIndex)">
+            @if (answer.splitPosition) {
+              <span class="label-1">{{ (answer.text | splitWord: answer.splitPosition)[0] }}</span>
+              <span class="label-2">{{ (answer.text | splitWord: answer.splitPosition)[1] }}</span>
+            } @else {
+              {{ answer.text }}
+            }
+          </button>
+        </div>
       }
     </div>
   `,
@@ -43,7 +52,19 @@ import { SplitWordPipe } from '../split-word.pipe';
     .buttons.stacked {
       grid-auto-flow: row;
     }
+    .answer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    speedtest-player-audio-button {
+      flex: none;
+      width: 45px;
+    }
     button {
+      flex: 1;
+      align-self: stretch;
       min-width: 120px;
       min-height: 90px;
       padding: 10px 25px;
@@ -81,7 +102,10 @@ export class TextAnswersComponent implements OnChanges {
   @Input() layout: 'column' | 'row' = 'column';
   @Input() buttonColor?: string;
   @Input() selectedAnswers: number[] = [];
+  @Input() withAudio = false;
+  @Input() audioPlaying = false;
   @Output() answerClick = new EventEmitter<number>();
+  @Output() playingChange = new EventEmitter<boolean>();
 
   isSelected: boolean[] = [];
 

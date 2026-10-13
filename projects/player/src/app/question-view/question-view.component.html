@@ -41,7 +41,10 @@
                                                    [layout]="unit.layout"
                                                    [buttonColor]="unit.buttonColor"
                                                    [selectedAnswers]="selectedAnswers"
-                                                   (answerClick)="onAnswerClick($event)">
+                                                   [withAudio]="unit.answerType === 'audio'"
+                                                   [audioPlaying]="audioPlaying"
+                                                   (answerClick)="onAnswerClick($event)"
+                                                   (playingChange)="audioPlaying = $event">
                     </speedtest-player-text-answers>
                 }
             }
