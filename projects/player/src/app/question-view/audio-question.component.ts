@@ -2,6 +2,7 @@ import {
   Component, EventEmitter, Input, Output,
   ChangeDetectionStrategy
 } from '@angular/core';
+import { LatexPipe } from 'common/latex.pipe';
 import { AudioButtonComponent } from './audio-button.component';
 
 /* A large audio button with the question text below it, centred together in the question area. The button
@@ -9,7 +10,7 @@ import { AudioButtonComponent } from './audio-button.component';
    fill the area instead of placing it by margins. */
 @Component({
   selector: 'speedtest-player-audio-question',
-  imports: [AudioButtonComponent],
+  imports: [AudioButtonComponent, LatexPipe],
   template: `
     <div class="group">
       <speedtest-player-audio-button [src]="src"
@@ -17,7 +18,7 @@ import { AudioButtonComponent } from './audio-button.component';
                                      (playingChange)="playingChange.emit($event)">
       </speedtest-player-audio-button>
       @if (text) {
-        <p>{{ text }}</p>
+        <p class="latex-block" [innerHTML]="text | latex: latex"></p>
       }
     </div>
   `,
@@ -51,6 +52,7 @@ import { AudioButtonComponent } from './audio-button.component';
 export class AudioQuestionComponent {
   @Input() src = '';
   @Input() text = '';
+  @Input() latex = false;
   @Input() audioPlaying = false;
   @Output() playingChange = new EventEmitter<boolean>();
 }

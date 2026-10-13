@@ -9,7 +9,7 @@ node scripts/make-fixtures.mjs
 ## What is here
 
 - `{layout}_{questionType}_{answerType}.json` — one unit per format combination the editor allows (2 layouts × 3 question types × 4 answer types), plus `word-select.json` and `inline-answers.json`. All have an instruction text.
-- `variant_*.json` — unit-level settings that change the layout: without instruction text, multiple selection and question space ratio 30 and 70.
+- `variant_*.json` — unit-level settings that change the layout: without instruction text, multiple selection, question space ratio 30 and 70, and LaTeX (`*_latex.json`: formulas in question texts, captions, text and audio answers, a label that is too wide for its button, and `\$`).
 
 Each unit's items pair every question case with the hardest answer case (4 long answers, 4 mixed-format images, 4 labelled audio answers, 6 digits), and every answer case with a plain question. 4 answers is taken as the realistic maximum.
 

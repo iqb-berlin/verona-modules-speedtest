@@ -1,0 +1,16 @@
+/* KaTeX's stylesheet with its fonts as woff2 only. The packed module embeds every font file the CSS
+   references, and woff and ttf copies would add about 1 MB that no supported browser needs.
+   The font folder is resolved relative to KaTeX's own fonts.scss. */
+@use 'katex/src/styles/katex' with (
+  $font-folder: '../../dist/fonts',
+  $use-woff: false,
+  $use-ttf: false
+);
+
+/* For a block with formulas in it. KaTeX moves parts of a formula into place by relative positioning, and
+   their boxes can reach past the formula's height and depth even though nothing visible does. A scrolling
+   parent would scroll by that much; clipping at the block stops it. Unlike hidden, clip does not make the
+   block scroll itself, and only the vertical direction is clipped. */
+.latex-block {
+  overflow-y: clip;
+}

@@ -100,3 +100,8 @@ mat-panel-title button {
 .question mat-form-field {
   width: 80%;
 }
+
+.latex-preview {
+  margin: 0 0 20px;
+  font-size: 20px;
+}

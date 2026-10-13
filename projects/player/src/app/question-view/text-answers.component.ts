@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
+import { LatexPipe } from 'common/latex.pipe';
 import { SplitWordPipe } from '../split-word.pipe';
 import { AudioButtonComponent } from './audio-button.component';
 
@@ -11,7 +12,7 @@ import { AudioButtonComponent } from './audio-button.component';
    each button has its audio button in front of it; whether audio may play is the parent's decision. */
 @Component({
   selector: 'speedtest-player-text-answers',
-  imports: [SplitWordPipe, AudioButtonComponent],
+  imports: [SplitWordPipe, LatexPipe, AudioButtonComponent],
   template: `
     <div class="buttons" [class.stacked]="layout === 'row'">
       @for (answer of answers; let answerIndex = $index; track answerIndex) {
@@ -29,7 +30,7 @@ import { AudioButtonComponent } from './audio-button.component';
               <span class="label-1">{{ (answer.text | splitWord: answer.splitPosition)[0] }}</span>
               <span class="label-2">{{ (answer.text | splitWord: answer.splitPosition)[1] }}</span>
             } @else {
-              {{ answer.text }}
+              <span [innerHTML]="answer.text | latex: latex"></span>
             }
           </button>
         </div>
@@ -97,6 +98,10 @@ import { AudioButtonComponent } from './audio-button.component';
     .label-2 {
       color: #dc3220;
     }
+    // The button's letter spacing would pull a formula apart.
+    button ::ng-deep .katex {
+      letter-spacing: normal;
+    }
   `
 })
 export class TextAnswersComponent implements OnChanges {
@@ -104,6 +109,7 @@ export class TextAnswersComponent implements OnChanges {
   @Input() layout: 'column' | 'row' = 'column';
   @Input() buttonColor?: string;
   @Input() selectedAnswers: number[] = [];
+  @Input() latex = false;
   @Input() withAudio = false;
   @Input() audioPlaying = false;
   @Output() answerClick = new EventEmitter<number>();

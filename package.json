@@ -3,7 +3,7 @@
   "config": {
     "player_version": "3.4.0-beta",
     "editor_version": "3.2.0",
-    "unit_definition_version": "2.3.0"
+    "unit_definition_version": "2.4.0"
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "@angular/platform-browser-dynamic": "^22.2.2",
     "@angular/router": "^22.2.2",
     "@iqb/responses": "^3.3.2",
+    "katex": "^0.18.7",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",
     "zone.js": "~0.16.3"

@@ -87,6 +87,47 @@ describe('QuestionViewComponent', () => {
     expect(find('figcaption')!.textContent).toContain('Was siehst du?');
   });
 
+  it('renders formulas in the question text of a LaTeX unit', () => {
+    const unit: Unit = { ...textUnit(false), latex: true, questions: [question('Berechne $\\frac{1}{2}$.')] };
+    show(unit);
+    expect(find('speedtest-player-text-question .katex')).not.toBeNull();
+    expect(find('speedtest-player-text-question p')!.textContent).toContain('Berechne');
+  });
+
+  it('renders formulas in image captions and audio question texts of a LaTeX unit', () => {
+    const imageUnit: Unit = {
+      ...textUnit(false),
+      latex: true,
+      questionType: 'image',
+      questions: [{ ...question('$x^2$'), src: 'data:image/png;base64,AAAA' }]
+    };
+    show(imageUnit);
+    expect(find('figcaption .katex')).not.toBeNull();
+    const audioUnit: Unit = { ...imageUnit, questionType: 'audio' };
+    show(audioUnit);
+    expect(find('speedtest-player-audio-question p .katex')).not.toBeNull();
+  });
+
+  it('shows $ signs and markup in the question text as they are without the LaTeX flag', () => {
+    show({ ...textUnit(false), questions: [question('Kostet $5 <b>oder</b> $x$?')] });
+    expect(find('speedtest-player-text-question .katex')).toBeNull();
+    expect(find('speedtest-player-text-question b')).toBeNull();
+    expect(find('speedtest-player-text-question p')!.textContent).toBe('Kostet $5 <b>oder</b> $x$?');
+  });
+
+  it('renders formulas in text and audio answer labels of a LaTeX unit', () => {
+    const answers = [
+      { text: '$\\frac{3}{4}$', src: 'data:audio/wav;base64,AAAA' },
+      { text: '0,75', src: 'data:audio/wav;base64,BBBB' }
+    ];
+    const unit: Unit = { ...textUnit(false), latex: true, questions: [{ text: 'Was ist gleich?', answers }] };
+    show(unit);
+    expect(answerButton(0).querySelector('.katex')).not.toBeNull();
+    expect(answerButton(1).textContent.trim()).toBe('0,75');
+    show({ ...unit, answerType: 'audio' });
+    expect(find('.answer > button .katex')).not.toBeNull();
+  });
+
   it('selects image answers and marks the selected image', () => {
     const unit: Unit = {
       ...textUnit(true),

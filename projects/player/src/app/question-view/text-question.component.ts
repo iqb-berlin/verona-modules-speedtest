@@ -1,8 +1,10 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { LatexPipe } from 'common/latex.pipe';
 
 @Component({
   selector: 'speedtest-player-text-question',
-  template: '<p>{{ text }}</p>',
+  imports: [LatexPipe],
+  template: '<p class="latex-block" [innerHTML]="text | latex: latex"></p>',
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
     :host {
@@ -17,4 +19,5 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 })
 export class TextQuestionComponent {
   @Input() text = '';
+  @Input() latex = false;
 }

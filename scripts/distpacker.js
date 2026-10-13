@@ -60,19 +60,23 @@ function replaceUrlInCss(jsString, cssPath) {
   return jsString.replace(regexUrl, a => {
     console.log('Replacing URL: ', a);
     if (!a.includes('/')) return a;
+    // The path may be quoted, as Angular writes the URLs of fonts from node_modules (e.g. KaTeX).
+    const regexFile = /\((.*?)\)/ig;
+    const path = regexFile.exec(a)[1].trim().replace(/^(['"])(.*)\1$/, '$2');
     // List of illegal file chars: ~ “ # % & * : < > ? / \ { | }
     // : / \ are path delimiters
-    // If one of the other characters is found, a must be a variable and must not be replaced.
-    if (a.search(/[~|"|#|%|*|<|>|?|{|}||]/) > -1) {
+    // If one of the other characters is found, the path must be a variable and must not be replaced.
+    if (path.search(/[~|"'#%*<>?{}]/) > -1) {
       return a;
     }
-    const regexFile = /\((.*?)\)/ig;
-    const src = regexFile.exec(a)[1].replace(/\'/gi, '').replace(/\"/gi, '').replace('./', '');
+    const src = path.replace('./', '');
     const ext = getExtension(src);
-    const file = `${folder}${getFolderPath(cssPath)}/${src}`;
+    // Without a CSS path (URLs in JS), the path is relative to the folder itself.
+    const file = `${folder}${getFolderPath(cssPath ?? '')}/${src}`;
     if (existsSync(file)) {
       const base64Str = base64Encode(file);
-      return `url(data:image/${ext};base64,${base64Str})`; // ATTENTION with " & '
+      const mediaType = ['woff', 'woff2', 'ttf', 'otf'].includes(ext) ? `font/${ext}` : `image/${ext}`;
+      return `url(data:${mediaType};base64,${base64Str})`; // ATTENTION with " & '
     }
     logDebug(`file ${file} not found. Skipping replacement.`);
     return a;

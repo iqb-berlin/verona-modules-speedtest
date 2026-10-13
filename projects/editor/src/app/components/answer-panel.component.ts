@@ -10,6 +10,7 @@ import { MatRadioButton } from '@angular/material/radio';
 import { FileService } from 'common/services/file.service';
 import { Answer } from 'common/interfaces/unit';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { LatexPipe } from 'common/latex.pipe';
 
 @Component({
   selector: 'speedtest-answer-panel',
@@ -25,7 +26,8 @@ import { MatCheckbox } from '@angular/material/checkbox';
     MatMiniFabButton,
     MatIconButton,
     MatRadioButton,
-    MatCheckbox
+    MatCheckbox,
+    LatexPipe
   ],
   template: `
     @if (unitService.unit.answerType !== 'number' && unitService.unit.questionType !== 'word-select') {
@@ -48,11 +50,16 @@ import { MatCheckbox } from '@angular/material/checkbox';
                                   (change)="onSelectCorrectAnswer(answerIndex)">
                     </mat-checkbox>
                 }
-                <mat-form-field [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="2">
-                    <mat-label>Frage</mat-label>
-                    <input matInput [value]="answer.text"
-                           (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
-                </mat-form-field>
+                <div class="answer-text" [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="2">
+                    <mat-form-field>
+                        <mat-label>Frage</mat-label>
+                        <input matInput [value]="answer.text"
+                               (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
+                    </mat-form-field>
+                    @if (unitService.unit.answerType !== 'image' && unitService.hasFormula(answer.text)) {
+                        <p class="latex-preview" [innerHTML]="answer.text | latex: true"></p>
+                    }
+                </div>
                 @if (unitService.unit.answerType === 'image') {
                     <div class="image-answer" [style.grid-row-start]="answerIndex + 2"
                          [style.grid-column-start]="3">
@@ -150,6 +157,14 @@ import { MatCheckbox } from '@angular/material/checkbox';
     }
     .text-answer-list button.mdc-fab {
       margin-left: 30px;
+    }
+    .answer-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .latex-preview {
+      margin: 0 0 10px;
+      font-size: 20px;
     }
     .split-pos-field {
       margin-left: 10px;

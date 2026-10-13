@@ -10,13 +10,15 @@
                 @case ('image') {
                     <speedtest-player-image-question class="fill"
                                                      [src]="question.src ?? ''"
-                                                     [caption]="question.text ?? ''">
+                                                     [caption]="question.text ?? ''"
+                                                     [latex]="!!unit.latex">
                     </speedtest-player-image-question>
                 }
                 @case ('audio') {
                     <speedtest-player-audio-question class="fill"
                                                      [src]="question.src ?? ''"
                                                      [text]="question.text ?? ''"
+                                                     [latex]="!!unit.latex"
                                                      [audioPlaying]="audioPlaying"
                                                      (playingChange)="audioPlaying = $event">
                     </speedtest-player-audio-question>
@@ -43,7 +45,8 @@
                     </speedtest-player-inline-answers>
                 }
                 @default {
-                    <speedtest-player-text-question [text]="question.text ?? ''"></speedtest-player-text-question>
+                    <speedtest-player-text-question [text]="question.text ?? ''" [latex]="!!unit.latex">
+                    </speedtest-player-text-question>
                 }
             }
         </div>
@@ -75,6 +78,7 @@
                         <speedtest-player-text-answers [answers]="question.answers"
                                                        [layout]="unit.layout"
                                                        [buttonColor]="unit.buttonColor"
+                                                       [latex]="!!unit.latex"
                                                        [selectedAnswers]="selectedAnswers"
                                                        [withAudio]="unit.answerType === 'audio'"
                                                        [audioPlaying]="audioPlaying"

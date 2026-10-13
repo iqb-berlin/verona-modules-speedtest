@@ -19,6 +19,7 @@ Current version: **2.3.0** (`package.json` → `config.unit_definition_version`)
   "instructionText": "…",               // optional, shown above every question
   "buttonColor": "#aabbcc",             // optional, answer button background
   "questionSpaceRatio": 50,             // optional, % of screen given to the question area
+  "latex": true,                        // optional, see below
   "questions": [ … ]
 }
 ```
@@ -83,6 +84,10 @@ The validator also contains the only code that knows about older forms of the fo
 
 `multipleSelection` is unavailable for `number`, `word-select` and `inline-answers`. When multiple answers are possible (`multipleSelection`, `number`, `word-select`), the player shows a "next" button instead of advancing on the first click.
 
+## LaTeX
+
+With `latex: true`, text between `$` signs in a question's `text` and in text answer labels is rendered as LaTeX, e.g. `Berechne $\frac{1}{2} + \frac{1}{4}$`. It does not apply to the instruction text, or to `word-select` and `inline-answers`, which split their text into words.
+
 ## CSV import
 
 The editor can fill `questions` from a semicolon-separated CSV ([`csv-parser.ts`](../projects/editor/src/app/services/csv-parser.ts)). Text only — images and audio cannot be imported. The selected `questionType` / `answerType` / `multipleSelection` decide how the columns are interpreted, so set them **before** importing.
@@ -97,7 +102,7 @@ Columns are identified by the header row; order does not matter. Any other heade
 | `teilungsposition_<n>` | `splitPosition` for `antwort_<n>` |
 | `antwortpositionsindex` | `answerPosition`, only read for `inline-answers` |
 
-The file must be UTF-8; the parser rejects anything containing a replacement character and normalises Windows line endings.
+Cells are separated by `;`, except for `\;`, LaTeX's thick space, so formulas can be imported as written. The file must be UTF-8; the parser rejects anything containing a replacement character and normalises Windows line endings.
 
 ## Result data
 

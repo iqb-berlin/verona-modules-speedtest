@@ -125,6 +125,17 @@ Frage 3; 2`;
     });
   });
 
+  it('keeps LaTeX formulas, including \\; inside them', () => {
+    const csv = `frage; loesung; antwort_1; antwort_2
+Berechne $\\frac{1}{2}$; 0; $a \\; b$; 5 \\$`;
+    const questions = csvParser.parseQuestions(csv, 'text');
+    expect(questions[0]).toEqual({
+      text: 'Berechne $\\frac{1}{2}$',
+      answers: [{ text: '$a \\; b$', splitPosition: undefined }, { text: '5 \\$', splitPosition: undefined }],
+      correctAnswer: 0
+    });
+  });
+
   it('should throw Error when line item count does not match header count', () => {
     const csv = `frage; antwort_1; antwort_2
 Frage 1; 1; richtig; falsch

@@ -190,6 +190,53 @@ const inlineAnswers = [
   inlineItem('Die Katze springt das Sofa.', 3, ['auf', 'unter'], true)
 ];
 
+/* ---------------------------------------------- LaTeX ----------------------------------------------- */
+
+// Formulas are taller than text (fractions, limits) and only break at top-level operators, so a long one
+// can be wider than its button.
+const latexTextItems = [
+  {
+    text: 'Welcher Bruch ist gleich $0{,}75$?',
+    answers: ['$\\frac{3}{4}$', '$\\frac{7}{10}$', '$\\frac{1}{4}$', '$\\frac{4}{3}$'].map(text => ({ text }))
+  },
+  {
+    text: 'Lena kauft $3$ Hefte zu je $1{,}20$ \\$ und einen Stift für $\\frac{1}{2}$ des Heftpreises. ' +
+      'Wie viel bezahlt sie insgesamt, wenn sie mit $x$ \\$ bezahlt und $y$ \\$ zurückbekommt?',
+    answers: [
+      'Sie bezahlt $3 \\cdot 1{,}20 + 0{,}60 = 4{,}20$ \\$.',
+      'Sie bezahlt $3 \\cdot 1{,}20 = 3{,}60$ \\$.',
+      'Sie bezahlt $x - y$ \\$, also genau $4{,}20$ \\$.',
+      'Das lässt sich nicht bestimmen.'
+    ].map(text => ({ text }))
+  },
+  {
+    text: 'Berechne $\\dfrac{\\sqrt{x^2 + 1}}{\\sum_{i=1}^{n} i}$ für $x = 0$ und $n = 1$.',
+    answers: [
+      { text: '$\\dfrac{1}{1}$' },
+      { text: '$\\int_0^1 x \\, dx$' },
+      { text: 'kostet 5 \\$' }
+    ]
+  },
+  {
+    text: 'Welche Summe ist richtig?',
+    answers: [
+      '$1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 = 120$',
+      '$1 + 2 + 3 = 6$',
+      '$2^{10} = 1024$',
+      '$\\sqrt[3]{27} = 3$'
+    ].map(text => ({ text }))
+  }
+].map(item => ({ ...item, correctAnswer: 0 }));
+
+const latexCaptionAudioItems = [
+  { src: image(1200, 675, '#dec'), text: 'Die Fläche ist $A = \\frac{1}{2} \\cdot g \\cdot h$.' },
+  { src: image(600, 600, '#cde'), text: 'Welche Zahl ist $\\sqrt{16}$?' }
+].map(question => ({
+  ...question,
+  answers: ['$\\frac{3}{4}$', '$\\sum_{i=1}^{n} i$', '$4$', 'vier'].map(text => ({ text, src: audio })),
+  correctAnswer: 0
+}));
+
 /* ---------------------------------------------- output ---------------------------------------------- */
 
 const fixtures = {};
@@ -221,6 +268,9 @@ for (const layout of ['column', 'row']) {
     fixtures[`variant_${layout}_image_text_ratio-${ratio}`] =
       unit(layout, 'image', 'text', itemsFor('image', 'text', false), { questionSpaceRatio: ratio });
   }
+  fixtures[`variant_${layout}_text_text_latex`] = unit(layout, 'text', 'text', latexTextItems, { latex: true });
+  fixtures[`variant_${layout}_image_audio_latex`] =
+    unit(layout, 'image', 'audio', latexCaptionAudioItems, { latex: true });
 }
 
 // Only the generated units are replaced, so a renamed or dropped fixture does not linger.

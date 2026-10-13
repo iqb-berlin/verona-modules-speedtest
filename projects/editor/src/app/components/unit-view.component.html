@@ -34,6 +34,15 @@
                       (ngModelChange)="onToggleMultiselect()">
             Mehrfachauswahl
         </mat-checkbox>
+        <mat-checkbox [ngModel]="!!unit.latex"
+                      [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
+                      [matTooltip]="'Formeln zwischen $-Zeichen werden in Frage- und Antworttexten als LaTeX ' +
+                                    'dargestellt, z. B. $\\frac{1}{2}$. Ein Dollarzeichen, das nicht zu einer ' +
+                                    'Formel gehört, wird als \\$ geschrieben, z. B. 5 \\$. ' +
+                                    'Für größere Brüche \\dfrac statt \\frac verwenden.'"
+                      (ngModelChange)="onToggleLatex($event)">
+            LaTeX-Formeln
+        </mat-checkbox>
         <mat-form-field>
             <mat-label>Instruktionstext</mat-label>
             <textarea matInput [(ngModel)]="unit.instructionText" (ngModelChange)="unitService.updateUnitDef()">
@@ -89,6 +98,7 @@
           <li>teilungsposition_#</li>
           <li>antwortpositionsindex</li>
         </ul>
+        <li>LaTeX-Formeln stehen wie im Editor zwischen $-Zeichen. Ein Semikolon in einer Formel (\;) trennt keine Spalten.</li>
       </ul>
       <button mat-raised-button class="csv-import-button" (click)="upload.click()">
         Datei hochladen
@@ -143,6 +153,9 @@
                                    (change)="unitService.updateUnitDef()">
                         </mat-form-field>
                     </div>
+                    @if (unitService.hasFormula(question.text)) {
+                        <p class="latex-preview" [innerHTML]="question.text ?? '' | latex: true"></p>
+                    }
                     @if (unit.questionType === 'inline-answers') {
                         <mat-form-field>
                             <mat-label>Antwortpositionsindex</mat-label>

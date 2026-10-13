@@ -16,3 +16,6 @@
 
 ## 2.3.0
 - Remove the optional property `buttonWidth`. Answer buttons are now all as wide as the widest one, which makes a fixed width unnecessary. Editor and player drop the property when loading an older unit, so such units keep working and lose it the next time they are saved.
+
+## 2.4.0
+- Add the optional property `latex`. When set, `$…$` in question and answer texts is rendered as LaTeX.

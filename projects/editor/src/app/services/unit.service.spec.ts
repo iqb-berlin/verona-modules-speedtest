@@ -94,4 +94,27 @@ describe('UnitService', () => {
       expect(showError).toHaveBeenCalledWith('Die Unit-Definition konnte nicht gelesen werden.');
     });
   });
+
+  describe('hasFormula', () => {
+    it('is true for a text with a formula in a LaTeX unit', () => {
+      service.unit.latex = true;
+
+      expect(service.hasFormula('Berechne $x^2$')).toBe(true);
+    });
+
+    it('is false without the LaTeX setting or without a formula', () => {
+      expect(service.hasFormula('Berechne $x^2$')).toBe(false);
+      service.unit.latex = true;
+      expect(service.hasFormula('kostet 5 \\$')).toBe(false);
+      expect(service.hasFormula(undefined)).toBe(false);
+    });
+
+    it('is false for question types that split their text into words', () => {
+      service.unit.latex = true;
+      service.unit.questionType = 'word-select';
+
+      expect(service.usesLatex()).toBe(false);
+      expect(service.hasFormula('Berechne $x^2$')).toBe(false);
+    });
+  });
 });

@@ -2,12 +2,15 @@ import {
   Answer, Question, QuestionType
 } from 'common/interfaces/unit';
 
+/* Cells are separated by semicolons, except for \; which is LaTeX's thick space inside a formula. */
+const CELL_SEPARATOR = /(?<!\\);/;
+
 export function parseQuestions(csv: string, questionType: QuestionType, multiSelect: boolean = false): Question[] {
   const cleanedCsv = csv.replace(/\r/g, '');
   if (cleanedCsv.includes('\uFFFD')) {
     throw new Error('Datei ist nicht UTF-8 kodiert.');
   }
-  const headerItems = cleanedCsv.split(/\n/)[0].split(';').map(h => h.trim());
+  const headerItems = cleanedCsv.split(/\n/)[0].split(CELL_SEPARATOR).map(h => h.trim());
   const invalidHeaders = getInvalidHeaderLabels(headerItems);
   if (invalidHeaders.length > 0) throw Error(`Nicht erlaubte Kopfzeilenelement(e): ${invalidHeaders.join(',')}`);
 
@@ -15,7 +18,7 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
     .filter(text => text.trim())
     .slice(1) // skip header line
     .map((line: string) => {
-      const cellValues: string[] = line.split(';');
+      const cellValues: string[] = line.split(CELL_SEPARATOR);
       if (cellValues.length !== headerItems.length) {
         throw Error(`Zeilenlänge passt nicht zur Kopfzeile!
                      Länge Kopfzeile: ${headerItems.length}; Zeilenlänge: ${cellValues.length}`);

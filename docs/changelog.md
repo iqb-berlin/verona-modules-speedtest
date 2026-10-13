@@ -1,5 +1,7 @@
 # next
 ## Player
+### Neue Funktionen
+- LaTeX in Fragetexten (auch Bildunterschriften und Text unter Audiofragen) und Antworttexten (Text- und Audioantworten), wenn die Unit es einschaltet. Formeln stehen zwischen `$`-Zeichen. Ein Dollarzeichen, das nicht zu einer Formel gehört, wird als `\$` geschrieben, z. B. `5 \$`. Nicht im Instruktionstext, bei Wortauswahl und bei Antworten im Satz.
 ### Änderungen
 - Darstellung neu aufgebaut, für alle Formate. Frage- und Antwortbereich sind so groß wie ihr Inhalt, höchstens so groß wie ihr Größenanteil, und stehen gemeinsam in der Mitte, statt dass freier Platz zwischen ihnen entsteht. Bilder werden weiterhin in ihren Bereich verkleinert, aber nie vergrößert.
   - Bestehende Units sehen dadurch teils anders aus; der Größenanteil Fragebereich wirkt nur noch, wenn der Inhalt den Platz braucht.
@@ -11,6 +13,9 @@
 - Inhalte, die nicht in ihren Bereich passen, werden scrollbar statt abgeschnitten, z. B. Antwortknöpfe mit viel Text.
 - Beim Fortsetzen einer Unit wird die Summe der falschen Antworten wieder korrekt gelesen. Zuvor wurde sie durch den Index der zuletzt beantworteten Frage ersetzt.
 ## Editor
+### Neue Funktionen
+- Einstellung LaTeX-Formeln: Formeln zwischen `$`-Zeichen in Frage- und Antworttexten werden im Player als LaTeX dargestellt. Unter Texten mit Formel zeigt der Editor eine Vorschau. Für Wortauswahl und Antworten im Satz nicht verfügbar.
+- Beim CSV-Import trennt `\;` (Leerraum in LaTeX-Formeln) keine Spalten mehr.
 ### Änderungen
 - Unit-Definitionen werden vor dem Laden geprüft. Fehlerhafte Dateien, Units anderer Module und Units ohne Version werden mit einer passenden Meldung abgelehnt, statt einen Fehler auszulösen.
 - Die Einstellung Antwortknopfbreite entfällt, auch die bisherige Standardbreite von 350px. Ältere Units lassen sich weiterhin laden; die Einstellung wird dabei entfernt. Units werden im Unit-Definitionsformat 2.3.0 gespeichert.

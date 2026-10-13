@@ -105,4 +105,15 @@ describe('UnitViewComponent', () => {
       expect(component.unit.questions[0].correctAnswer).toBeUndefined();
     });
   });
+
+  describe('onToggleLatex', () => {
+    it('sets the property when switching on and removes it when switching off', () => {
+      component.onToggleLatex(true);
+      expect(component.unit.latex).toBe(true);
+
+      component.onToggleLatex(false);
+      expect('latex' in component.unit).toBe(false);
+      expect(sendChange).toHaveBeenCalledTimes(2);
+    });
+  });
 });

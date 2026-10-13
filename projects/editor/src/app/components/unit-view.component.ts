@@ -23,6 +23,7 @@ import {
 import { Answer, Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
 import { defaultQuestionSpaceRatio } from 'common/constants';
+import { LatexPipe } from 'common/latex.pipe';
 import { MessageService } from 'editor/src/app/services/message.service';
 import { UnitService } from '../services/unit.service';
 import { AnswerPanelComponent } from './answer-panel.component';
@@ -51,7 +52,8 @@ import { AnswerPanelComponent } from './answer-panel.component';
     MatCard,
     MatCardHeader,
     MatCardTitle,
-    MatCardContent
+    MatCardContent,
+    LatexPipe
   ],
   templateUrl: 'unit-view.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -128,6 +130,13 @@ export class UnitViewComponent implements OnChanges {
   // The player's default, shown as placeholder while the unit sets no ratio of its own.
   updateRatioDefault() {
     this.activeRatioDefault = defaultQuestionSpaceRatio(this.unit.questionType, this.unit.answerType);
+  }
+
+  // Units without formulas leave the property out rather than storing false.
+  onToggleLatex(enabled: boolean) {
+    if (enabled) this.unit.latex = true;
+    else delete this.unit.latex;
+    this.unitService.updateUnitDef();
   }
 
   onToggleMultiselect() {

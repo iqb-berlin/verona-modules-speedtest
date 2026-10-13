@@ -3,6 +3,7 @@ import { VariableInfo } from '@iqb/responses';
 import packageInfo from 'packageInfo';
 import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
+import { containsFormula } from 'common/services/latex';
 import * as csvParser from 'editor/src/app/services/csv-parser';
 import { MessageService } from 'editor/src/app/services/message.service';
 import { UNIT_DEFINITION_TYPE, UNIT_PARSE_ERROR_MESSAGES, parseUnitDefinition } from 'common/services/unit-validation';
@@ -25,6 +26,18 @@ export class UnitService {
   missingCorrectAnswerPositions: number[] = [];
 
   constructor(private messageService: MessageService) { }
+
+  /* Whether the unit uses LaTeX. Word-select and inline answers do not support it; for them the setting
+     stays stored but has no effect, so it is back when the question type changes again. */
+  usesLatex(): boolean {
+    return !!this.unit.latex && this.unit.questionType !== 'word-select' &&
+      this.unit.questionType !== 'inline-answers';
+  }
+
+  // Whether the text contains a formula, which it only can when the unit uses LaTeX.
+  hasFormula(text: string | undefined): boolean {
+    return this.usesLatex() && containsFormula(text ?? '');
+  }
 
   loadUnitDefinition(unitDefinition: string): void {
     if (!unitDefinition) return;

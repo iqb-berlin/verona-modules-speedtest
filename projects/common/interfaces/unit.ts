@@ -9,6 +9,7 @@ export interface Unit {
   answerType: AnswerType;
   multipleSelection?: boolean;
   questionSpaceRatio?: number; // Determines of much screen space is reserved for question part
+  latex?: boolean; // Renders $…$ in question and answer texts as LaTeX
 }
 
 export type QuestionType = 'text' | 'image' | 'audio' | 'word-select' | 'inline-answers';

@@ -1,15 +1,17 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { LatexPipe } from 'common/latex.pipe';
 
 /* Fills the question area and scales the image down into it, never up. Image and caption stay together
    and are centred in the area: the image box is at most as big as the image, the caption centred below it.
    The parent must let this component fill the area instead of placing it by margins. */
 @Component({
   selector: 'speedtest-player-image-question',
+  imports: [LatexPipe],
   template: `
     <figure>
       <img [src]="src" [alt]="caption">
       @if (caption) {
-        <figcaption>{{ caption }}</figcaption>
+        <figcaption class="latex-block" [innerHTML]="caption | latex: latex"></figcaption>
       }
     </figure>
   `,
@@ -47,4 +49,5 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 export class ImageQuestionComponent {
   @Input() src = '';
   @Input() caption = '';
+  @Input() latex = false;
 }

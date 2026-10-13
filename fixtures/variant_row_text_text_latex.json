@@ -1,0 +1,80 @@
+{
+  "type": "speedtest-unit-definition",
+  "version": "2.4.0",
+  "layout": "row",
+  "questionType": "text",
+  "answerType": "text",
+  "instructionText": "Tippe auf die richtige Antwort.",
+  "latex": true,
+  "questions": [
+    {
+      "text": "Welcher Bruch ist gleich $0{,}75$?",
+      "answers": [
+        {
+          "text": "$\\frac{3}{4}$"
+        },
+        {
+          "text": "$\\frac{7}{10}$"
+        },
+        {
+          "text": "$\\frac{1}{4}$"
+        },
+        {
+          "text": "$\\frac{4}{3}$"
+        }
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "text": "Lena kauft $3$ Hefte zu je $1{,}20$ \\$ und einen Stift für $\\frac{1}{2}$ des Heftpreises. Wie viel bezahlt sie insgesamt, wenn sie mit $x$ \\$ bezahlt und $y$ \\$ zurückbekommt?",
+      "answers": [
+        {
+          "text": "Sie bezahlt $3 \\cdot 1{,}20 + 0{,}60 = 4{,}20$ \\$."
+        },
+        {
+          "text": "Sie bezahlt $3 \\cdot 1{,}20 = 3{,}60$ \\$."
+        },
+        {
+          "text": "Sie bezahlt $x - y$ \\$, also genau $4{,}20$ \\$."
+        },
+        {
+          "text": "Das lässt sich nicht bestimmen."
+        }
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "text": "Berechne $\\dfrac{\\sqrt{x^2 + 1}}{\\sum_{i=1}^{n} i}$ für $x = 0$ und $n = 1$.",
+      "answers": [
+        {
+          "text": "$\\dfrac{1}{1}$"
+        },
+        {
+          "text": "$\\int_0^1 x \\, dx$"
+        },
+        {
+          "text": "kostet 5 \\$"
+        }
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "text": "Welche Summe ist richtig?",
+      "answers": [
+        {
+          "text": "$1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 = 120$"
+        },
+        {
+          "text": "$1 + 2 + 3 = 6$"
+        },
+        {
+          "text": "$2^{10} = 1024$"
+        },
+        {
+          "text": "$\\sqrt[3]{27} = 3$"
+        }
+      ],
+      "correctAnswer": 0
+    }
+  ]
+}
