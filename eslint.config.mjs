@@ -56,7 +56,7 @@ export default defineConfig([
     languageOptions: { globals: globals.browser }
   },
   {
-    files: ['karma.conf.js', 'scripts/**/*.js'],
+    files: ['scripts/**/*.js'],
     languageOptions: {
       sourceType: 'commonjs',
       globals: globals.node

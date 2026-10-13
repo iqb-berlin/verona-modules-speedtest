@@ -1,5 +1,5 @@
 /* Tests common/services/unit-validation.ts, which both modules use. It lives here because Angular's
-   karma builder only discovers spec files under a project's own src folder. */
+   unit-test builder only discovers spec files under a project's own src folder. */
 import packageInfo from 'packageInfo';
 import { Unit } from 'common/interfaces/unit';
 import { UNIT_DEFINITION_TYPE, parseUnitDefinition } from 'common/services/unit-validation';

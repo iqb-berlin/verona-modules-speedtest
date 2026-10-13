@@ -1,5 +1,5 @@
-/* Tests live in editor/src/app/services/unit-validation.spec.ts: Angular's karma builder only picks
-   up spec files under a project's own src folder, so a spec next to this file would never run. */
+/* Tests live in editor/src/app/services/unit-validation.spec.ts: Angular's unit-test builder only
+   picks up spec files under a project's own src folder, so a spec next to this file would never run. */
 import packageInfo from 'packageInfo';
 import { Unit } from 'common/interfaces/unit';
 

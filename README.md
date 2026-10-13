@@ -42,7 +42,7 @@ The version comes from `config.player_version` / `config.editor_version` in `pac
 ### Test
 >npm test
 
-Runs the unit tests of both projects once in headless Chromium. `npm run test-player` and `npm run test-editor` run a single project. A Chromium binary must be available; set `CHROME_BIN` if it is not found automatically.
+Runs the unit tests of both projects once with Vitest in jsdom; no browser is needed. `npm run test-player` and `npm run test-editor` run a single project.
 
 ### Lint
 >npm run lint
