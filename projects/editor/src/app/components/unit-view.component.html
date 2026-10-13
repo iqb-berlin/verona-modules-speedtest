@@ -48,6 +48,11 @@
             <textarea matInput [(ngModel)]="unit.instructionText" (ngModelChange)="unitService.updateUnitDef()">
             </textarea>
         </mat-form-field>
+        <mat-form-field>
+            <mat-label>Abschlusstext</mat-label>
+            <input matInput [placeholder]="defaultOutroText"
+                   [(ngModel)]="unit.outroText" (ngModelChange)="unitService.updateUnitDef()">
+        </mat-form-field>
       </mat-card-content>
     </mat-card>
 

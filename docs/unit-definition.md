@@ -20,6 +20,7 @@ Current version: **2.3.0** (`package.json` → `config.unit_definition_version`)
   "buttonColor": "#aabbcc",             // optional, answer button background
   "questionSpaceRatio": 50,             // optional, % of screen given to the question area
   "latex": true,                        // optional, see below
+  "outroText": "…",                     // optional, shown after the last question
   "questions": [ … ]
 }
 ```

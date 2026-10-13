@@ -10,3 +10,6 @@ export function defaultQuestionSpaceRatio(questionType: QuestionType, answerType
   if (questionType === 'image' && answerType === 'image') return imageAndImage;
   return textOnly;
 }
+
+/* Shown after the last question when a unit does not set outroText. */
+export const defaultOutroText = 'Keine weiteren Seiten. Weiterleitung zur nächsten Unit...';

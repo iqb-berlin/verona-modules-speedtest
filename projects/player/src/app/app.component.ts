@@ -4,6 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { fromEvent } from 'rxjs';
 import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
+import { defaultOutroText } from 'common/constants';
 import { UnitParseError, UNIT_PARSE_ERROR_MESSAGES, parseUnitDefinition } from 'common/services/unit-validation';
 import { QuestionViewComponent } from './question-view/question-view.component';
 import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
@@ -30,9 +31,7 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
     }
 
     @if (showOutroPage) {
-      <div class="outro">
-        Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
-      </div>
+      <div class="outro">{{ outroText() }}</div>
     }
 
     @if (loadErrorMessage) {
@@ -201,6 +200,11 @@ export class AppComponent implements OnInit {
         value: this.activeQuestionIndex
       }]
     };
+  }
+
+  // An empty text counts as unset, so the outro page is never blank.
+  outroText(): string {
+    return this.unit?.outroText || defaultOutroText;
   }
 
   private gotoNextQuestion(): void {

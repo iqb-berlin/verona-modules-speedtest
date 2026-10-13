@@ -22,7 +22,7 @@ import {
 } from '@angular/material/card';
 import { Answer, Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
-import { defaultQuestionSpaceRatio } from 'common/constants';
+import { defaultOutroText, defaultQuestionSpaceRatio } from 'common/constants';
 import { LatexPipe } from 'common/latex.pipe';
 import { MessageService } from 'editor/src/app/services/message.service';
 import { UnitService } from '../services/unit.service';
@@ -63,6 +63,8 @@ export class UnitViewComponent implements OnChanges {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
   activeRatioDefault = 0;
+  // Shown as placeholder; the player uses it while the unit sets no outro text of its own.
+  readonly defaultOutroText = defaultOutroText;
 
   constructor(public unitService: UnitService, private messageService: MessageService) { }
 

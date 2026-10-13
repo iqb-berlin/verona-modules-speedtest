@@ -4,6 +4,7 @@ import {
 } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { Unit } from 'common/interfaces/unit';
+import { defaultOutroText } from 'common/constants';
 import { UNIT_PARSE_ERROR_MESSAGES } from 'common/services/unit-validation';
 import { AppComponent } from './app.component';
 import { Response, StartCommand, VeronaAPIService } from './verona-api.service';
@@ -137,6 +138,24 @@ describe('AppComponent', () => {
 
       expect(component.showOutroPage).toBe(true);
       expect(sendNavRequest).toHaveBeenCalled();
+    });
+  });
+
+  describe('outro page', () => {
+    function outroAfterLastAnswer(unit: Unit): string {
+      component.unit = unit;
+      component.onResponse(0);
+      fixture.detectChanges();
+      return (fixture.nativeElement as HTMLElement).querySelector('.outro')!.textContent.trim();
+    }
+
+    it('shows the text of the unit', () => {
+      expect(outroAfterLastAnswer({ ...textUnit([0]), outroText: 'Geschafft!' })).toBe('Geschafft!');
+    });
+
+    it('shows the default text when the unit sets none or an empty one', () => {
+      expect(outroAfterLastAnswer(textUnit([0]))).toBe(defaultOutroText);
+      expect(outroAfterLastAnswer({ ...textUnit([0]), outroText: '' })).toBe(defaultOutroText);
     });
   });
 
