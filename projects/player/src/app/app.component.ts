@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { fromEvent } from 'rxjs';
@@ -11,31 +10,37 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
 @Component({
   selector: 'speedtest-player',
-  imports: [CommonModule, QuestionViewComponent, MatButton, MatIcon],
+  imports: [QuestionViewComponent, MatButton, MatIcon],
   template: `
-    <button *ngIf="isStandalone" mat-raised-button class="load-button" (click)="upload.click()">
-      Unit laden
-      <mat-icon>file_upload</mat-icon>
-    </button>
+    @if (isStandalone) {
+      <button mat-raised-button class="load-button" (click)="upload.click()">
+        Unit laden
+        <mat-icon>file_upload</mat-icon>
+      </button>
+    }
 
     <input type="file" hidden accept=".json, .voud" #upload
            (change)="loadUnitFromFile($event.target)">
 
-    <ng-container *ngIf="unit && unit.questions.length > 0 && !showOutroPage">
+    @if (unit && unit.questions.length > 0 && !showOutroPage) {
       <speedtest-player-question-view [question]="unit.questions[activeQuestionIndex]"
                                       [unit]="unit"
                                       (responseGiven)="onResponse($event)">
       </speedtest-player-question-view>
-    </ng-container>
+    }
 
-    <div *ngIf="showOutroPage" class="outro">
-      Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
-    </div>
+    @if (showOutroPage) {
+      <div class="outro">
+        Keine weiteren Seiten. Weiterleitung zur nächsten Unit...
+      </div>
+    }
 
-    <div *ngIf="loadErrorMessage" class="load-error">
-      Diese Unit kann nicht geladen werden.<br>
-      ({{ loadErrorMessage }})
-    </div>
+    @if (loadErrorMessage) {
+      <div class="load-error">
+        Diese Unit kann nicht geladen werden.<br>
+        ({{ loadErrorMessage }})
+      </div>
+    }
   `,
   styles: `
     :host {

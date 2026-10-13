@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -31,7 +30,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
 @Component({
   selector: 'speedtest-unit-view',
   imports: [
-    NgForOf,
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelTitle,
@@ -43,7 +41,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
     MatLabel,
     MatTooltip,
     FormsModule,
-    NgIf,
     MatIconButton,
     MatOption,
     MatSelect,
