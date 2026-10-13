@@ -5,14 +5,18 @@ import { Question, Unit } from 'common/interfaces/unit';
 import { defaultQuestionSpaceRatio } from 'common/constants';
 import { TextQuestionComponent } from './text-question.component';
 import { ImageQuestionComponent } from './image-question.component';
+import { AudioQuestionComponent } from './audio-question.component';
 import { TextAnswersComponent } from './text-answers.component';
 import { NextButtonComponent } from './next-button.component';
 
 /* Shows one question: instruction, a stage split into question and answer area, and a footer.
-   Owns the selection and decides when an answer is submitted. */
+   Owns the selection and decides when an answer is submitted. Also owns whether an audio is playing:
+   only one may play at a time, so every audio button is disabled meanwhile. */
 @Component({
   selector: 'speedtest-player-question-view',
-  imports: [TextQuestionComponent, ImageQuestionComponent, TextAnswersComponent, NextButtonComponent],
+  imports: [
+    TextQuestionComponent, ImageQuestionComponent, AudioQuestionComponent, TextAnswersComponent, NextButtonComponent
+  ],
   templateUrl: 'question-view.component.html',
   styleUrls: ['question-view.component.scss']
 })
@@ -22,12 +26,13 @@ export class QuestionViewComponent implements OnChanges {
   @Output() responseGiven = new EventEmitter<number | number[]>();
 
   selectedAnswers: number[] = [];
+  audioPlaying = false;
   needsNextButton = false;
   stageTracks = '';
 
   /* The format combinations this view handles so far; the app routes everything else to the old view. */
   static supports(unit: Unit): boolean {
-    return ['text', 'image'].includes(unit.questionType) && unit.answerType === 'text';
+    return ['text', 'image', 'audio'].includes(unit.questionType) && unit.answerType === 'text';
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -35,7 +40,11 @@ export class QuestionViewComponent implements OnChanges {
       this.needsNextButton = !!this.unit.multipleSelection;
       this.stageTracks = QuestionViewComponent.stageTracksFor(this.unit);
     }
-    if (changes['question']) this.selectedAnswers = [];
+    if (changes['question']) {
+      this.selectedAnswers = [];
+      // A new source stops the playing audio without an ended event.
+      this.audioPlaying = false;
+    }
   }
 
   /* Grid tracks of the stage: question first, answers second. Each is as big as its content, at most its

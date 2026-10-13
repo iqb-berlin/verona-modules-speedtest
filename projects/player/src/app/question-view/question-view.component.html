@@ -13,6 +13,14 @@
                                                      [caption]="question.text ?? ''">
                     </speedtest-player-image-question>
                 }
+                @case ('audio') {
+                    <speedtest-player-audio-question class="fill"
+                                                     [src]="question.src ?? ''"
+                                                     [text]="question.text ?? ''"
+                                                     [audioPlaying]="audioPlaying"
+                                                     (playingChange)="audioPlaying = $event">
+                    </speedtest-player-audio-question>
+                }
                 @default {
                     <speedtest-player-text-question [text]="question.text ?? ''"></speedtest-player-text-question>
                 }

@@ -80,6 +80,25 @@ describe('QuestionViewComponent', () => {
     expect(fixture.nativeElement.querySelector('figcaption').textContent).toContain('Was siehst du?');
   });
 
+  it('disables the audio button while the audio plays, and enables it for the next question', () => {
+    const unit: Unit = {
+      ...textUnit(false),
+      questionType: 'audio',
+      questions: [
+        { ...question('Hör zu.'), src: 'data:audio/wav;base64,AAAA' },
+        { ...question('Hör noch mal zu.'), src: 'data:audio/wav;base64,BBBB' }
+      ]
+    };
+    show(unit, 0);
+    const audioButton = (): HTMLButtonElement => fixture.nativeElement.querySelector('speedtest-player-audio-button button');
+    expect(audioButton().disabled).toBeFalse();
+    fixture.nativeElement.querySelector('audio').dispatchEvent(new Event('play'));
+    fixture.detectChanges();
+    expect(audioButton().disabled).toBeTrue();
+    show(unit, 1);
+    expect(audioButton().disabled).toBeFalse();
+  });
+
   it('starts every question with an empty selection', () => {
     const unit = textUnit(true);
     show(unit, 0);
