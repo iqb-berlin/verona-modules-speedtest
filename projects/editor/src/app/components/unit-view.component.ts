@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { Component, Input, OnChanges } from '@angular/core';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -23,7 +22,7 @@ import {
 } from '@angular/material/card';
 import { Answer, Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
-import { imageAndImage, imageAndText, textOnly } from 'common/constants';
+import { defaultQuestionSpaceRatio } from 'common/constants';
 import { MessageService } from 'editor/src/app/services/message.service';
 import { UnitService } from '../services/unit.service';
 import { AnswerPanelComponent } from './answer-panel.component';
@@ -31,7 +30,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
 @Component({
   selector: 'speedtest-unit-view',
   imports: [
-    NgForOf,
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelTitle,
@@ -43,7 +41,6 @@ import { AnswerPanelComponent } from './answer-panel.component';
     MatLabel,
     MatTooltip,
     FormsModule,
-    NgIf,
     MatIconButton,
     MatOption,
     MatSelect,
@@ -59,12 +56,16 @@ import { AnswerPanelComponent } from './answer-panel.component';
   templateUrl: 'unit-view.component.html',
   styleUrls: ['./unit-view.component.css']
 })
-export class UnitViewComponent {
+export class UnitViewComponent implements OnChanges {
   @Input() unit!: Unit;
   latestQuestionIndex: number | undefined;
-  activeRatioDefault = textOnly;
+  activeRatioDefault = 0;
 
   constructor(public unitService: UnitService, private messageService: MessageService) { }
+
+  ngOnChanges(): void {
+    this.updateRatioDefault();
+  }
 
   addQuestion() {
     this.unit.questions.push({
@@ -123,14 +124,9 @@ export class UnitViewComponent {
     this.unitService.updateUnitDef();
   }
 
-  updateRatioDeault() {
-    if (this.unit.questionType === 'text' && this.unit.answerType === 'text') {
-      this.activeRatioDefault = textOnly;
-    } else if (this.unit.questionType === 'image' && this.unit.answerType === 'text') {
-      this.activeRatioDefault = imageAndText;
-    } else if (this.unit.questionType === 'image' && this.unit.answerType === 'image') {
-      this.activeRatioDefault = imageAndImage;
-    }
+  // The player's default, shown as placeholder while the unit sets no ratio of its own.
+  updateRatioDefault() {
+    this.activeRatioDefault = defaultQuestionSpaceRatio(this.unit.questionType, this.unit.answerType);
   }
 
   onToggleMultiselect() {

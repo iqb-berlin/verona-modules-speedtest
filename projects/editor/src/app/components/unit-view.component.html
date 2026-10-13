@@ -7,7 +7,7 @@
         <mat-form-field>
             <mat-label>Stimulustyp</mat-label>
             <mat-select required [(ngModel)]="unit.questionType"
-                        (ngModelChange)="updateRatioDeault(); unitService.updateUnitDef()">
+                        (ngModelChange)="updateRatioDefault(); unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="audio">Audio</mat-option>
@@ -20,7 +20,7 @@
             <mat-select required
                         [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
                         [(ngModel)]="unit.answerType"
-                        (ngModelChange)="updateRatioDeault(); unitService.updateUnitDef()">
+                        (ngModelChange)="updateRatioDefault(); unitService.updateUnitDef()">
                 <mat-option value="text">Text</mat-option>
                 <mat-option value="image">Bild</mat-option>
                 <mat-option value="audio">Audio</mat-option>
@@ -68,14 +68,6 @@
                                                  unit.questionType === 'word-select'"
                [(ngModel)]="unit.buttonColor"
                (change)="unitService.updateUnitDef()">
-        <mat-form-field>
-          <label>Antwortknopfbreite in px</label>
-          <input matInput [type]="'number'" [disabled]="unit.answerType === 'image' ||
-                                                        unit.answerType === 'number' ||
-                                                        unit.questionType === 'word-select'"
-                 [(ngModel)]="unit.buttonWidth"
-                 (change)="unitService.updateUnitDef()">
-        </mat-form-field>
       </mat-card-content>
     </mat-card>
 
@@ -109,98 +101,109 @@
 </div>
 
 <mat-accordion multi="true">
-    <mat-expansion-panel *ngFor="let question of unit.questions; let questionIndex = index"
-                         [expanded]="questionIndex == latestQuestionIndex">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <h2>{{ questionIndex + 1 }}: {{ question.text }}</h2>
-                <img *ngIf="unit.questionType === 'image'" [src]="question.src" [alt]="question.text">
-                <button [style.margin-left]="'auto'" [disabled]="questionIndex == 0"
-                        [matTooltip]="'Frage nach oben verschieben'"
-                        (click)="moveQuestion(questionIndex, 'up')">
-                    <mat-icon>arrow_upward</mat-icon>
-                </button>
-                <button [disabled]="questionIndex == unit.questions.length - 1"
-                        [matTooltip]="'Frage nach unten verschieben'"
-                        (click)="moveQuestion(questionIndex, 'down')">
-                    <mat-icon>arrow_downward</mat-icon>
-                </button>
-                <button class="question-delete-button" [matTooltip]="'Frage löschen'"
-                        (click)="deleteQuestion(questionIndex)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="expansion-panel-content">
-            <div class="question">
-                <div class="text-button-panel">
-                    <h4>Text</h4>
-                    <button mat-icon-button [matTooltip]="'Text für alle Fragen übernehmen'"
-                            [matTooltipPosition]="'above'"
-                            (click)="setQuestionTextForAll(question.text)">
-                        <mat-icon>copy_all</mat-icon>
+    @for (question of unit.questions; track question; let questionIndex = $index) {
+        <mat-expansion-panel [expanded]="questionIndex == latestQuestionIndex">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <h2>{{ questionIndex + 1 }}: {{ question.text }}</h2>
+                    @if (unit.questionType === 'image') {
+                        <img [src]="question.src" [alt]="question.text">
+                    }
+                    <button [style.margin-left]="'auto'" [disabled]="questionIndex == 0"
+                            [matTooltip]="'Frage nach oben verschieben'"
+                            (click)="moveQuestion(questionIndex, 'up')">
+                        <mat-icon>arrow_upward</mat-icon>
                     </button>
-                </div>
-                <div class="question-content">
-                    <mat-form-field>
-                        <mat-label>Frage</mat-label>
-                        <input matInput [(ngModel)]="question.text"
-                               (change)="unitService.updateUnitDef()">
-                    </mat-form-field>
-                </div>
-                @if (unit.questionType === 'inline-answers') {
-                    <mat-form-field>
-                        <mat-label>Antwortpositionsindex</mat-label>
-                        <input matInput [(ngModel)]="question.answerPosition"
-                               (change)="unitService.updateUnitDef()">
-                    </mat-form-field>
-                }
-                @if (unit.questionType === 'image') {
-                    <h4>Bild</h4>
-                    <div class="image-panel">
-                        <div class="image-panel-buttons">
-                            <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
-                                <mat-icon>image</mat-icon>
-                            </button>
-                            <input type="file" hidden accept="image/*" #imageUpload
-                                   (change)="loadQuestionSrc(questionIndex, $event.target)">
-                            <button *ngIf="question.src" mat-icon-button [matTooltip]="'Bild entfernen'"
+                    <button [disabled]="questionIndex == unit.questions.length - 1"
+                            [matTooltip]="'Frage nach unten verschieben'"
+                            (click)="moveQuestion(questionIndex, 'down')">
+                        <mat-icon>arrow_downward</mat-icon>
+                    </button>
+                    <button class="question-delete-button" [matTooltip]="'Frage löschen'"
+                            (click)="deleteQuestion(questionIndex)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="expansion-panel-content">
+                <div class="question">
+                    <div class="text-button-panel">
+                        <h4>Text</h4>
+                        <button mat-icon-button [matTooltip]="'Text für alle Fragen übernehmen'"
+                                [matTooltipPosition]="'above'"
+                                (click)="setQuestionTextForAll(question.text)">
+                            <mat-icon>copy_all</mat-icon>
+                        </button>
+                    </div>
+                    <div class="question-content">
+                        <mat-form-field>
+                            <mat-label>Frage</mat-label>
+                            <input matInput [(ngModel)]="question.text"
+                                   (change)="unitService.updateUnitDef()">
+                        </mat-form-field>
+                    </div>
+                    @if (unit.questionType === 'inline-answers') {
+                        <mat-form-field>
+                            <mat-label>Antwortpositionsindex</mat-label>
+                            <input matInput [(ngModel)]="question.answerPosition"
+                                   (change)="unitService.updateUnitDef()">
+                        </mat-form-field>
+                    }
+                    @if (unit.questionType === 'image') {
+                        <h4>Bild</h4>
+                        <div class="image-panel">
+                            <div class="image-panel-buttons">
+                                <button mat-icon-button [matTooltip]="'Bild hinzufügen'" (click)="imageUpload.click();">
+                                    <mat-icon>image</mat-icon>
+                                </button>
+                                <input type="file" hidden accept="image/*" #imageUpload
+                                       (change)="loadQuestionSrc(questionIndex, $event.target)">
+                                @if (question.src) {
+                                    <button mat-icon-button [matTooltip]="'Bild entfernen'"
+                                            (click)="removeQuestionSrc(questionIndex);">
+                                        <mat-icon>backspace</mat-icon>
+                                    </button>
+                                }
+                            </div>
+                            @if (question.src) {
+                                <img [src]="question.src" [alt]="question.text">
+                            }
+                        </div>
+                    }
+                    @if (unit.questionType === 'audio' || unit.questionType === 'word-select' || unit.questionType === 'inline-answers') {
+                        <h4>Audio</h4>
+                        @if (question.src) {
+                            <audio controls [src]=question.src></audio>
+                        }
+                        <button mat-icon-button [matTooltip]="'Audio hinzufügen/ändern'" (click)="audioUpload.click();">
+                            <mat-icon>volume_up</mat-icon>
+                        </button>
+                        <input type="file" hidden accept="audio/*" #audioUpload
+                               (change)="loadQuestionSrc(questionIndex, $event.target)">
+                        @if (question.src) {
+                            <button mat-icon-button [matTooltip]="'Audio entfernen'"
                                     (click)="removeQuestionSrc(questionIndex);">
                                 <mat-icon>backspace</mat-icon>
                             </button>
-                        </div>
-                        <img *ngIf="question.src" [src]="question.src" [alt]="question.text">
-                    </div>
-                }
-                @if (unit.questionType === 'audio' || unit.questionType === 'word-select' || unit.questionType === 'inline-answers') {
-                    <h4>Audio</h4>
-                    <audio *ngIf="question.src" controls [src]=question.src></audio>
-                    <button mat-icon-button [matTooltip]="'Audio hinzufügen/ändern'" (click)="audioUpload.click();">
-                        <mat-icon>volume_up</mat-icon>
-                    </button>
-                    <input type="file" hidden accept="audio/*" #audioUpload
-                           (change)="loadQuestionSrc(questionIndex, $event.target)">
-                    <button *ngIf="question.src" mat-icon-button [matTooltip]="'Audio entfernen'"
-                            (click)="removeQuestionSrc(questionIndex);">
-                        <mat-icon>backspace</mat-icon>
-                    </button>
-                }
-            </div>
+                        }
+                    }
+                </div>
 
-            <div class="text-button-panel">
-                <h3>Antworten</h3>
-                <button mat-icon-button [matTooltip]="'Antworten für alle Fragen übernehmen'"
-                        [matTooltipPosition]="'above'"
-                        (click)="setAnswersForAll(unit.questions[questionIndex].answers)">
-                    <mat-icon>copy_all</mat-icon>
-                </button>
-            </div>
+                <div class="text-button-panel">
+                    <h3>Antworten</h3>
+                    <button mat-icon-button [matTooltip]="'Antworten für alle Fragen übernehmen'"
+                            [matTooltipPosition]="'above'"
+                            (click)="setAnswersForAll(unit.questions[questionIndex].answers)">
+                        <mat-icon>copy_all</mat-icon>
+                    </button>
+                </div>
 
-            <speedtest-answer-panel [answers]="unit.questions[questionIndex].answers" [questionIndex]="questionIndex">
-            </speedtest-answer-panel>
-        </div>
-    </mat-expansion-panel>
+                <speedtest-answer-panel [answers]="unit.questions[questionIndex].answers" [questionIndex]="questionIndex">
+                </speedtest-answer-panel>
+            </div>
+        </mat-expansion-panel>
+    }
 </mat-accordion>
 
 <button mat-raised-button class="add-button" [matTooltip]="'Frage hinzu'" (click)="addQuestion()">

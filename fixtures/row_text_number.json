@@ -1,6 +1,6 @@
 {
   "type": "speedtest-unit-definition",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "layout": "row",
   "questionType": "text",
   "answerType": "number",
@@ -8,7 +8,7 @@
   "questions": [
     {
       "answers": [],
-      "text": "Wie viele Beine hat eine Spinne?",
+      "text": "Wie viele Räder hat ein Fahrrad?",
       "correctAnswer": 123456
     },
     {
@@ -18,12 +18,12 @@
     },
     {
       "answers": [],
-      "text": "Wie viele Beine hat eine Spinne?",
+      "text": "Wie viele Räder hat ein Fahrrad?",
       "correctAnswer": 7
     },
     {
       "answers": [],
-      "text": "Wie viele Beine hat eine Spinne?",
+      "text": "Wie viele Räder hat ein Fahrrad?",
       "correctAnswer": 1234
     }
   ]

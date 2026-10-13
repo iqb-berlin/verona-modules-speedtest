@@ -1,6 +1,6 @@
 {
   "type": "speedtest-unit-definition",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "layout": "row",
   "questionType": "text",
   "answerType": "text",
@@ -21,7 +21,7 @@
           "text": "Das lässt sich aus den Angaben nicht eindeutig bestimmen."
         }
       ],
-      "text": "Wie viele Beine hat eine Spinne?",
+      "text": "Wie viele Räder hat ein Fahrrad?",
       "correctAnswer": 0
     },
     {
@@ -51,7 +51,7 @@
           "text": "nein"
         }
       ],
-      "text": "Wie viele Beine hat eine Spinne?",
+      "text": "Wie viele Räder hat ein Fahrrad?",
       "correctAnswer": 0
     },
     {
@@ -69,7 +69,7 @@
           "text": "mit"
         }
       ],
-      "text": "Wie viele Beine hat eine Spinne?",
+      "text": "Wie viele Räder hat ein Fahrrad?",
       "correctAnswer": 0
     },
     {
@@ -87,7 +87,7 @@
           "splitPosition": 7
         }
       ],
-      "text": "Wie viele Beine hat eine Spinne?",
+      "text": "Wie viele Räder hat ein Fahrrad?",
       "correctAnswer": 0
     }
   ]

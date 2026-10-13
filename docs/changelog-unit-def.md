@@ -13,3 +13,6 @@
   Editor and player still accept the old spelling and rewrite it on load, so units of earlier 2.x
   versions keep working and adopt the new value the next time they are saved. The compatibility
   layer is removed with the next major version.
+
+## 2.3.0
+- Remove the optional property `buttonWidth`. Answer buttons are now all as wide as the widest one, which makes a fixed width unnecessary. Editor and player drop the property when loading an older unit, so such units keep working and lose it the next time they are saved.

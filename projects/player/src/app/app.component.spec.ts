@@ -3,6 +3,7 @@ import {
 } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { Unit } from 'common/interfaces/unit';
+import { UNIT_PARSE_ERROR_MESSAGES } from 'common/services/unit-validation';
 import { AppComponent } from './app.component';
 import { Response, StartCommand, VeronaAPIService } from './verona-api.service';
 
@@ -179,6 +180,11 @@ describe('AppComponent', () => {
   /* Which definitions are rejected, and why, is covered in unit-validation.spec.ts.
      These only pin down what the player does with the outcome. */
   describe('a unit that cannot be read', () => {
+    beforeEach(() => {
+      // The player logs the reason; keep it out of the test output.
+      spyOn(console, 'error');
+    });
+
     function startWith(unitDefinition: string): void {
       VeronaAPIService.startCommand.next({
         type: 'vopStartCommand', sessionId: 'session-1', unitDefinition
@@ -189,8 +195,21 @@ describe('AppComponent', () => {
     it('shows the error instead of the unit', fakeAsync(() => {
       startWith('{ not json');
 
-      expect(component.loadError).toBeTrue();
+      expect(component.loadErrorMessage).toBe(UNIT_PARSE_ERROR_MESSAGES['invalid-json']);
       expect(component.unit).toBeUndefined();
+    }));
+
+    it('names the actual reason', fakeAsync(() => {
+      startWith(JSON.stringify({ ...unitWithoutSolutions(1), version: '1.1.0' }));
+
+      expect(component.loadErrorMessage).toBe(UNIT_PARSE_ERROR_MESSAGES['incompatible-version']);
+    }));
+
+    it('logs the reason', fakeAsync(() => {
+      startWith('{ not json');
+
+      // eslint-disable-next-line no-console
+      expect(console.error).toHaveBeenCalledWith(jasmine.stringContaining(UNIT_PARSE_ERROR_MESSAGES['invalid-json']));
     }));
 
     it('still answers the host so it does not keep waiting', fakeAsync(() => {
@@ -204,7 +223,7 @@ describe('AppComponent', () => {
 
       startWith(JSON.stringify(unitWithoutSolutions(2)));
 
-      expect(component.loadError).toBeFalse();
+      expect(component.loadErrorMessage).toBeUndefined();
       expect(component.unit).toBeDefined();
     }));
   });

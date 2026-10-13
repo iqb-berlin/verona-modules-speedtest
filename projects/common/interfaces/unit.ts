@@ -4,7 +4,6 @@ export interface Unit {
   questions: Question[];
   layout: 'column' | 'row';
   buttonColor?: string;
-  buttonWidth?: number;
   instructionText?: string;
   questionType: QuestionType;
   answerType: AnswerType;
