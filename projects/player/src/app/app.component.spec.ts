@@ -1,5 +1,6 @@
+import type { Mock } from 'vitest';
 import {
-  ComponentFixture, TestBed, fakeAsync, tick
+  ComponentFixture, TestBed
 } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { Unit } from 'common/interfaces/unit';
@@ -46,20 +47,20 @@ function dataPartsFor(lastAnsweredIndex: number, totalCorrect: number, totalWron
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
-  let sendState: jasmine.Spy;
-  let sendNavRequest: jasmine.Spy;
+  let sendState: Mock;
+  let sendNavRequest: Mock;
 
   /* Returns the responseData of the most recent sendState call. */
   function lastState(): Record<string, Response[]> {
-    return sendState.calls.mostRecent().args[0] as Record<string, Response[]>;
+    return sendState.mock.lastCall![0] as Record<string, Response[]>;
   }
 
   beforeEach(async () => {
     // The subject is static and the component never unsubscribes, so give every spec a fresh one.
     VeronaAPIService.startCommand = new Subject<StartCommand>();
-    sendState = spyOn(VeronaAPIService, 'sendState');
-    sendNavRequest = spyOn(VeronaAPIService, 'sendNavRequest');
-    spyOn(VeronaAPIService, 'sendReady');
+    sendState = vi.spyOn(VeronaAPIService, 'sendState').mockReturnValue(undefined);
+    sendNavRequest = vi.spyOn(VeronaAPIService, 'sendNavRequest').mockReturnValue(undefined);
+    vi.spyOn(VeronaAPIService, 'sendReady').mockReturnValue(undefined);
 
     await TestBed.configureTestingModule({ imports: [AppComponent] }).compileComponents();
     fixture = TestBed.createComponent(AppComponent);
@@ -75,7 +76,7 @@ describe('AppComponent', () => {
 
       component.onResponse(0);
 
-      expect(lastState()['question_0'][0]).toEqual(jasmine.objectContaining({
+      expect(lastState()['question_0'][0]).toEqual(expect.objectContaining({
         id: 'value', value: 0, code: 1, score: 1, subform: '0'
       }));
     });
@@ -85,7 +86,7 @@ describe('AppComponent', () => {
 
       component.onResponse(1);
 
-      expect(lastState()['question_0'][0]).toEqual(jasmine.objectContaining({ value: 1, code: 0, score: 0 }));
+      expect(lastState()['question_0'][0]).toEqual(expect.objectContaining({ value: 1, code: 0, score: 0 }));
     });
 
     it('leaves code and score undefined when the question has no correct answer', () => {
@@ -124,8 +125,8 @@ describe('AppComponent', () => {
       component.onResponse(0); // correct
 
       expect(lastState()['sums']).toEqual([
-        jasmine.objectContaining({ id: 'total_correct', value: 2 }),
-        jasmine.objectContaining({ id: 'total_wrong', value: 1 })
+        expect.objectContaining({ id: 'total_correct', value: 2 }),
+        expect.objectContaining({ id: 'total_wrong', value: 1 })
       ]);
     });
 
@@ -134,12 +135,20 @@ describe('AppComponent', () => {
 
       component.onResponse(0);
 
-      expect(component.showOutroPage).toBeTrue();
+      expect(component.showOutroPage).toBe(true);
       expect(sendNavRequest).toHaveBeenCalled();
     });
   });
 
   describe('resuming a unit', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
     function start(unit: Unit, dataParts?: Record<string, string>): void {
       VeronaAPIService.startCommand.next({
         type: 'vopStartCommand',
@@ -147,83 +156,88 @@ describe('AppComponent', () => {
         unitDefinition: JSON.stringify(unit),
         ...(dataParts ? { unitState: { dataParts } } : {})
       });
-      tick();
+      vi.runOnlyPendingTimers();
     }
 
-    it('starts at the first question when there is no previous state', fakeAsync(() => {
+    it('starts at the first question when there is no previous state', () => {
       start(unitWithoutSolutions(4));
 
       expect(component.activeQuestionIndex).toBe(0);
-      expect(component.showOutroPage).toBeFalse();
-    }));
+      expect(component.showOutroPage).toBe(false);
+    });
 
-    it('continues after the last answered question', fakeAsync(() => {
+    it('continues after the last answered question', () => {
       start(unitWithoutSolutions(6), dataPartsFor(2, 2, 1));
 
       expect(component.activeQuestionIndex).toBe(3);
-    }));
+    });
 
-    it('restores the running totals', fakeAsync(() => {
+    it('restores the running totals', () => {
       start(unitWithoutSolutions(6), dataPartsFor(2, 2, 1));
 
       expect(component.sumCorrect).toBe(2);
       expect(component.sumWrong).toBe(1);
-    }));
+    });
 
-    it('shows the outro page when every question was already answered', fakeAsync(() => {
+    it('shows the outro page when every question was already answered', () => {
       start(unitWithoutSolutions(3), dataPartsFor(2, 2, 1));
 
-      expect(component.showOutroPage).toBeTrue();
-    }));
+      expect(component.showOutroPage).toBe(true);
+    });
   });
 
   /* Which definitions are rejected, and why, is covered in unit-validation.spec.ts.
      These only pin down what the player does with the outcome. */
   describe('a unit that cannot be read', () => {
     beforeEach(() => {
+      vi.useFakeTimers();
       // The player logs the reason; keep it out of the test output.
-      spyOn(console, 'error');
+      vi.spyOn(console, 'error').mockReturnValue(undefined);
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
     });
 
     function startWith(unitDefinition: string): void {
       VeronaAPIService.startCommand.next({
         type: 'vopStartCommand', sessionId: 'session-1', unitDefinition
       });
-      tick();
+      vi.runOnlyPendingTimers();
     }
 
-    it('shows the error instead of the unit', fakeAsync(() => {
+    it('shows the error instead of the unit', () => {
       startWith('{ not json');
 
       expect(component.loadErrorMessage).toBe(UNIT_PARSE_ERROR_MESSAGES['invalid-json']);
       expect(component.unit).toBeUndefined();
-    }));
+    });
 
-    it('names the actual reason', fakeAsync(() => {
+    it('names the actual reason', () => {
       startWith(JSON.stringify({ ...unitWithoutSolutions(1), version: '1.1.0' }));
 
       expect(component.loadErrorMessage).toBe(UNIT_PARSE_ERROR_MESSAGES['incompatible-version']);
-    }));
+    });
 
-    it('logs the reason', fakeAsync(() => {
+    it('logs the reason', () => {
       startWith('{ not json');
 
-      expect(console.error).toHaveBeenCalledWith(jasmine.stringContaining(UNIT_PARSE_ERROR_MESSAGES['invalid-json']));
-    }));
+      expect(console.error).toHaveBeenCalledWith(expect.stringContaining(UNIT_PARSE_ERROR_MESSAGES['invalid-json']));
+    });
 
-    it('still answers the host so it does not keep waiting', fakeAsync(() => {
+    it('still answers the host so it does not keep waiting', () => {
       startWith('{ not json');
 
       expect(sendState).toHaveBeenCalled();
-    }));
+    });
 
-    it('clears the error when a valid unit follows', fakeAsync(() => {
+    it('clears the error when a valid unit follows', () => {
       startWith('{ not json');
 
       startWith(JSON.stringify(unitWithoutSolutions(2)));
 
       expect(component.loadErrorMessage).toBeUndefined();
       expect(component.unit).toBeDefined();
-    }));
+    });
   });
 });

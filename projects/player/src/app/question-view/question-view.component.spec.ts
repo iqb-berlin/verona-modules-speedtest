@@ -116,12 +116,12 @@ describe('QuestionViewComponent', () => {
     };
     show(unit, 0);
     const audioButton = (): HTMLButtonElement => find<HTMLButtonElement>('speedtest-player-audio-button button')!;
-    expect(audioButton().disabled).toBeFalse();
+    expect(audioButton().disabled).toBe(false);
     find('audio')!.dispatchEvent(new Event('play'));
     fixture.detectChanges();
-    expect(audioButton().disabled).toBeTrue();
+    expect(audioButton().disabled).toBe(true);
     show(unit, 1);
-    expect(audioButton().disabled).toBeFalse();
+    expect(audioButton().disabled).toBe(false);
   });
 
   it('lets only one audio answer play at a time and submits by the label button', () => {

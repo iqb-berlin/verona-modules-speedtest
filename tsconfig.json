@@ -21,7 +21,7 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "types": [
-      "jasmine"
+      "vitest/globals"
     ],
     "paths": {
       "common/*": [

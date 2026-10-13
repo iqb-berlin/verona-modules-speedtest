@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { Question } from 'common/interfaces/unit';
@@ -9,7 +10,7 @@ import { UnitViewComponent } from './unit-view.component';
 describe('UnitViewComponent', () => {
   let component: UnitViewComponent;
   let unitService: UnitService;
-  let sendChange: jasmine.Spy;
+  let sendChange: Mock;
 
   function question(text: string): Question {
     return { text: text, answers: [{ text: 'richtig' }, { text: 'falsch' }], correctAnswer: 0 };
@@ -33,7 +34,7 @@ describe('UnitViewComponent', () => {
     component = new UnitViewComponent(unitService, TestBed.inject(MessageService));
     component.unit = unitService.unit;
     component.unit.questions = [question('A'), question('B'), question('C')];
-    sendChange = spyOn(VeronaAPIService, 'sendChange');
+    sendChange = vi.spyOn(VeronaAPIService, 'sendChange').mockReturnValue(undefined);
   });
 
   describe('moveQuestion', () => {
@@ -72,7 +73,7 @@ describe('UnitViewComponent', () => {
 
       component.onToggleMultiselect();
 
-      expect(component.unit.multipleSelection).toBeTrue();
+      expect(component.unit.multipleSelection).toBe(true);
       expect(component.unit.questions[0].correctAnswer).toEqual([1]);
     });
 
@@ -82,7 +83,7 @@ describe('UnitViewComponent', () => {
 
       component.onToggleMultiselect();
 
-      expect(component.unit.multipleSelection).toBeFalse();
+      expect(component.unit.multipleSelection).toBe(false);
       expect(component.unit.questions[0].correctAnswer).toBe(1);
     });
 

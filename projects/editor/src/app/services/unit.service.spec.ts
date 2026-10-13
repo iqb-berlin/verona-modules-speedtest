@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { UNIT_DEFINITION_TYPE } from 'common/services/unit-validation';
@@ -11,16 +12,16 @@ describe('UnitService', () => {
                Frage 2; 0; ja; nein`;
 
   let service: UnitService;
-  let sendChange: jasmine.Spy;
-  let showError: jasmine.Spy;
+  let sendChange: Mock;
+  let showError: Mock;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [{ provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } }]
     });
     service = TestBed.inject(UnitService);
-    sendChange = spyOn(VeronaAPIService, 'sendChange');
-    showError = spyOn(TestBed.inject(MessageService), 'showError');
+    sendChange = vi.spyOn(VeronaAPIService, 'sendChange').mockReturnValue(undefined);
+    showError = vi.spyOn(TestBed.inject(MessageService), 'showError').mockReturnValue(undefined);
   });
 
   describe('loadUnitFromCSV', () => {
@@ -41,7 +42,7 @@ describe('UnitService', () => {
 
       expect(service.unit.layout).toBe('row');
       expect(service.unit.questionType).toBe('image');
-      expect(service.unit.multipleSelection).toBeTrue();
+      expect(service.unit.multipleSelection).toBe(true);
     });
 
     it('keeps the styling settings', () => {
