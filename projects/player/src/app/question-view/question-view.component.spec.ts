@@ -151,6 +151,40 @@ describe('QuestionViewComponent', () => {
     expect(responses).toEqual([42]);
   });
 
+  it('strikes words through and submits their numbers, skipping punctuation and numbers', () => {
+    const unit: Unit = {
+      ...textUnit(false),
+      questionType: 'word-select',
+      questions: [{ text: 'Der Hund, 3 Katzen.', answers: [] }]
+    };
+    show(unit);
+    const words = (): HTMLElement[] => [...fixture.nativeElement.querySelectorAll('.word')];
+    expect(words().map(word => word.textContent)).toEqual(['Der', 'Hund', 'Katzen']);
+    words()[2].click();
+    words()[0].click();
+    fixture.detectChanges();
+    expect(words()[2].classList).toContain('selected');
+    nextButton()!.click();
+    expect(responses).toEqual([[0, 2]]);
+  });
+
+  it('shows inline answers in the gap of the sentence and submits on click', () => {
+    const unit: Unit = {
+      ...textUnit(false),
+      questionType: 'inline-answers',
+      questions: [{
+        text: 'Der Ball liegt dem Tisch.', answerPosition: 3, answers: [{ text: 'unter' }, { text: 'über' }]
+      }]
+    };
+    show(unit);
+    const parts = [...fixture.nativeElement.querySelectorAll('.sentence > span')]
+      .map((part: HTMLElement) => part.textContent);
+    expect(parts).toEqual(['Der Ball liegt', 'dem Tisch.']);
+    expect(fixture.nativeElement.querySelector('.area.answers')).toBeNull();
+    fixture.nativeElement.querySelectorAll('.sentence button')[1].click();
+    expect(responses).toEqual([1]);
+  });
+
   it('starts every question with an empty selection', () => {
     const unit = textUnit(true);
     show(unit, 0);

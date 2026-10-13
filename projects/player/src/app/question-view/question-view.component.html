@@ -2,7 +2,7 @@
     @if (unit.instructionText) {
         <p class="instruction-text">{{ unit.instructionText }}</p>
     }
-    <div class="stage" [class]="unit.layout"
+    <div class="stage" [class]="stageLayout"
          [style.grid-template-rows]="stageRows"
          [style.grid-template-columns]="stageColumns">
         <div class="area question">
@@ -21,47 +21,70 @@
                                                      (playingChange)="audioPlaying = $event">
                     </speedtest-player-audio-question>
                 }
+                @case ('word-select') {
+                    <speedtest-player-word-select [text]="question.text ?? ''"
+                                                  [src]="question.src ?? ''"
+                                                  [audioPlaying]="audioPlaying"
+                                                  [selectedWords]="selectedAnswers"
+                                                  (wordClick)="onAnswerClick($event)"
+                                                  (playingChange)="audioPlaying = $event">
+                    </speedtest-player-word-select>
+                }
+                @case ('inline-answers') {
+                    <speedtest-player-inline-answers [text]="question.text ?? ''"
+                                                     [answerPosition]="question.answerPosition"
+                                                     [answers]="question.answers"
+                                                     [src]="question.src ?? ''"
+                                                     [buttonColor]="unit.buttonColor"
+                                                     [audioPlaying]="audioPlaying"
+                                                     [selectedAnswers]="selectedAnswers"
+                                                     (answerClick)="onAnswerClick($event)"
+                                                     (playingChange)="audioPlaying = $event">
+                    </speedtest-player-inline-answers>
+                }
                 @default {
                     <speedtest-player-text-question [text]="question.text ?? ''"></speedtest-player-text-question>
                 }
             }
         </div>
-        <div class="area answers">
-            @switch (unit.answerType) {
-                @case ('image') {
-                    <speedtest-player-image-answers class="fill"
-                                                    [answers]="question.answers"
-                                                    [layout]="unit.layout"
-                                                    [selectedAnswers]="selectedAnswers"
-                                                    (answerClick)="onAnswerClick($event)">
-                    </speedtest-player-image-answers>
+        @if (!answersInQuestion) {
+            <div class="area answers">
+                @switch (unit.answerType) {
+                    @case ('image') {
+                        <speedtest-player-image-answers class="fill"
+                                                        [answers]="question.answers"
+                                                        [layout]="unit.layout"
+                                                        [selectedAnswers]="selectedAnswers"
+                                                        (answerClick)="onAnswerClick($event)">
+                        </speedtest-player-image-answers>
+                    }
+                    @case ('number') {
+                        <div class="number-entry">
+                            <speedtest-player-number-boxes [digits]="numberEntry.digits"
+                                                           [activeIndex]="numberEntry.activeIndex"
+                                                           (boxClick)="numberEntry.select($event)">
+                            </speedtest-player-number-boxes>
+                            @if (!keypadBelowStage) {
+                                <speedtest-player-keypad (digitClick)="numberEntry.enter($event)"
+                                                         (deleteClick)="numberEntry.delete()">
+                                </speedtest-player-keypad>
+                            }
+                        </div>
+                    }
+                    @default {
+                        <speedtest-player-text-answers [answers]="question.answers"
+                                                       [layout]="unit.layout"
+                                                       [buttonColor]="unit.buttonColor"
+                                                       [selectedAnswers]="selectedAnswers"
+                                                       [withAudio]="unit.answerType === 'audio'"
+                                                       [audioPlaying]="audioPlaying"
+                                                       (answerClick)="onAnswerClick($event)"
+                                                       (playingChange)="audioPlaying = $event">
+                        </speedtest-player-text-answers>
+                    }
                 }
-                @case ('number') {
-                    <div class="number-entry">
-                        <speedtest-player-number-boxes [digits]="numberEntry.digits"
-                                                       [activeIndex]="numberEntry.activeIndex"
-                                                       (boxClick)="numberEntry.select($event)">
-                        </speedtest-player-number-boxes>
-                        @if (!keypadBelowStage) {
-                            <speedtest-player-keypad (digitClick)="numberEntry.enter($event)"
-                                                     (deleteClick)="numberEntry.delete()">
-                            </speedtest-player-keypad>
-                        }
-                    </div>
-                }
-                @default {
-                    <speedtest-player-text-answers [answers]="question.answers"
-                                                   [layout]="unit.layout"
-                                                   [buttonColor]="unit.buttonColor"
-                                                   [selectedAnswers]="selectedAnswers"
-                                                   [withAudio]="unit.answerType === 'audio'"
-                                                   [audioPlaying]="audioPlaying"
-                                                   (answerClick)="onAnswerClick($event)"
-                                                   (playingChange)="audioPlaying = $event">
-                    </speedtest-player-text-answers>
-                }
-            }
-        </div>
+            </div>
+        }
         @if (keypadBelowStage) {
             <speedtest-player-keypad class="stage-keypad"
                                      (digitClick)="numberEntry.enter($event)"

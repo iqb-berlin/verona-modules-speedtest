@@ -6,6 +6,8 @@ import { defaultQuestionSpaceRatio } from 'common/constants';
 import { TextQuestionComponent } from './text-question.component';
 import { ImageQuestionComponent } from './image-question.component';
 import { AudioQuestionComponent } from './audio-question.component';
+import { WordSelectComponent } from './word-select.component';
+import { InlineAnswersComponent } from './inline-answers.component';
 import { TextAnswersComponent } from './text-answers.component';
 import { ImageAnswersComponent } from './image-answers.component';
 import { NumberBoxesComponent } from './number-boxes.component';
@@ -19,7 +21,7 @@ import { NumberEntry } from './number-entry';
 @Component({
   selector: 'speedtest-player-question-view',
   imports: [
-    TextQuestionComponent, ImageQuestionComponent, AudioQuestionComponent,
+    TextQuestionComponent, ImageQuestionComponent, AudioQuestionComponent, WordSelectComponent, InlineAnswersComponent,
     TextAnswersComponent, ImageAnswersComponent, NumberBoxesComponent, KeypadComponent, NextButtonComponent
   ],
   templateUrl: 'question-view.component.html',
@@ -33,23 +35,27 @@ export class QuestionViewComponent implements OnChanges {
   selectedAnswers: number[] = [];
   numberEntry = new NumberEntry(1);
   audioPlaying = false;
+  answersInQuestion = false;
+  togglesSelection = false;
   needsNextButton = false;
   keypadBelowStage = false;
+  stageLayout: 'column' | 'row' = 'column';
   stageRows = '';
   stageColumns = '';
 
-  /* The format combinations this view handles so far; the app routes everything else to the old view. */
-  static supports(unit: Unit): boolean {
-    return ['text', 'image', 'audio'].includes(unit.questionType);
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['unit']) {
-      this.needsNextButton = !!this.unit.multipleSelection || this.unit.answerType === 'number';
+      // Word-select and inline answers are answered within the question; there is no answer area.
+      this.answersInQuestion = ['word-select', 'inline-answers'].includes(this.unit.questionType);
+      this.stageLayout = this.answersInQuestion ? 'column' : this.unit.layout;
+      // Words are always struck through one by one and then submitted.
+      this.togglesSelection = !!this.unit.multipleSelection || this.unit.questionType === 'word-select';
+      this.needsNextButton = this.togglesSelection || this.unit.answerType === 'number';
       // Beside the question, the keypad does not fit into the answer area; it spans the stage below both.
       this.keypadBelowStage = this.unit.answerType === 'number' && this.unit.layout === 'row';
       [this.stageRows, this.stageColumns] =
-        QuestionViewComponent.stageTracksFor(this.unit, this.keypadBelowStage, this.needsNextButton);
+        QuestionViewComponent.stageTracksFor(this.unit, this.answersInQuestion, this.keypadBelowStage,
+          this.needsNextButton);
     }
     if (changes['question']) {
       this.selectedAnswers = [];
@@ -66,20 +72,24 @@ export class QuestionViewComponent implements OnChanges {
      next button follow in rows of their own, so they stay close to the content. Empty columns at both ends
      centre the content, so the next button can end where the content ends; in row, the gap between question
      and answers is a column of its own, so those empty columns do not add gaps. */
-  private static stageTracksFor(unit: Unit, keypad: boolean, nextButton: boolean): [string, string] {
+  private static stageTracksFor(
+    unit: Unit, questionOnly: boolean, keypad: boolean, nextButton: boolean
+  ): [string, string] {
     const ratio = unit.questionSpaceRatio ?? defaultQuestionSpaceRatio(unit.questionType, unit.answerType);
     const question = `fit-content(calc(${ratio}% - 25px))`;
     const answers = unit.layout === 'column' && unit.answerType !== 'image' ?
       'min-content' :
       `fit-content(calc(${100 - ratio}% - 25px))`;
     const below = `${keypad ? ' auto' : ''}${nextButton ? ' auto' : ''}`;
+    const columns = 'minmax(0, 1fr) minmax(0, max-content) minmax(0, 1fr)';
+    if (questionOnly) return [`minmax(0, auto)${below}`, columns];
     return unit.layout === 'column' ?
-      [`${question} ${answers}${below}`, 'minmax(0, 1fr) minmax(0, max-content) minmax(0, 1fr)'] :
+      [`${question} ${answers}${below}`, columns] :
       [`minmax(0, auto)${below}`, `minmax(0, 1fr) ${question} 50px ${answers} minmax(0, 1fr)`];
   }
 
   onAnswerClick(answerIndex: number): void {
-    if (!this.unit.multipleSelection) {
+    if (!this.togglesSelection) {
       this.submit(answerIndex);
       return;
     }
