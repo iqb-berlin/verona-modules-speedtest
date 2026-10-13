@@ -142,7 +142,9 @@ function replaceScriptTags(htmlString) {
     let fileContent = readFileSync(folder + filename, 'utf8').toString();
     fileContent = replaceUrlInCss(fileContent); // first because works with url-pattern
     fileContent = replaceLinkedAssetsInJS(fileContent);
-    return "<script type='text/javascript'>" + fileContent + "\n" + "</script>";
+    // Modules keep their type: each runs in its own scope and in document order.
+    const type = /type="module"/i.test(a) ? 'module' : 'text/javascript';
+    return "<script type='" + type + "'>" + fileContent + "\n" + "</script>";
   });
 }
 

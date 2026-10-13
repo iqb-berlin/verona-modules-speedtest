@@ -1,4 +1,3 @@
-import 'zone.js';
 import { provideZoneChangeDetection } from '@angular/core';
 import { createApplication } from '@angular/platform-browser';
 import { createCustomElement } from '@angular/elements';
