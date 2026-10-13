@@ -131,13 +131,14 @@ export class UnitViewComponent implements OnChanges {
 
   onToggleMultiselect() {
     this.unit.multipleSelection = !this.unit.multipleSelection;
-    this.unit.questions.forEach(question => {
+    this.unit.questions.forEach((question) => {
       const { correctAnswer } = question;
       if (this.unit.multipleSelection) {
         question.correctAnswer = typeof correctAnswer === 'number' ? [correctAnswer] : [];
       } else {
         question.correctAnswer = Array.isArray(correctAnswer) && correctAnswer.length === 1 ?
-          correctAnswer[0] : undefined;
+          correctAnswer[0] :
+          undefined;
       }
     });
     this.unitService.calculateMissingCorrectAnswerPositions();

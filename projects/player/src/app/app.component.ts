@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
   constructor() {
     fromEvent(window, 'message')
       .subscribe((event: Event): void => {
-        VeronaAPIService.handleMessage((event as MessageEvent).data);
+        VeronaAPIService.handleMessage((event as MessageEvent<StartCommand>).data);
       });
   }
 
@@ -97,12 +97,13 @@ export class AppComponent implements OnInit {
           this.unit = result.unit;
           if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
             const { dataParts } = message.unitState;
-            const sums = JSON.parse(dataParts['sums']);
+            const sums = JSON.parse(dataParts['sums']) as Response[];
             // Add 1 because the activeQuestionIndex has already been seen and answered
-            this.activeQuestionIndex = Number(JSON.parse(dataParts['activeQuestionIndex'])[0].value) + 1;
+            const lastAnswered = JSON.parse(dataParts['activeQuestionIndex']) as Response[];
+            this.activeQuestionIndex = Number(lastAnswered[0].value) + 1;
             this.sumCorrect = Number(sums[0].value);
             this.sumWrong = Number(sums[1].value);
-            if (this.activeQuestionIndex >= this.unit!.questions.length) this.showOutroPage = true;
+            if (this.activeQuestionIndex >= this.unit.questions.length) this.showOutroPage = true;
           }
           VeronaAPIService.sendState({});
         });
@@ -124,7 +125,6 @@ export class AppComponent implements OnInit {
   // Logged as well, so the reason also reaches the host's logs, where the screen is not seen.
   private showLoadError(error: UnitParseError): void {
     this.loadErrorMessage = UNIT_PARSE_ERROR_MESSAGES[error];
-    // eslint-disable-next-line no-console
     console.error(`Speedtest-Player: ${this.loadErrorMessage}`);
   }
 
@@ -153,7 +153,11 @@ export class AppComponent implements OnInit {
   }
 
   private updateResultSums(isCorrect: boolean): void {
-    isCorrect ? this.sumCorrect += 1 : this.sumWrong += 1;
+    if (isCorrect) {
+      this.sumCorrect += 1;
+    } else {
+      this.sumWrong += 1;
+    }
   }
 
   private createResponseData(answerValue: number | number[], isCorrect?: boolean): Record<string, Response[]> {
@@ -209,13 +213,11 @@ export class AppComponent implements OnInit {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   @HostListener('window:blur')
   onBlur() {
     VeronaAPIService.sendFocusChanged(false);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   @HostListener('window:focus')
   onFocus() {
     VeronaAPIService.sendFocusChanged(true);

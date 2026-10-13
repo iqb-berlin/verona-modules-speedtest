@@ -13,7 +13,7 @@ export class VeronaAPIService {
     }
   }
 
-  private static sendMessage(message: Record<string, string | VariableInfo[]>): void {
+  private static sendMessage(message: Record<string, string | object>): void {
     window.parent.postMessage(message, '*');
   }
 
@@ -21,7 +21,7 @@ export class VeronaAPIService {
     const metadata: string | null | undefined = document.getElementById('verona-metadata')?.textContent;
     VeronaAPIService.sendMessage({
       type: 'voeReadyNotification',
-      metadata: metadata ? JSON.parse(metadata) : {}
+      metadata: metadata ? JSON.parse(metadata) as object : {}
     });
   }
 
@@ -38,14 +38,14 @@ export class VeronaAPIService {
 }
 
 export interface StartCommand extends MessageEvent {
-  sessionId: string,
-  unitDefinition: string,
-  unitDefinitionType: string,
+  sessionId: string;
+  unitDefinition: string;
+  unitDefinitionType: string;
   editorConfig: {
-    directDownloadUrl: string
-  }
+    directDownloadUrl: string;
+  };
 }
 
 export interface GetDefinitionCommand extends MessageEvent {
-  sessionId: string
+  sessionId: string;
 }

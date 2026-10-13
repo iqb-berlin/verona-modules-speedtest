@@ -80,8 +80,8 @@ export class WordSelectComponent implements OnChanges {
   private static split(sentence: string): TextPart[] {
     const tokens = sentence.match(/\p{L}+\p{M}*|\p{N}+|[^\p{L}\p{N}\s]+|\s+/gu) ?? [];
     let wordIndex = 0;
-    return tokens.map(token => {
-      if (/^\s+$/.test(token)) return { text: ' ' };
+    return tokens.map((token) => {
+      if (/^\s+$/.test(token)) return { text: '\u00A0' };
       if (!/^\p{L}+$/u.test(token)) return { text: token };
       const part = { text: token, wordIndex };
       wordIndex += 1;

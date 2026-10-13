@@ -4,7 +4,7 @@ import { createCustomElement } from '@angular/elements';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
 
-(async () => {
+void (async () => {
   const app = await createApplication({
     providers: [provideAnimations()]
   });

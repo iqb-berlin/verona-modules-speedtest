@@ -28,12 +28,20 @@ describe('QuestionViewComponent', () => {
     fixture.detectChanges();
   }
 
+  function find<T extends HTMLElement = HTMLElement>(selector: string): T | null {
+    return (fixture.nativeElement as HTMLElement).querySelector<T>(selector);
+  }
+
+  function findAll<T extends HTMLElement = HTMLElement>(selector: string): T[] {
+    return Array.from((fixture.nativeElement as HTMLElement).querySelectorAll<T>(selector));
+  }
+
   function answerButton(index: number): HTMLButtonElement {
-    return fixture.nativeElement.querySelectorAll('speedtest-player-text-answers button')[index];
+    return findAll<HTMLButtonElement>('speedtest-player-text-answers button')[index];
   }
 
   function nextButton(): HTMLButtonElement | null {
-    return fixture.nativeElement.querySelector('speedtest-player-next-button button');
+    return find<HTMLButtonElement>('speedtest-player-next-button button');
   }
 
   beforeEach(() => {
@@ -75,9 +83,8 @@ describe('QuestionViewComponent', () => {
       questions: [{ ...question('Was siehst du?'), src: 'data:image/png;base64,AAAA' }]
     };
     show(unit);
-    const image: HTMLImageElement = fixture.nativeElement.querySelector('speedtest-player-image-question img');
-    expect(image.getAttribute('src')).toBe('data:image/png;base64,AAAA');
-    expect(fixture.nativeElement.querySelector('figcaption').textContent).toContain('Was siehst du?');
+    expect(find('speedtest-player-image-question img')!.getAttribute('src')).toBe('data:image/png;base64,AAAA');
+    expect(find('figcaption')!.textContent).toContain('Was siehst du?');
   });
 
   it('selects image answers and marks the selected image', () => {
@@ -90,10 +97,10 @@ describe('QuestionViewComponent', () => {
       }]
     };
     show(unit);
-    const cells = fixture.nativeElement.querySelectorAll('speedtest-player-image-answers button');
+    const cells = findAll('speedtest-player-image-answers button');
     cells[1].click();
     fixture.detectChanges();
-    expect(cells[1].querySelector('img').classList).toContain('selected');
+    expect(cells[1].querySelector('img')!.classList).toContain('selected');
     nextButton()!.click();
     expect(responses).toEqual([[1]]);
   });
@@ -108,10 +115,9 @@ describe('QuestionViewComponent', () => {
       ]
     };
     show(unit, 0);
-    const audioButton = (): HTMLButtonElement => fixture.nativeElement
-      .querySelector('speedtest-player-audio-button button');
+    const audioButton = (): HTMLButtonElement => find<HTMLButtonElement>('speedtest-player-audio-button button')!;
     expect(audioButton().disabled).toBeFalse();
-    fixture.nativeElement.querySelector('audio').dispatchEvent(new Event('play'));
+    find('audio')!.dispatchEvent(new Event('play'));
     fixture.detectChanges();
     expect(audioButton().disabled).toBeTrue();
     show(unit, 1);
@@ -131,13 +137,11 @@ describe('QuestionViewComponent', () => {
       }]
     };
     show(unit);
-    const audioButtons = (): HTMLButtonElement[] => [
-      ...fixture.nativeElement.querySelectorAll('speedtest-player-audio-button button')
-    ];
-    fixture.nativeElement.querySelectorAll('audio')[0].dispatchEvent(new Event('play'));
+    const audioButtons = (): HTMLButtonElement[] => findAll<HTMLButtonElement>('speedtest-player-audio-button button');
+    findAll('audio')[0].dispatchEvent(new Event('play'));
     fixture.detectChanges();
     expect(audioButtons().map(button => button.disabled)).toEqual([true, true]);
-    fixture.nativeElement.querySelectorAll('.answer > button')[1].click();
+    findAll('.answer > button')[1].click();
     expect(responses).toEqual([1]);
   });
 
@@ -148,11 +152,10 @@ describe('QuestionViewComponent', () => {
       questions: [{ text: '12 + 30', answers: [], correctAnswer: 42 }]
     };
     show(unit);
-    const boxes = (): string[] => [...fixture.nativeElement.querySelectorAll('speedtest-player-number-boxes button')]
-      .map((box: HTMLElement) => box.textContent!.trim());
-    const key = (label: string): HTMLButtonElement => [
-      ...fixture.nativeElement.querySelectorAll('speedtest-player-keypad button')
-    ].find((button: HTMLElement) => button.textContent!.trim() === label);
+    const boxes = (): string[] => findAll('speedtest-player-number-boxes button')
+      .map(box => box.textContent!.trim());
+    const key = (label: string): HTMLElement => findAll('speedtest-player-keypad button')
+      .find(button => button.textContent!.trim() === label)!;
     expect(boxes()).toEqual(['', '']);
     key('4').click();
     window.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
@@ -171,7 +174,7 @@ describe('QuestionViewComponent', () => {
       questions: [{ text: 'Der Hund, 3 Katzen.', answers: [] }]
     };
     show(unit);
-    const words = (): HTMLElement[] => [...fixture.nativeElement.querySelectorAll('.word')];
+    const words = (): HTMLElement[] => findAll('.word');
     expect(words().map(word => word.textContent)).toEqual(['Der', 'Hund', 'Katzen']);
     words()[2].click();
     words()[0].click();
@@ -190,11 +193,9 @@ describe('QuestionViewComponent', () => {
       }]
     };
     show(unit);
-    const parts = [...fixture.nativeElement.querySelectorAll('.sentence > span')]
-      .map((part: HTMLElement) => part.textContent);
-    expect(parts).toEqual(['Der Ball liegt', 'dem Tisch.']);
-    expect(fixture.nativeElement.querySelector('.area.answers')).toBeNull();
-    fixture.nativeElement.querySelectorAll('.sentence button')[1].click();
+    expect(findAll('.sentence > span').map(part => part.textContent)).toEqual(['Der Ball liegt', 'dem Tisch.']);
+    expect(find('.area.answers')).toBeNull();
+    findAll('.sentence button')[1].click();
     expect(responses).toEqual([1]);
   });
 

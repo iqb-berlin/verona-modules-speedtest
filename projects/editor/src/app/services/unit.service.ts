@@ -55,7 +55,7 @@ export class UnitService {
   }
 
   private static stringifyUnit(unit: Unit): string {
-    return JSON.stringify(unit, (key, value) => {
+    return JSON.stringify(unit, (key: string, value: unknown) => {
       if (unit.answerType === 'number' && key === 'answers') {
         return undefined;
       }
@@ -139,7 +139,8 @@ export class UnitService {
     this.missingCorrectAnswerPositions = this.unit.questions
       .flatMap((question, index) => (question.correctAnswer === undefined ||
         (Array.isArray(question.correctAnswer) && question.correctAnswer.length === 0) ?
-        [index + 1] : []));
+        [index + 1] :
+        []));
     if (this.missingCorrectAnswerPositions.length > 0) {
       this.messageService.showPermanently(
         `Es fehlen Lösungen für mindestens folgende Fragen:

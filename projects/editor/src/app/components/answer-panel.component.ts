@@ -177,9 +177,14 @@ export class AnswerPanelComponent {
   addAnswer() {
     let answerText: string;
     switch (this.answers.length) {
-      case 0: answerText = 'richtig'; break;
-      case 1: answerText = 'falsch'; break;
-      default: answerText = `Antworttext ${this.answers.length + 1}`; break;
+      case 0:
+        answerText = 'richtig';
+        break;
+      case 1:
+        answerText = 'falsch';
+        break;
+      default:
+        answerText = `Antworttext ${this.answers.length + 1}`;
     }
     this.unitService.addAnswer(this.questionIndex, answerText);
   }
@@ -206,7 +211,7 @@ export class AnswerPanelComponent {
 
   onSelectCorrectAnswer(answerIndex: number) {
     if (this.unitService.unit.multipleSelection) {
-      const answers = (this.unitService.unit.questions[this.questionIndex].correctAnswer as unknown[]);
+      const answers = this.unitService.unit.questions[this.questionIndex].correctAnswer as unknown[];
       if (answers.includes(answerIndex)) {
         answers.splice(answers.indexOf(answerIndex), 1);
       } else {
@@ -227,7 +232,6 @@ export class AnswerPanelComponent {
     this.unitService.updateUnitDef();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isArray(value: unknown): value is unknown[] {
     return Array.isArray(value);
   }

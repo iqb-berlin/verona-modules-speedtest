@@ -16,8 +16,12 @@ export class FileService {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result as string);
-      reader.onerror = () => reject();
-      asBase64 ? reader.readAsDataURL(file) : reader.readAsText(file);
+      reader.onerror = () => reject(reader.error ?? new Error('Datei konnte nicht gelesen werden.'));
+      if (asBase64) {
+        reader.readAsDataURL(file);
+      } else {
+        reader.readAsText(file);
+      }
     });
   }
 }

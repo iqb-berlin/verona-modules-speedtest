@@ -9,7 +9,7 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
   }
   const headerItems = cleanedCsv.split(/\n/)[0].split(';').map(h => h.trim());
   const invalidHeaders = getInvalidHeaderLabels(headerItems);
-  if (invalidHeaders.length > 0) throw Error(`Nicht erlaubte Kopfzeilenelement(e): ${invalidHeaders}`);
+  if (invalidHeaders.length > 0) throw Error(`Nicht erlaubte Kopfzeilenelement(e): ${invalidHeaders.join(',')}`);
 
   return cleanedCsv.split(/\n/)
     .filter(text => text.trim())
@@ -41,7 +41,7 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
 function generateAnswers(headers: string[], cellValues: string[]): Answer[] {
   return headers
     .filter((header: string) => /^antwort_\d+$/.test(header))
-    .map(header => {
+    .map((header) => {
       const splitHeaderName = `teilungsposition_${header.split('_')[1]}`;
       return {
         text: cellValues[headers.indexOf(header)].trim(),

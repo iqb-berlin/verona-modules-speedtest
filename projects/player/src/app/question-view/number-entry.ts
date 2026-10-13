@@ -5,7 +5,7 @@ export class NumberEntry {
   activeIndex = 0;
 
   constructor(length: number) {
-    this.digits = Array(Math.max(length, 1)).fill(undefined);
+    this.digits = new Array<number | undefined>(Math.max(length, 1)).fill(undefined);
   }
 
   static forAnswer(correctAnswer: number | number[] | undefined): NumberEntry {

@@ -8,7 +8,7 @@ export class VeronaAPIService {
     switch (messageData.type) {
       case 'vopStartCommand':
         VeronaAPIService.sessionID = messageData.sessionId;
-        VeronaAPIService.startCommand.next(messageData as StartCommand);
+        VeronaAPIService.startCommand.next(messageData);
         break;
       // no default
     }
@@ -23,7 +23,7 @@ export class VeronaAPIService {
     const metadata: string | null | undefined = document.getElementById('verona-metadata')?.textContent;
     VeronaAPIService.sendMessage({
       type: 'vopReadyNotification',
-      metadata: metadata ? JSON.parse(metadata) : {}
+      metadata: metadata ? JSON.parse(metadata) as object : {}
     });
   }
 
@@ -72,13 +72,13 @@ export interface StartCommand {
   unitDefinition: string;
   unitState?: {
     dataParts: Record<string, string>;
-  }
+  };
 }
 
 // Outgoing
 export interface ReadyNotification {
   type: 'vopReadyNotification';
-  metadata: string;
+  metadata: object;
 }
 
 export interface StateChangeNotification {

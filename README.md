@@ -47,4 +47,4 @@ Runs the unit tests of both projects once in headless Chromium. `npm run test-pl
 ### Lint
 >npm run lint
 
-ESLint with [`@iqb/eslint-config`](https://github.com/iqb-berlin/eslint-config); the configuration is declared inline in `package.json`.
+ESLint configuration in `eslint.config.mjs`: the recommended JavaScript and type-checked TypeScript rules plus `@stylistic` for formatting. It covers the projects and the scripts; `scripts/distpacker.js` is left out.

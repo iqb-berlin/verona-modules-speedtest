@@ -25,7 +25,7 @@ function textUnit(correctAnswerPerQuestion: (number | number[] | undefined)[]): 
 }
 
 function unitWithoutSolutions(questionCount: number): Unit {
-  return textUnit(new Array(questionCount).fill(undefined));
+  return textUnit(new Array<undefined>(questionCount).fill(undefined));
 }
 
 /* Builds the dataParts of a unit state as the player itself would have written them.
@@ -146,7 +146,7 @@ describe('AppComponent', () => {
         sessionId: 'session-1',
         unitDefinition: JSON.stringify(unit),
         ...(dataParts ? { unitState: { dataParts } } : {})
-      } as StartCommand);
+      });
       tick();
     }
 
@@ -188,7 +188,7 @@ describe('AppComponent', () => {
     function startWith(unitDefinition: string): void {
       VeronaAPIService.startCommand.next({
         type: 'vopStartCommand', sessionId: 'session-1', unitDefinition
-      } as StartCommand);
+      });
       tick();
     }
 
@@ -208,7 +208,6 @@ describe('AppComponent', () => {
     it('logs the reason', fakeAsync(() => {
       startWith('{ not json');
 
-      // eslint-disable-next-line no-console
       expect(console.error).toHaveBeenCalledWith(jasmine.stringContaining(UNIT_PARSE_ERROR_MESSAGES['invalid-json']));
     }));
 

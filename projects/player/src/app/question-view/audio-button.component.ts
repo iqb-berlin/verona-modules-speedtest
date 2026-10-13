@@ -1,4 +1,4 @@
-/* eslint-disable max-len */ // SVG path data
+/* eslint-disable @stylistic/max-len */ // SVG path data
 import {
   Component, EventEmitter, Input, Output
 } from '@angular/core';

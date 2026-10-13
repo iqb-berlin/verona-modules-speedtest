@@ -55,7 +55,7 @@ export class QuestionViewComponent implements OnChanges {
       this.keypadBelowStage = this.unit.answerType === 'number' && this.unit.layout === 'row';
       [this.stageRows, this.stageColumns] =
         QuestionViewComponent.stageTracksFor(this.unit, this.answersInQuestion, this.keypadBelowStage,
-          this.needsNextButton);
+                                             this.needsNextButton);
     }
     if (changes['question']) {
       this.selectedAnswers = [];

@@ -8,8 +8,8 @@ export const UNIT_DEFINITION_TYPE = 'speedtest-unit-definition';
 export type UnitParseError = 'invalid-json' | 'wrong-type' | 'missing-version' | 'incompatible-version';
 
 export type UnitParseResult =
-  { unit: Unit, error?: undefined } |
-  { unit?: undefined, error: UnitParseError };
+  { unit: Unit; error?: undefined } |
+  { unit?: undefined; error: UnitParseError };
 
 /* Shown to the user by both modules: the editor in a snackbar, the player on its error screen. */
 export const UNIT_PARSE_ERROR_MESSAGES: Record<UnitParseError, string> = {
@@ -28,7 +28,7 @@ const expectedMajor = packageInfo.config.unit_definition_version.split('.')[0];
 export function parseUnitDefinition(unitDefinition: string): UnitParseResult {
   let parsedUnit: Unit;
   try {
-    parsedUnit = JSON.parse(unitDefinition);
+    parsedUnit = JSON.parse(unitDefinition) as Unit;
   } catch {
     return { error: 'invalid-json' };
   }
@@ -60,8 +60,9 @@ function isSupportedType(type: unknown): boolean {
 }
 
 function toCurrentForm(unit: LegacyUnit): Unit {
-  const { buttonWidth, ...current } = unit;
-  return { ...current, type: UNIT_DEFINITION_TYPE };
+  const current: LegacyUnit = { ...unit, type: UNIT_DEFINITION_TYPE };
+  delete current.buttonWidth;
+  return current;
 }
 
 /* ------------------------------------- end of compatibility --------------------------------- */

@@ -23,38 +23,34 @@
     "test": "npm run test-editor && npm run test-player",
     "test-editor": "ng test editor --watch=false",
     "test-player": "ng test player --watch=false",
-    "lint": "eslint \"projects/**/*.ts\""
-  },
-  "eslintConfig": {
-    "extends": "@iqb/eslint-config",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
-    "rules": {
-      "function-call-argument-newline": "off"
-    }
+    "lint": "eslint"
   },
   "dependencies": {
     "@angular/animations": "^19.2.17",
     "@angular/common": "^19.2.17",
     "@angular/compiler": "^19.2.17",
     "@angular/core": "^19.2.17",
+    "@angular/elements": "^19.2.17",
     "@angular/forms": "^19.2.17",
+    "@angular/material": "^19.2.17",
     "@angular/platform-browser": "^19.2.17",
     "@angular/platform-browser-dynamic": "^19.2.17",
     "@angular/router": "^19.2.17",
-    "@angular/elements": "^19.2.17",
-    "@angular/material": "^19.2.17",
+    "@iqb/responses": "^3.3.2",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",
-    "zone.js": "~0.15.1",
-    "@iqb/responses": "^3.3.2"
+    "zone.js": "~0.15.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.17",
     "@angular/cli": "^19.2.17",
     "@angular/compiler-cli": "^19.2.17",
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/jasmine": "~5.1.13",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "iqb-dev-components": "^1.4.1",
     "jasmine-core": "~5.13.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
@@ -62,10 +58,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.8.3",
-    "@iqb/eslint-config": "^2.2.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb-typescript": "^18.0.0",
-    "iqb-dev-components": "^1.4.1"
+    "typescript-eslint": "^8.71.2"
   }
 }

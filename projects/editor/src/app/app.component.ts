@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { VeronaAPIService, StartCommand } from './services/verona-api.service';
+import { VeronaAPIService, StartCommand, GetDefinitionCommand } from './services/verona-api.service';
 import { UnitService } from './services/unit.service';
 import { UnitViewComponent } from './components/unit-view.component';
 
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   constructor(public unitService: UnitService) {
     fromEvent(window, 'message')
       .subscribe((event: Event): void => {
-        VeronaAPIService.handleMessage((event as MessageEvent).data);
+        VeronaAPIService.handleMessage((event as MessageEvent<GetDefinitionCommand | StartCommand>).data);
       });
   }
 

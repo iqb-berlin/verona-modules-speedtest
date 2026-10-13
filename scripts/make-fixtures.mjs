@@ -16,11 +16,13 @@ const version = config.unit_definition_version;
 function image(width, height, color) {
   const r = Math.min(width, height) * 0.35;
   const fontSize = Math.max(12, Math.round(Math.min(width, height) / 8));
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`
-    + `<rect width="100%" height="100%" fill="${color}" stroke="#333" stroke-width="4"/>`
-    + `<circle cx="${width / 2}" cy="${height / 2}" r="${r}" fill="none" stroke="#333" stroke-width="3"/>`
-    + `<text x="50%" y="50%" font-family="sans-serif" font-size="${fontSize}" text-anchor="middle" dominant-baseline="middle">`
-    + `${width}×${height}</text></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"` +
+    ` viewBox="0 0 ${width} ${height}">` +
+    `<rect width="100%" height="100%" fill="${color}" stroke="#333" stroke-width="4"/>` +
+    `<circle cx="${width / 2}" cy="${height / 2}" r="${r}" fill="none" stroke="#333" stroke-width="3"/>` +
+    `<text x="50%" y="50%" font-family="sans-serif" font-size="${fontSize}"` +
+    ' text-anchor="middle" dominant-baseline="middle">' +
+    `${width}×${height}</text></svg>`;
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
 }
 
@@ -51,9 +53,9 @@ const audio = tone();
 
 /* ---------------------------------------------- cases ---------------------------------------------- */
 
-const LONG_QUESTION = 'Lena hat am Montag 12 Murmeln, am Dienstag schenkt ihr Oma noch einmal halb so viele, '
-  + 'und am Mittwoch verliert sie auf dem Schulweg drei davon. Am Donnerstag tauscht sie zwei Murmeln '
-  + 'gegen einen Sticker. Wie viele Murmeln hat Lena am Ende der Woche noch übrig?';
+const LONG_QUESTION = 'Lena hat am Montag 12 Murmeln, am Dienstag schenkt ihr Oma noch einmal halb so viele, ' +
+  'und am Mittwoch verliert sie auf dem Schulweg drei davon. Am Donnerstag tauscht sie zwei Murmeln ' +
+  'gegen einen Sticker. Wie viele Murmeln hat Lena am Ende der Woche noch übrig?';
 
 const questionCases = {
   text: [
@@ -110,9 +112,9 @@ const ANSWER_COLORS = ['#fdd', '#dfd', '#ddf', '#ffd'];
 function answersFor(answerType, answerCase) {
   switch (answerType) {
     case 'text':
-      return answerCase.answers.map(a => (Array.isArray(a)
-        ? { text: a[0] + a[2], splitPosition: a[1] }
-        : { text: a }));
+      return answerCase.answers.map(a => (Array.isArray(a) ?
+        { text: a[0] + a[2], splitPosition: a[1] } :
+        { text: a }));
     case 'image':
       return answerCase.images.map(([w, h], i) => ({ text: '', src: image(w, h, ANSWER_COLORS[i]) }));
     case 'audio':
@@ -164,9 +166,9 @@ function wordSelectItem(text, words, withAudio) {
 
 const wordSelect = [
   wordSelectItem('Der Hund bellt laut.', [1]),
-  wordSelectItem('Am Morgen packt Lena ihren Rucksack, zieht die gelbe Regenjacke an und läuft mit ihrem '
-    + 'kleinen Bruder durch den Park bis zur Haltestelle, wo der Bus schon mit offenen Türen auf die '
-    + 'beiden Kinder wartet.', [3, 8], false),
+  wordSelectItem('Am Morgen packt Lena ihren Rucksack, zieht die gelbe Regenjacke an und läuft mit ihrem ' +
+    'kleinen Bruder durch den Park bis zur Haltestelle, wo der Bus schon mit offenen Türen auf die ' +
+    'beiden Kinder wartet.', [3, 8], false),
   wordSelectItem('Die Katze schläft auf dem warmen Sofa.', [1], true)
 ];
 
@@ -182,9 +184,9 @@ function inlineItem(text, position, answers, withAudio) {
 
 const inlineAnswers = [
   inlineItem('Der Ball liegt dem Tisch.', 3, ['unter', 'über']),
-  inlineItem('Nach der Schule geht Lena mit ihrem kleinen Bruder und den beiden Nachbarskindern noch eine '
-    + 'Weile den Spielplatz hinter der großen Turnhalle, bevor sie zum Mittagessen nach Hause laufen.', 15,
-  ['auf', 'in', 'über', 'durch']),
+  inlineItem('Nach der Schule geht Lena mit ihrem kleinen Bruder und den beiden Nachbarskindern noch eine ' +
+    'Weile den Spielplatz hinter der großen Turnhalle, bevor sie zum Mittagessen nach Hause laufen.', 15,
+             ['auf', 'in', 'über', 'durch']),
   inlineItem('Die Katze springt das Sofa.', 3, ['auf', 'unter'], true)
 ];
 
@@ -207,7 +209,8 @@ fixtures['inline-answers'] = unit('column', 'inline-answers', 'text', inlineAnsw
 for (const layout of ['column', 'row']) {
   for (const [q, a] of [['text', 'text'], ['image', 'number']]) {
     const base = fixtures[`${layout}_${q}_${a}`];
-    const { instructionText, ...withoutInstruction } = base;
+    const withoutInstruction = { ...base };
+    delete withoutInstruction.instructionText;
     fixtures[`variant_${layout}_${q}_${a}_no-instruction`] = withoutInstruction;
   }
   for (const [q, a] of [['text', 'text'], ['image', 'image']]) {
