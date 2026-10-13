@@ -18,7 +18,9 @@ import { NumberEntry } from './number-entry';
 
 /* Shows one question: instruction, then a stage with question and answer area and, if needed, keypad and next button.
    Owns the selection and decides when an answer is submitted. Also owns whether an audio is playing:
-   only one may play at a time, so every audio button is disabled meanwhile. */
+   only one may play at a time, so every audio button is disabled meanwhile. With audioRequired, a question
+   with audio locks every answer input until that audio has played to its end (#36); a locked input
+   looks flat where it can without losing contrast, takes no answer, and wobbles the audio button instead. */
 @Component({
   selector: 'speedtest-player-question-view',
   imports: [
@@ -37,6 +39,9 @@ export class QuestionViewComponent implements OnChanges {
   selectedAnswers: number[] = [];
   numberEntry = new NumberEntry(1);
   audioPlaying = false;
+  answersLocked = false;
+  // A trigger, not state: each new value wobbles the audio button again.
+  audioButtonWobbles = 0;
   answersInQuestion = false;
   togglesSelection = false;
   needsNextButton = false;
@@ -64,6 +69,8 @@ export class QuestionViewComponent implements OnChanges {
       this.numberEntry = NumberEntry.forAnswer(this.question.correctAnswer);
       // A new source stops the playing audio without an ended event.
       this.audioPlaying = false;
+      this.answersLocked = !!this.unit.audioRequired && !!this.question.src &&
+        ['audio', 'word-select', 'inline-answers'].includes(this.unit.questionType);
     }
   }
 
@@ -90,7 +97,13 @@ export class QuestionViewComponent implements OnChanges {
       [`minmax(0, auto)${below}`, `minmax(0, 1fr) ${question} 50px ${answers} minmax(0, 1fr)`];
   }
 
+  // Also when the audio cannot be played, so that a broken file does not lock the question for good.
+  onQuestionAudioFinished(): void {
+    this.answersLocked = false;
+  }
+
   onAnswerClick(answerIndex: number): void {
+    if (this.refuseWhileLocked()) return;
     if (!this.togglesSelection) {
       this.submit(answerIndex);
       return;
@@ -101,6 +114,7 @@ export class QuestionViewComponent implements OnChanges {
   }
 
   onNext(): void {
+    if (this.refuseWhileLocked()) return;
     this.submit(this.unit.answerType === 'number' ? this.numberEntry.value() : this.selectedAnswers);
   }
 
@@ -108,10 +122,32 @@ export class QuestionViewComponent implements OnChanges {
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
     if (this.unit.answerType !== 'number') return;
+    if (!/^\d$/.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    if (this.refuseWhileLocked()) return;
     if (/^\d$/.test(event.key)) this.numberEntry.enter(Number(event.key));
     if (event.key === 'Backspace') this.numberEntry.delete();
     if (event.key === 'ArrowLeft') this.numberEntry.moveBack();
     if (event.key === 'ArrowRight') this.numberEntry.moveForward();
+  }
+
+  onDigitClick(digit: number): void {
+    if (!this.refuseWhileLocked()) this.numberEntry.enter(digit);
+  }
+
+  onDeleteClick(): void {
+    if (!this.refuseWhileLocked()) this.numberEntry.delete();
+  }
+
+  onBoxClick(boxIndex: number): void {
+    if (!this.refuseWhileLocked()) this.numberEntry.select(boxIndex);
+  }
+
+  /* Whether an answer input must be ignored. If so, the audio button wobbles, unless its audio is already
+     playing. */
+  private refuseWhileLocked(): boolean {
+    if (!this.answersLocked) return false;
+    if (!this.audioPlaying) this.audioButtonWobbles += 1;
+    return true;
   }
 
   private submit(answer: number | number[]): void {

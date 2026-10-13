@@ -1,16 +1,22 @@
-import { Component, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component, EventEmitter, Input, Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 
-/* Digits 0–9 in one line and a delete key. */
+/* Digits 0–9 in one line and a delete key. Locked keys get light borders but still report clicks; the
+   parent decides what a click does. */
 @Component({
   selector: 'speedtest-player-keypad',
   imports: [MatIcon],
   template: `
     <div class="keys">
       @for (digit of digits; track digit) {
-        <button (click)="digitClick.emit(digit)">{{ digit }}</button>
+        <button [class.locked]="locked" [attr.aria-disabled]="locked"
+                (click)="digitClick.emit(digit)">{{ digit }}</button>
       }
-      <button class="delete" aria-label="löschen" (click)="deleteClick.emit()">
+      <button class="delete" aria-label="löschen" [class.locked]="locked" [attr.aria-disabled]="locked"
+              (click)="deleteClick.emit()">
         <mat-icon>backspace</mat-icon>
       </button>
     </div>
@@ -36,6 +42,10 @@ import { MatIcon } from '@angular/material/icon';
       font-size: 25px;
       cursor: pointer;
     }
+    button.locked {
+      border-color: lightgray;
+      cursor: default;
+    }
     button.delete {
       width: 110px;
       margin-left: 20px;
@@ -45,6 +55,7 @@ import { MatIcon } from '@angular/material/icon';
   `
 })
 export class KeypadComponent {
+  @Input() locked = false;
   @Output() digitClick = new EventEmitter<number>();
   @Output() deleteClick = new EventEmitter<void>();
 

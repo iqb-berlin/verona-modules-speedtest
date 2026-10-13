@@ -9,7 +9,9 @@ import { AudioButtonComponent } from './audio-button.component';
 
 /* Answer buttons that are all as wide as the widest one (#26): equal 1fr grid tracks, sized by the
    widest label. If that does not fit, the tracks shrink equally and the labels wrap. For audio answers,
-   each button has its audio button in front of it; whether audio may play is the parent's decision. */
+   each button has its audio button in front of it; whether audio may play is the parent's decision. Locked
+   buttons look flat but still report clicks; the parent decides what a click does. Their audio buttons
+   are not affected. */
 @Component({
   selector: 'speedtest-player-text-answers',
   imports: [SplitWordPipe, LatexPipe, AudioButtonComponent],
@@ -23,7 +25,8 @@ import { AudioButtonComponent } from './audio-button.component';
                                            (playingChange)="playingChange.emit($event)">
             </speedtest-player-audio-button>
           }
-          <button [class.selected]="isSelected[answerIndex]"
+          <button [class.selected]="isSelected[answerIndex]" [class.locked]="locked"
+                  [attr.aria-disabled]="locked"
                   [style.background-color]="buttonColor"
                   (click)="answerClick.emit(answerIndex)">
             @if (answer.splitPosition) {
@@ -88,6 +91,10 @@ import { AudioButtonComponent } from './audio-button.component';
       outline: 5px solid blueviolet;
       outline-offset: -5px;
     }
+    button.locked {
+      box-shadow: none;
+      cursor: default;
+    }
     .label-1 {
       color: #005ab5;
     }
@@ -112,6 +119,7 @@ export class TextAnswersComponent implements OnChanges {
   @Input() latex = false;
   @Input() withAudio = false;
   @Input() audioPlaying = false;
+  @Input() locked = false;
   @Output() answerClick = new EventEmitter<number>();
   @Output() playingChange = new EventEmitter<boolean>();
 

@@ -6,13 +6,15 @@ import { Answer } from 'common/interfaces/unit';
 
 /* Image answers in equal cells, side by side below the question or stacked beside it. Each image is scaled
    down into its cell, never up, and the image itself is the button face, so the selection frame sits on
-   the image. The parent must let this component fill the area instead of placing it by margins. */
+   the image. Locked images look as usual and still report clicks; the parent decides what a click does. The
+   parent must let this component fill the area instead of placing it by margins. */
 @Component({
   selector: 'speedtest-player-image-answers',
   template: `
     <div class="cells" [class.stacked]="layout === 'row'">
       @for (answer of answers; let answerIndex = $index; track answerIndex) {
-        <button [attr.aria-label]="'Antwort ' + (answerIndex + 1)" (click)="answerClick.emit(answerIndex)">
+        <button [attr.aria-label]="'Antwort ' + (answerIndex + 1)" [class.locked]="locked"
+                [attr.aria-disabled]="locked" (click)="answerClick.emit(answerIndex)">
           <img [src]="answer.src" alt="" [class.selected]="isSelected[answerIndex]">
         </button>
       }
@@ -49,6 +51,9 @@ import { Answer } from 'common/interfaces/unit';
       place-items: center;
       cursor: pointer;
     }
+    button.locked {
+      cursor: default;
+    }
     img {
       display: block;
       max-width: 100%;
@@ -68,6 +73,7 @@ export class ImageAnswersComponent implements OnChanges {
   @Input() answers: Answer[] = [];
   @Input() layout: 'column' | 'row' = 'column';
   @Input() selectedAnswers: number[] = [];
+  @Input() locked = false;
   @Output() answerClick = new EventEmitter<number>();
 
   isSelected: boolean[] = [];

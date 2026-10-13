@@ -6,7 +6,8 @@ import { Answer } from 'common/interfaces/unit';
 import { AudioButtonComponent } from './audio-button.component';
 
 /* A sentence with its gap filled by a stack of answer buttons, with an optional audio button in front. The
-   gap sits before the word at answerPosition (counted from 0); without one, the buttons follow the text. */
+   gap sits before the word at answerPosition (counted from 0); without one, the buttons follow the text.
+   Locked buttons look flat but still report clicks; the parent decides what a click does. */
 @Component({
   selector: 'speedtest-player-inline-answers',
   imports: [AudioButtonComponent],
@@ -15,13 +16,16 @@ import { AudioButtonComponent } from './audio-button.component';
       @if (src) {
         <speedtest-player-audio-button [src]="src"
                                        [disabled]="audioPlaying"
-                                       (playingChange)="playingChange.emit($event)">
+                                       [wobble]="wobble"
+                                       (playingChange)="playingChange.emit($event)"
+                                       (finished)="audioFinished.emit()">
         </speedtest-player-audio-button>
       }
       <span>{{ before }}</span>
       <div class="buttons">
         @for (answer of answers; let answerIndex = $index; track answerIndex) {
-          <button [class.selected]="isSelected[answerIndex]"
+          <button [class.selected]="isSelected[answerIndex]" [class.locked]="locked"
+                  [attr.aria-disabled]="locked"
                   [style.background-color]="buttonColor"
                   (click)="answerClick.emit(answerIndex)">{{ answer.text }}</button>
         }
@@ -72,6 +76,10 @@ import { AudioButtonComponent } from './audio-button.component';
       outline: 5px solid blueviolet;
       outline-offset: -5px;
     }
+    button.locked {
+      box-shadow: none;
+      cursor: default;
+    }
   `
 })
 export class InlineAnswersComponent implements OnChanges {
@@ -81,9 +89,12 @@ export class InlineAnswersComponent implements OnChanges {
   @Input() src = '';
   @Input() buttonColor?: string;
   @Input() audioPlaying = false;
+  @Input() wobble = 0;
+  @Input() locked = false;
   @Input() selectedAnswers: number[] = [];
   @Output() answerClick = new EventEmitter<number>();
   @Output() playingChange = new EventEmitter<boolean>();
+  @Output() audioFinished = new EventEmitter<void>();
 
   before = '';
   after = '';

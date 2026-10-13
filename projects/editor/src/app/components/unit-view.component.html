@@ -36,12 +36,17 @@
         </mat-checkbox>
         <mat-checkbox [ngModel]="!!unit.latex"
                       [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
-                      [matTooltip]="'Formeln zwischen $-Zeichen werden in Frage- und Antworttexten als LaTeX ' +
-                                    'dargestellt, z. B. $\\frac{1}{2}$. Ein Dollarzeichen, das nicht zu einer ' +
-                                    'Formel gehört, wird als \\$ geschrieben, z. B. 5 \\$. ' +
-                                    'Für größere Brüche \\dfrac statt \\frac verwenden.'"
+                      [matTooltip]="'Erlaubt LaTeX-Formeln in Frage- und Antworttexten. Formeln stehen zwischen ' +
+                                    '$-Zeichen, z.\u202FB. $\\frac{1}{2}$.'"
                       (ngModelChange)="onToggleLatex($event)">
             LaTeX-Formeln
+        </mat-checkbox>
+        <mat-checkbox [ngModel]="!!unit.audioRequired"
+                      [disabled]="unit.questionType !== 'audio' && unit.questionType !== 'word-select' &&
+                                  unit.questionType !== 'inline-answers'"
+                      [matTooltip]="'Antworten werden erst nach vollständigem Abspielen des Audios aktiv.'"
+                      (ngModelChange)="onToggleAudioRequired($event)">
+            Antworten erst nach Audio freigeben
         </mat-checkbox>
         <mat-form-field>
             <mat-label>Instruktionstext</mat-label>

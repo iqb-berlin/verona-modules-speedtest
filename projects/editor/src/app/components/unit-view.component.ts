@@ -141,6 +141,13 @@ export class UnitViewComponent implements OnChanges {
     this.unitService.updateUnitDef();
   }
 
+  // Like latex: units without the lock leave the property out rather than storing false.
+  onToggleAudioRequired(enabled: boolean) {
+    if (enabled) this.unit.audioRequired = true;
+    else delete this.unit.audioRequired;
+    this.unitService.updateUnitDef();
+  }
+
   onToggleMultiselect() {
     this.unit.multipleSelection = !this.unit.multipleSelection;
     this.unit.questions.forEach((question) => {

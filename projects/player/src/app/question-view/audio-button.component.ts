@@ -1,21 +1,23 @@
 /* eslint-disable @stylistic/max-len */ // SVG path data
 import {
-  Component, EventEmitter, Input, Output,
+  Component, EventEmitter, Input, OnChanges, Output, SimpleChanges,
   ChangeDetectionStrategy
 } from '@angular/core';
 
-/* Plays one audio. Reports when playback starts and stops; the parent decides whether any audio may
-   play (only one at a time) and disables the buttons meanwhile. The icon fills the host, so the parent
-   sets the size. */
+/* Plays one audio. Reports when playback starts and stops, and when the audio has played to its end or
+   cannot be played at all; the parent decides whether any audio may play (only one at a time) and
+   disables the buttons meanwhile. Each change of wobble (after the first) wobbles the button, to point
+   to it. The icon fills the host, so the parent sets the size. */
 @Component({
   selector: 'speedtest-player-audio-button',
   template: `
     <audio #audio [src]="src"
            (play)="playingChange.emit(true)"
-           (ended)="playingChange.emit(false)"
+           (ended)="playingChange.emit(false); finished.emit()"
            (pause)="playingChange.emit(false)"
-           (error)="playingChange.emit(false)"></audio>
-    <button aria-label="anhören" [disabled]="disabled" (click)="audio.play()">
+           (error)="playingChange.emit(false); finished.emit()"></audio>
+    <button aria-label="anhören" [disabled]="disabled" [class.wobbling]="wobbling"
+            (animationend)="wobbling = false" (click)="audio.play()">
       <svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="46.5" cy="46.5" r="38.5" fill="#d1dfe3"/>
         <circle cx="40" cy="40" r="40" fill="#196175"/>
@@ -40,6 +42,8 @@ import {
       border: none;
       background: transparent;
       cursor: pointer;
+      // The wobbling icon must not stick out: the scrolling area around the button would overflow.
+      overflow: clip;
 
       &:hover, &:disabled {
         opacity: 0.5;
@@ -49,6 +53,16 @@ import {
         cursor: default;
       }
     }
+    // The circle is not centred in the icon, so it shrinks a little while it turns, to stay inside the
+    // button.
+    .wobbling svg {
+      animation: wobble 0.6s ease-in-out;
+    }
+    @keyframes wobble {
+      0%, 100% { transform: rotate(0); }
+      15%, 55% { transform: rotate(-15deg) scale(0.95); }
+      35%, 75% { transform: rotate(15deg) scale(0.95); }
+    }
     svg {
       display: block;
       width: 100%;
@@ -56,8 +70,16 @@ import {
     }
   `
 })
-export class AudioButtonComponent {
+export class AudioButtonComponent implements OnChanges {
   @Input() src = '';
   @Input() disabled = false;
+  @Input() wobble = 0;
   @Output() playingChange = new EventEmitter<boolean>();
+  @Output() finished = new EventEmitter<void>();
+
+  wobbling = false;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['wobble'] && !changes['wobble'].firstChange) this.wobbling = true;
+  }
 }

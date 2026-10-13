@@ -20,3 +20,4 @@
 ## 2.4.0
 - Add the optional property `latex`. When set, `$…$` in question and answer texts is rendered as LaTeX.
 - Add the optional property `outroText`, the text shown after the last question. Without it, or when it is empty, the player shows its previous fixed text, "Keine weiteren Seiten. Weiterleitung zur nächsten Unit...".
+- Add the optional property `audioRequired`. When set, the answers to a question with audio are locked until that audio has played to its end.

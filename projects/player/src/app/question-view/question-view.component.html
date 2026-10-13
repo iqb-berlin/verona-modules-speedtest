@@ -20,16 +20,21 @@
                                                      [text]="question.text ?? ''"
                                                      [latex]="!!unit.latex"
                                                      [audioPlaying]="audioPlaying"
-                                                     (playingChange)="audioPlaying = $event">
+                                                     [wobble]="audioButtonWobbles"
+                                                     (playingChange)="audioPlaying = $event"
+                                                     (audioFinished)="onQuestionAudioFinished()">
                     </speedtest-player-audio-question>
                 }
                 @case ('word-select') {
                     <speedtest-player-word-select [text]="question.text ?? ''"
                                                   [src]="question.src ?? ''"
                                                   [audioPlaying]="audioPlaying"
+                                                  [wobble]="audioButtonWobbles"
+                                                  [locked]="answersLocked"
                                                   [selectedWords]="selectedAnswers"
                                                   (wordClick)="onAnswerClick($event)"
-                                                  (playingChange)="audioPlaying = $event">
+                                                  (playingChange)="audioPlaying = $event"
+                                                  (audioFinished)="onQuestionAudioFinished()">
                     </speedtest-player-word-select>
                 }
                 @case ('inline-answers') {
@@ -39,9 +44,12 @@
                                                      [src]="question.src ?? ''"
                                                      [buttonColor]="unit.buttonColor"
                                                      [audioPlaying]="audioPlaying"
+                                                     [wobble]="audioButtonWobbles"
+                                                     [locked]="answersLocked"
                                                      [selectedAnswers]="selectedAnswers"
                                                      (answerClick)="onAnswerClick($event)"
-                                                     (playingChange)="audioPlaying = $event">
+                                                     (playingChange)="audioPlaying = $event"
+                                                     (audioFinished)="onQuestionAudioFinished()">
                     </speedtest-player-inline-answers>
                 }
                 @default {
@@ -58,6 +66,7 @@
                                                         [answers]="question.answers"
                                                         [layout]="unit.layout"
                                                         [selectedAnswers]="selectedAnswers"
+                                                        [locked]="answersLocked"
                                                         (answerClick)="onAnswerClick($event)">
                         </speedtest-player-image-answers>
                     }
@@ -65,11 +74,13 @@
                         <div class="number-entry">
                             <speedtest-player-number-boxes [digits]="numberEntry.digits"
                                                            [activeIndex]="numberEntry.activeIndex"
-                                                           (boxClick)="numberEntry.select($event)">
+                                                           [locked]="answersLocked"
+                                                           (boxClick)="onBoxClick($event)">
                             </speedtest-player-number-boxes>
                             @if (!keypadBelowStage) {
-                                <speedtest-player-keypad (digitClick)="numberEntry.enter($event)"
-                                                         (deleteClick)="numberEntry.delete()">
+                                <speedtest-player-keypad [locked]="answersLocked"
+                                                         (digitClick)="onDigitClick($event)"
+                                                         (deleteClick)="onDeleteClick()">
                                 </speedtest-player-keypad>
                             }
                         </div>
@@ -82,6 +93,7 @@
                                                        [selectedAnswers]="selectedAnswers"
                                                        [withAudio]="unit.answerType === 'audio'"
                                                        [audioPlaying]="audioPlaying"
+                                                       [locked]="answersLocked"
                                                        (answerClick)="onAnswerClick($event)"
                                                        (playingChange)="audioPlaying = $event">
                         </speedtest-player-text-answers>
@@ -91,12 +103,14 @@
         }
         @if (keypadBelowStage) {
             <speedtest-player-keypad class="stage-keypad"
-                                     (digitClick)="numberEntry.enter($event)"
-                                     (deleteClick)="numberEntry.delete()">
+                                     [locked]="answersLocked"
+                                     (digitClick)="onDigitClick($event)"
+                                     (deleteClick)="onDeleteClick()">
             </speedtest-player-keypad>
         }
         @if (needsNextButton) {
-            <speedtest-player-next-button class="stage-next" (click)="onNext()"></speedtest-player-next-button>
+            <speedtest-player-next-button class="stage-next" [locked]="answersLocked" (click)="onNext()">
+            </speedtest-player-next-button>
         }
     </div>
 </div>

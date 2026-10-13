@@ -10,7 +10,8 @@ interface TextPart {
 }
 
 /* A sentence whose words can be struck through, with an optional audio button in front. Words are numbered
-   in order, skipping numbers and punctuation; the selection reports those numbers. */
+   in order, skipping numbers and punctuation; the selection reports those numbers. Locked words look as
+   usual and still report clicks; the parent decides what a click does. */
 @Component({
   selector: 'speedtest-player-word-select',
   imports: [AudioButtonComponent],
@@ -19,12 +20,14 @@ interface TextPart {
       @if (src) {
         <speedtest-player-audio-button [src]="src"
                                        [disabled]="audioPlaying"
-                                       (playingChange)="playingChange.emit($event)">
+                                       [wobble]="wobble"
+                                       (playingChange)="playingChange.emit($event)"
+                                       (finished)="audioFinished.emit()">
         </speedtest-player-audio-button>
       }
       @for (part of parts; track $index) {
         @if (part.wordIndex !== undefined) {
-          <span class="word" [class.selected]="isSelected[part.wordIndex]"
+          <span class="word" [class.selected]="isSelected[part.wordIndex]" [class.locked]="locked"
                 (click)="wordClick.emit(part.wordIndex)">{{ part.text }}</span>
         } @else {
           <span>{{ part.text }}</span>
@@ -48,6 +51,9 @@ interface TextPart {
     .word {
       cursor: pointer;
     }
+    .word.locked {
+      cursor: default;
+    }
     .selected {
       text-decoration: line-through;
       text-decoration-thickness: 3px;
@@ -64,9 +70,12 @@ export class WordSelectComponent implements OnChanges {
   @Input() text = '';
   @Input() src = '';
   @Input() audioPlaying = false;
+  @Input() wobble = 0;
+  @Input() locked = false;
   @Input() selectedWords: number[] = [];
   @Output() wordClick = new EventEmitter<number>();
   @Output() playingChange = new EventEmitter<boolean>();
+  @Output() audioFinished = new EventEmitter<void>();
 
   parts: TextPart[] = [];
   isSelected: boolean[] = [];

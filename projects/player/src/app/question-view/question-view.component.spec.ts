@@ -236,8 +236,128 @@ describe('QuestionViewComponent', () => {
     show(unit);
     expect(findAll('.sentence > span').map(part => part.textContent)).toEqual(['Der Ball liegt', 'dem Tisch.']);
     expect(find('.area.answers')).toBeNull();
-    findAll('.sentence button')[1].click();
+    findAll('.sentence > .buttons button')[1].click();
     expect(responses).toEqual([1]);
+  });
+
+  describe('with audioRequired', () => {
+    function audioUnit(overrides: Partial<Unit> = {}): Unit {
+      return {
+        ...textUnit(false),
+        questionType: 'audio',
+        audioRequired: true,
+        questions: [
+          { ...question('Hör zu.'), src: 'data:audio/wav;base64,AAAA' },
+          { ...question('Hör noch mal zu.'), src: 'data:audio/wav;base64,BBBB' }
+        ],
+        ...overrides
+      };
+    }
+
+    // The question comes before the answers, so its audio is the first one.
+    function questionAudio(event: string): void {
+      find('audio')!.dispatchEvent(new Event(event));
+      fixture.detectChanges();
+    }
+
+    function audioButtonIsWobbling(): boolean {
+      return find('speedtest-player-audio-button button')!.classList.contains('wobbling');
+    }
+
+    it('locks the answers until the question audio has ended, and wobbles the audio button instead', () => {
+      show(audioUnit());
+      expect(answerButton(0).classList).toContain('locked');
+      expect(audioButtonIsWobbling()).toBe(false);
+      answerButton(0).click();
+      fixture.detectChanges();
+      expect(responses).toEqual([]);
+      expect(audioButtonIsWobbling()).toBe(true);
+      questionAudio('play');
+      questionAudio('pause');
+      answerButton(0).click();
+      expect(responses).toEqual([]);
+      questionAudio('ended');
+      expect(answerButton(0).classList).not.toContain('locked');
+      answerButton(1).click();
+      expect(responses).toEqual([1]);
+    });
+
+    it('locks every question again', () => {
+      const unit = audioUnit();
+      show(unit, 0);
+      questionAudio('ended');
+      show(unit, 1);
+      answerButton(0).click();
+      expect(responses).toEqual([]);
+    });
+
+    it('unlocks the answers when the question audio cannot be played', () => {
+      show(audioUnit());
+      questionAudio('error');
+      answerButton(0).click();
+      expect(responses).toEqual([0]);
+    });
+
+    it('does not lock a question without audio', () => {
+      show(audioUnit({ questions: [question('Ohne Audio')] }));
+      answerButton(1).click();
+      expect(responses).toEqual([1]);
+    });
+
+    it('is not unlocked by audio answers', () => {
+      const answers = [
+        { text: 'bei', src: 'data:audio/wav;base64,CCCC' }, { text: 'ein', src: 'data:audio/wav;base64,DDDD' }
+      ];
+      show(audioUnit({
+        answerType: 'audio',
+        questions: [{ text: 'Was hörst du?', src: 'data:audio/wav;base64,AAAA', answers }]
+      }));
+      findAll('.answer audio')[0].dispatchEvent(new Event('ended'));
+      fixture.detectChanges();
+      findAll('.answer > button')[0].click();
+      expect(responses).toEqual([]);
+    });
+
+    it('locks keypad, number boxes, keyboard and the next button of a number entry', () => {
+      show(audioUnit({
+        answerType: 'number',
+        questions: [{ text: 'Hör zu.', src: 'data:audio/wav;base64,AAAA', answers: [], correctAnswer: 42 }]
+      }));
+      findAll('speedtest-player-keypad button')[4].click();
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: '2' }));
+      findAll('speedtest-player-number-boxes button')[1].click();
+      nextButton()!.click();
+      fixture.detectChanges();
+      expect(findAll('speedtest-player-number-boxes button').map(box => box.textContent.trim())).toEqual(['', '']);
+      expect(find('speedtest-player-number-boxes button')!.classList).toContain('active');
+      expect(responses).toEqual([]);
+    });
+
+    it('locks word-select and inline answers until their audio has ended', () => {
+      show(audioUnit({
+        questionType: 'word-select',
+        questions: [{ text: 'Der Hund', src: 'data:audio/wav;base64,AAAA', answers: [] }]
+      }));
+      findAll('.word')[1].click();
+      fixture.detectChanges();
+      expect(audioButtonIsWobbling()).toBe(true);
+      questionAudio('ended');
+      findAll('.word')[1].click();
+      nextButton()!.click();
+      expect(responses).toEqual([[1]]);
+      show(audioUnit({
+        questionType: 'inline-answers',
+        questions: [{
+          text: 'Der Ball liegt dem Tisch.', src: 'data:audio/wav;base64,AAAA', answerPosition: 3,
+          answers: [{ text: 'unter' }, { text: 'über' }]
+        }]
+      }));
+      findAll('.sentence > .buttons button')[1].click();
+      expect(responses).toEqual([[1]]);
+      questionAudio('ended');
+      findAll('.sentence > .buttons button')[1].click();
+      expect(responses).toEqual([[1], 1]);
+    });
   });
 
   it('starts every question with an empty selection', () => {

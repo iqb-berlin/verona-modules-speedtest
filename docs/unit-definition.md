@@ -21,6 +21,7 @@ Current version: **2.3.0** (`package.json` → `config.unit_definition_version`)
   "questionSpaceRatio": 50,             // optional, % of screen given to the question area
   "latex": true,                        // optional, see below
   "outroText": "…",                     // optional, shown after the last question
+  "audioRequired": true,                // optional, see below
   "questions": [ … ]
 }
 ```
@@ -88,6 +89,10 @@ The validator also contains the only code that knows about older forms of the fo
 ## LaTeX
 
 With `latex: true`, text between `$` signs in a question's `text` and in text answer labels is rendered as LaTeX, e.g. `Berechne $\frac{1}{2} + \frac{1}{4}$`. It does not apply to the instruction text, or to `word-select` and `inline-answers`, which split their text into words.
+
+## Required audio
+
+With `audioRequired: true`, a question with audio (`questionType` `audio`, `word-select` or `inline-answers`, with a `src`) locks all answer inputs until its audio has played to its end: answer buttons, words, keypad, number boxes, hardware keyboard and the next button. Locked inputs take no answer; tapping one wobbles the audio button instead. Where it can be shown without lowering the contrast of their content, they also look not pressable: answer buttons and the next button lose their shadow, keypad keys and number boxes get light borders. Images and words look as usual. Audio in the answers does not count and stays playable. If the audio cannot be played, the answers unlock, so a broken file does not block the question. Questions without audio, and the other question types, are not affected.
 
 ## CSV import
 
