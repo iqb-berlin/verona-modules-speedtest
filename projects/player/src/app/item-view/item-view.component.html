@@ -9,15 +9,15 @@
             @switch (unit.questionType) {
                 @case ('image') {
                     <speedtest-player-image-question class="fill"
-                                                     [src]="question.src ?? ''"
-                                                     [caption]="question.text ?? ''"
+                                                     [src]="item.src ?? ''"
+                                                     [caption]="item.text ?? ''"
                                                      [latex]="!!unit.latex">
                     </speedtest-player-image-question>
                 }
                 @case ('audio') {
                     <speedtest-player-audio-question class="fill"
-                                                     [src]="question.src ?? ''"
-                                                     [text]="question.text ?? ''"
+                                                     [src]="item.src ?? ''"
+                                                     [text]="item.text ?? ''"
                                                      [latex]="!!unit.latex"
                                                      [audioPlaying]="audioPlaying"
                                                      [wobble]="audioButtonWobbles"
@@ -26,8 +26,8 @@
                     </speedtest-player-audio-question>
                 }
                 @case ('word-select') {
-                    <speedtest-player-word-select [text]="question.text ?? ''"
-                                                  [src]="question.src ?? ''"
+                    <speedtest-player-word-select [text]="item.text ?? ''"
+                                                  [src]="item.src ?? ''"
                                                   [audioPlaying]="audioPlaying"
                                                   [wobble]="audioButtonWobbles"
                                                   [locked]="answersLocked"
@@ -38,10 +38,10 @@
                     </speedtest-player-word-select>
                 }
                 @case ('inline-answers') {
-                    <speedtest-player-inline-answers [text]="question.text ?? ''"
-                                                     [answerPosition]="question.answerPosition"
-                                                     [answers]="question.answers"
-                                                     [src]="question.src ?? ''"
+                    <speedtest-player-inline-answers [text]="item.text ?? ''"
+                                                     [answerPosition]="item.answerPosition"
+                                                     [answers]="item.answers"
+                                                     [src]="item.src ?? ''"
                                                      [buttonColor]="unit.buttonColor"
                                                      [audioPlaying]="audioPlaying"
                                                      [wobble]="audioButtonWobbles"
@@ -53,7 +53,7 @@
                     </speedtest-player-inline-answers>
                 }
                 @default {
-                    <speedtest-player-text-question [text]="question.text ?? ''" [latex]="!!unit.latex">
+                    <speedtest-player-text-question [text]="item.text ?? ''" [latex]="!!unit.latex">
                     </speedtest-player-text-question>
                 }
             }
@@ -63,7 +63,7 @@
                 @switch (unit.answerType) {
                     @case ('image') {
                         <speedtest-player-image-answers class="fill"
-                                                        [answers]="question.answers"
+                                                        [answers]="item.answers"
                                                         [layout]="unit.layout"
                                                         [selectedAnswers]="selectedAnswers"
                                                         [locked]="answersLocked"
@@ -86,7 +86,7 @@
                         </div>
                     }
                     @default {
-                        <speedtest-player-text-answers [answers]="question.answers"
+                        <speedtest-player-text-answers [answers]="item.answers"
                                                        [layout]="unit.layout"
                                                        [buttonColor]="unit.buttonColor"
                                                        [latex]="!!unit.latex"

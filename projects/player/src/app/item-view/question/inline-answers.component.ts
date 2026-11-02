@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
-import { AudioButtonComponent } from './audio-button.component';
+import { AudioButtonComponent } from '../audio-button.component';
 
 /* A sentence with its gap filled by a stack of answer buttons, with an optional audio button in front. The
    gap sits before the word at answerPosition (counted from 0); without one, the buttons follow the text.

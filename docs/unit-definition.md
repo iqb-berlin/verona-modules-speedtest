@@ -16,19 +16,21 @@ Current version: **2.3.0** (`package.json` → `config.unit_definition_version`)
   "questionType": "text",
   "answerType": "text",
   "multipleSelection": false,           // optional
-  "instructionText": "…",               // optional, shown above every question
+  "instructionText": "…",               // optional, shown above every item
   "buttonColor": "#aabbcc",             // optional, answer button background
   "questionSpaceRatio": 50,             // optional, % of screen given to the question area
   "latex": true,                        // optional, see below
-  "outroText": "…",                     // optional, shown after the last question
+  "outroText": "…",                     // optional, shown after the last item
   "audioRequired": true,                // optional, see below
-  "questions": [ … ]
+  "questions": [ … ]                    // the items
 }
 ```
 
-`questionType`, `answerType` and all styling properties are **global** — they apply to every question in the unit. This is the central design decision of the module: all tasks in a unit have the same structure.
+`questionType`, `answerType` and all styling properties are **global** — they apply to every item in the unit. This is the central design decision of the module: all tasks in a unit have the same structure.
 
-### Question
+### Item
+
+An item is one task: a question and its answers. "Question" alone means only the question part, as in `questionType` and `questionSpaceRatio`. The array of items is still called `questions`, since renaming it would break stored units.
 
 ```jsonc
 {

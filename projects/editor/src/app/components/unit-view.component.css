@@ -61,7 +61,7 @@ mat-panel-title button {
   flex-direction: row;
 }
 
-.question-delete-button {
+.item-delete-button {
   box-shadow: none;
   color: #f44336;
 }

@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Question, Unit } from 'common/interfaces/unit';
-import { QuestionViewComponent } from './question-view.component';
+import { Item, Unit } from 'common/interfaces/unit';
+import { ItemViewComponent } from './item-view.component';
 
-function question(text: string): Question {
+function item(text: string): Item {
   return { text, answers: [{ text: 'a' }, { text: 'b' }, { text: 'c' }] };
 }
 
@@ -14,17 +14,17 @@ function textUnit(multipleSelection: boolean): Unit {
     questionType: 'text',
     answerType: 'text',
     multipleSelection,
-    questions: [question('Frage 1'), question('Frage 2')]
+    questions: [item('Frage 1'), item('Frage 2')]
   };
 }
 
-describe('QuestionViewComponent', () => {
-  let fixture: ComponentFixture<QuestionViewComponent>;
+describe('ItemViewComponent', () => {
+  let fixture: ComponentFixture<ItemViewComponent>;
   let responses: (number | number[])[];
 
-  function show(unit: Unit, questionIndex = 0): void {
+  function show(unit: Unit, itemIndex = 0): void {
     fixture.componentRef.setInput('unit', unit);
-    fixture.componentRef.setInput('question', unit.questions[questionIndex]);
+    fixture.componentRef.setInput('item', unit.questions[itemIndex]);
     fixture.detectChanges();
   }
 
@@ -45,7 +45,7 @@ describe('QuestionViewComponent', () => {
   }
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QuestionViewComponent);
+    fixture = TestBed.createComponent(ItemViewComponent);
     responses = [];
     fixture.componentInstance.responseGiven.subscribe(answer => responses.push(answer));
   });
@@ -80,7 +80,7 @@ describe('QuestionViewComponent', () => {
     const unit: Unit = {
       ...textUnit(false),
       questionType: 'image',
-      questions: [{ ...question('Was siehst du?'), src: 'data:image/png;base64,AAAA' }]
+      questions: [{ ...item('Was siehst du?'), src: 'data:image/png;base64,AAAA' }]
     };
     show(unit);
     expect(find('speedtest-player-image-question img')!.getAttribute('src')).toBe('data:image/png;base64,AAAA');
@@ -88,7 +88,7 @@ describe('QuestionViewComponent', () => {
   });
 
   it('renders formulas in the question text of a LaTeX unit', () => {
-    const unit: Unit = { ...textUnit(false), latex: true, questions: [question('Berechne $\\frac{1}{2}$.')] };
+    const unit: Unit = { ...textUnit(false), latex: true, questions: [item('Berechne $\\frac{1}{2}$.')] };
     show(unit);
     expect(find('speedtest-player-text-question .katex')).not.toBeNull();
     expect(find('speedtest-player-text-question p')!.textContent).toContain('Berechne');
@@ -99,7 +99,7 @@ describe('QuestionViewComponent', () => {
       ...textUnit(false),
       latex: true,
       questionType: 'image',
-      questions: [{ ...question('$x^2$'), src: 'data:image/png;base64,AAAA' }]
+      questions: [{ ...item('$x^2$'), src: 'data:image/png;base64,AAAA' }]
     };
     show(imageUnit);
     expect(find('figcaption .katex')).not.toBeNull();
@@ -109,7 +109,7 @@ describe('QuestionViewComponent', () => {
   });
 
   it('shows $ signs and markup in the question text as they are without the LaTeX flag', () => {
-    show({ ...textUnit(false), questions: [question('Kostet $5 <b>oder</b> $x$?')] });
+    show({ ...textUnit(false), questions: [item('Kostet $5 <b>oder</b> $x$?')] });
     expect(find('speedtest-player-text-question .katex')).toBeNull();
     expect(find('speedtest-player-text-question b')).toBeNull();
     expect(find('speedtest-player-text-question p')!.textContent).toBe('Kostet $5 <b>oder</b> $x$?');
@@ -146,13 +146,13 @@ describe('QuestionViewComponent', () => {
     expect(responses).toEqual([[1]]);
   });
 
-  it('disables the audio button while the audio plays, and enables it for the next question', () => {
+  it('disables the audio button while the audio plays, and enables it for the next item', () => {
     const unit: Unit = {
       ...textUnit(false),
       questionType: 'audio',
       questions: [
-        { ...question('Hör zu.'), src: 'data:audio/wav;base64,AAAA' },
-        { ...question('Hör noch mal zu.'), src: 'data:audio/wav;base64,BBBB' }
+        { ...item('Hör zu.'), src: 'data:audio/wav;base64,AAAA' },
+        { ...item('Hör noch mal zu.'), src: 'data:audio/wav;base64,BBBB' }
       ]
     };
     show(unit, 0);
@@ -247,8 +247,8 @@ describe('QuestionViewComponent', () => {
         questionType: 'audio',
         audioRequired: true,
         questions: [
-          { ...question('Hör zu.'), src: 'data:audio/wav;base64,AAAA' },
-          { ...question('Hör noch mal zu.'), src: 'data:audio/wav;base64,BBBB' }
+          { ...item('Hör zu.'), src: 'data:audio/wav;base64,AAAA' },
+          { ...item('Hör noch mal zu.'), src: 'data:audio/wav;base64,BBBB' }
         ],
         ...overrides
       };
@@ -282,7 +282,7 @@ describe('QuestionViewComponent', () => {
       expect(responses).toEqual([1]);
     });
 
-    it('locks every question again', () => {
+    it('locks every item again', () => {
       const unit = audioUnit();
       show(unit, 0);
       questionAudio('ended');
@@ -298,8 +298,8 @@ describe('QuestionViewComponent', () => {
       expect(responses).toEqual([0]);
     });
 
-    it('does not lock a question without audio', () => {
-      show(audioUnit({ questions: [question('Ohne Audio')] }));
+    it('does not lock an item without audio', () => {
+      show(audioUnit({ questions: [item('Ohne Audio')] }));
       answerButton(1).click();
       expect(responses).toEqual([1]);
     });
@@ -360,7 +360,7 @@ describe('QuestionViewComponent', () => {
     });
   });
 
-  it('starts every question with an empty selection', () => {
+  it('starts every item with an empty selection', () => {
     const unit = textUnit(true);
     show(unit, 0);
     answerButton(0).click();

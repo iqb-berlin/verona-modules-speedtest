@@ -25,7 +25,7 @@ describe('UnitService', () => {
   });
 
   describe('loadUnitFromCSV', () => {
-    it('replaces the questions with the imported ones', () => {
+    it('replaces the items with the imported ones', () => {
       service.loadUnitFromCSV(csv);
 
       expect(service.unit.questions.length).toBe(2);

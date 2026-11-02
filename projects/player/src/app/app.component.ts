@@ -6,12 +6,12 @@ import { FileService } from 'common/services/file.service';
 import { Unit } from 'common/interfaces/unit';
 import { defaultOutroText } from 'common/constants';
 import { UnitParseError, UNIT_PARSE_ERROR_MESSAGES, parseUnitDefinition } from 'common/services/unit-validation';
-import { QuestionViewComponent } from './question-view/question-view.component';
+import { ItemViewComponent } from './item-view/item-view.component';
 import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 
 @Component({
   selector: 'speedtest-player',
-  imports: [QuestionViewComponent, MatButton, MatIcon],
+  imports: [ItemViewComponent, MatButton, MatIcon],
   template: `
     @if (isStandalone) {
       <button mat-raised-button class="load-button" (click)="upload.click()">
@@ -24,10 +24,10 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
            (change)="loadUnitFromFile($event.target)">
 
     @if (unit && unit.questions.length > 0 && !showOutroPage) {
-      <speedtest-player-question-view [question]="unit.questions[activeQuestionIndex]"
-                                      [unit]="unit"
-                                      (responseGiven)="onResponse($event)">
-      </speedtest-player-question-view>
+      <speedtest-player-item-view [item]="unit.questions[activeItemIndex]"
+                                  [unit]="unit"
+                                  (responseGiven)="onResponse($event)">
+      </speedtest-player-item-view>
     }
 
     @if (showOutroPage) {
@@ -67,8 +67,8 @@ import { StartCommand, VeronaAPIService, Response } from './verona-api.service';
 export class AppComponent implements OnInit {
   isStandalone = window === window.parent;
   unit: Unit | undefined;
-  activeQuestionIndex: number = 0;
-  activeQuestionStartTime: number = Date.now();
+  activeItemIndex: number = 0;
+  activeItemStartTime: number = Date.now();
   showOutroPage: boolean = false;
   loadErrorMessage: string | undefined;
   sumCorrect: number = 0;
@@ -98,12 +98,12 @@ export class AppComponent implements OnInit {
           if (message.unitState?.dataParts !== undefined && Object.keys(message.unitState?.dataParts).length > 0) {
             const { dataParts } = message.unitState;
             const sums = JSON.parse(dataParts['sums']) as Response[];
-            // Add 1 because the activeQuestionIndex has already been seen and answered
+            // Add 1 because the stored index has already been seen and answered
             const lastAnswered = JSON.parse(dataParts['activeQuestionIndex']) as Response[];
-            this.activeQuestionIndex = Number(lastAnswered[0].value) + 1;
+            this.activeItemIndex = Number(lastAnswered[0].value) + 1;
             this.sumCorrect = Number(sums[0].value);
             this.sumWrong = Number(sums[1].value);
-            if (this.activeQuestionIndex >= this.unit.questions.length) this.showOutroPage = true;
+            if (this.activeItemIndex >= this.unit.questions.length) this.showOutroPage = true;
           }
           VeronaAPIService.sendState({});
         });
@@ -131,8 +131,8 @@ export class AppComponent implements OnInit {
   private resetUnitState(): void {
     this.unit = undefined;
     this.loadErrorMessage = undefined;
-    this.activeQuestionIndex = 0;
-    this.activeQuestionStartTime = Date.now();
+    this.activeItemIndex = 0;
+    this.activeItemStartTime = Date.now();
     this.showOutroPage = false;
     this.sumCorrect = 0;
     this.sumWrong = 0;
@@ -140,10 +140,10 @@ export class AppComponent implements OnInit {
 
   onResponse(answer: number | number[]) {
     const isCorrect = AppComponent.getIsCorrect(
-      answer, this.unit?.questions[this.activeQuestionIndex].correctAnswer);
+      answer, this.unit?.questions[this.activeItemIndex].correctAnswer);
     if (isCorrect !== undefined) this.updateResultSums(isCorrect);
     VeronaAPIService.sendState(this.createResponseData(answer, isCorrect));
-    this.gotoNextQuestion();
+    this.gotoNextItem();
   }
 
   private static getIsCorrect(answer: number | number[],
@@ -160,6 +160,7 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // The keys still say "question" for the item: results and stored states are read by these names.
   private createResponseData(answerValue: number | number[], isCorrect?: boolean): Record<string, Response[]> {
     let code;
     if (isCorrect === undefined) {
@@ -169,18 +170,18 @@ export class AppComponent implements OnInit {
     }
 
     return {
-      [`question_${this.activeQuestionIndex}`]: [{
+      [`question_${this.activeItemIndex}`]: [{
         id: 'value',
         status: 'CODING_COMPLETE',
         value: answerValue,
-        subform: String(this.activeQuestionIndex),
+        subform: String(this.activeItemIndex),
         code: code,
         score: code
       }, {
         id: 'time',
         status: 'VALUE_CHANGED',
-        value: Date.now() - this.activeQuestionStartTime,
-        subform: String(this.activeQuestionIndex)
+        value: Date.now() - this.activeItemStartTime,
+        subform: String(this.activeItemIndex)
       }],
       sums: [
         {
@@ -197,7 +198,7 @@ export class AppComponent implements OnInit {
       activeQuestionIndex: [{
         id: 'activeQuestionIndex',
         status: 'VALUE_CHANGED',
-        value: this.activeQuestionIndex
+        value: this.activeItemIndex
       }]
     };
   }
@@ -207,11 +208,11 @@ export class AppComponent implements OnInit {
     return this.unit?.outroText || defaultOutroText;
   }
 
-  private gotoNextQuestion(): void {
+  private gotoNextItem(): void {
     if (!this.unit) throw Error();
-    if (this.unit.questions.length > this.activeQuestionIndex + 1) {
-      this.activeQuestionIndex += 1;
-      this.activeQuestionStartTime = Date.now();
+    if (this.unit.questions.length > this.activeItemIndex + 1) {
+      this.activeItemIndex += 1;
+      this.activeItemStartTime = Date.now();
     } else {
       this.showOutroPage = true;
       VeronaAPIService.sendNavRequest();

@@ -1,7 +1,7 @@
 import type { Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
-import { Question } from 'common/interfaces/unit';
+import { Item } from 'common/interfaces/unit';
 import { MessageService } from '../services/message.service';
 import { UnitService } from '../services/unit.service';
 import { VeronaAPIService } from '../services/verona-api.service';
@@ -12,17 +12,17 @@ describe('UnitViewComponent', () => {
   let unitService: UnitService;
   let sendChange: Mock;
 
-  function question(text: string): Question {
+  function item(text: string): Item {
     return { text: text, answers: [{ text: 'richtig' }, { text: 'falsch' }], correctAnswer: 0 };
   }
 
-  function questionOrder(): (string | undefined)[] {
-    return component.unit.questions.map(singleQuestion => singleQuestion.text);
+  function itemOrder(): (string | undefined)[] {
+    return component.unit.questions.map(singleItem => singleItem.text);
   }
 
   function setAllSolutions(correctAnswer: number | number[] | undefined): void {
     component.unit.questions = component.unit.questions
-      .map(singleQuestion => ({ ...singleQuestion, correctAnswer: correctAnswer }));
+      .map(singleItem => ({ ...singleItem, correctAnswer: correctAnswer }));
   }
 
   beforeEach(() => {
@@ -33,35 +33,35 @@ describe('UnitViewComponent', () => {
     // These tests only exercise logic, so the component is built without compiling its template.
     component = new UnitViewComponent(unitService, TestBed.inject(MessageService));
     component.unit = unitService.unit;
-    component.unit.questions = [question('A'), question('B'), question('C')];
+    component.unit.questions = [item('A'), item('B'), item('C')];
     sendChange = vi.spyOn(VeronaAPIService, 'sendChange').mockReturnValue(undefined);
   });
 
-  describe('moveQuestion', () => {
-    it('moves a question towards the front', () => {
-      component.moveQuestion(1, 'up');
+  describe('moveItem', () => {
+    it('moves an item towards the front', () => {
+      component.moveItem(1, 'up');
 
-      expect(questionOrder()).toEqual(['B', 'A', 'C']);
+      expect(itemOrder()).toEqual(['B', 'A', 'C']);
     });
 
-    it('moves a question towards the back', () => {
-      component.moveQuestion(1, 'down');
+    it('moves an item towards the back', () => {
+      component.moveItem(1, 'down');
 
-      expect(questionOrder()).toEqual(['A', 'C', 'B']);
+      expect(itemOrder()).toEqual(['A', 'C', 'B']);
     });
 
     it('sends the new order to the host', () => {
-      component.moveQuestion(1, 'up');
+      component.moveItem(1, 'up');
 
       expect(sendChange).toHaveBeenCalled();
     });
 
-    it('updates the reported positions of questions without a solution', () => {
+    it('updates the reported positions of items without a solution', () => {
       component.unit.questions[0].correctAnswer = undefined;
       unitService.calculateMissingCorrectAnswerPositions();
       expect(unitService.missingCorrectAnswerPositions).toEqual([1]);
 
-      component.moveQuestion(0, 'down');
+      component.moveItem(0, 'down');
 
       expect(unitService.missingCorrectAnswerPositions).toEqual([2]);
     });
@@ -96,7 +96,7 @@ describe('UnitViewComponent', () => {
       expect(component.unit.questions[0].correctAnswer).toBeUndefined();
     });
 
-    it('keeps questions without a solution when switching off', () => {
+    it('keeps items without a solution when switching off', () => {
       component.unit.multipleSelection = true;
       setAllSolutions(undefined);
 

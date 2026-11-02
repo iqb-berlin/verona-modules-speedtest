@@ -61,7 +61,7 @@ import { AnswerPanelComponent } from './answer-panel.component';
 })
 export class UnitViewComponent implements OnChanges {
   @Input() unit!: Unit;
-  latestQuestionIndex: number | undefined;
+  latestItemIndex: number | undefined;
   activeRatioDefault = 0;
   // Shown as placeholder; the player uses it while the unit sets no outro text of its own.
   readonly defaultOutroText = defaultOutroText;
@@ -72,27 +72,27 @@ export class UnitViewComponent implements OnChanges {
     this.updateRatioDefault();
   }
 
-  addQuestion() {
+  addItem() {
     this.unit.questions.push({
       text: `Frage ${this.unit.questions.length + 1}`,
       answers: [{ text: 'richtig' }, { text: 'falsch' }],
       correctAnswer: this.unit.multipleSelection ? [] : undefined
     });
-    this.latestQuestionIndex = this.unit.questions.length - 1;
+    this.latestItemIndex = this.unit.questions.length - 1;
     this.unitService.updateUnitDef();
     this.unitService.calculateMissingCorrectAnswerPositions();
   }
 
-  deleteQuestion(index: number) {
+  deleteItem(index: number) {
     this.unit.questions.splice(index, 1);
     this.unitService.updateUnitDef();
     this.unitService.calculateMissingCorrectAnswerPositions();
   }
 
-  moveQuestion(questionIndex: number, direction: 'up' | 'down'): void {
-    const question = this.unit.questions.splice(questionIndex, 1)[0];
+  moveItem(itemIndex: number, direction: 'up' | 'down'): void {
+    const item = this.unit.questions.splice(itemIndex, 1)[0];
     const newIndex = direction === 'up' ? -1 : 1;
-    this.unit.questions.splice(questionIndex + newIndex, 0, question);
+    this.unit.questions.splice(itemIndex + newIndex, 0, item);
     this.unitService.updateUnitDef();
     this.unitService.calculateMissingCorrectAnswerPositions();
   }
@@ -108,8 +108,8 @@ export class UnitViewComponent implements OnChanges {
     }
   }
 
-  async loadQuestionSrc(questionIndex: number, eventTarget: EventTarget | null): Promise<void> {
-    this.unit.questions[questionIndex].src =
+  async loadQuestionSrc(itemIndex: number, eventTarget: EventTarget | null): Promise<void> {
+    this.unit.questions[itemIndex].src =
       await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File, true);
     this.unitService.updateUnitDef();
   }
@@ -120,12 +120,12 @@ export class UnitViewComponent implements OnChanges {
   }
 
   setQuestionTextForAll(text?: string) {
-    this.unit.questions = this.unit.questions.map(question => ({ ...question, text: text }));
+    this.unit.questions = this.unit.questions.map(item => ({ ...item, text: text }));
     this.unitService.updateUnitDef();
   }
 
   setAnswersForAll(answers: Answer[]) {
-    this.unit.questions = this.unit.questions.map(question => ({ ...question, answers: [...answers] }));
+    this.unit.questions = this.unit.questions.map(item => ({ ...item, answers: [...answers] }));
     this.unitService.updateUnitDef();
   }
 
@@ -150,12 +150,12 @@ export class UnitViewComponent implements OnChanges {
 
   onToggleMultiselect() {
     this.unit.multipleSelection = !this.unit.multipleSelection;
-    this.unit.questions.forEach((question) => {
-      const { correctAnswer } = question;
+    this.unit.questions.forEach((item) => {
+      const { correctAnswer } = item;
       if (this.unit.multipleSelection) {
-        question.correctAnswer = typeof correctAnswer === 'number' ? [correctAnswer] : [];
+        item.correctAnswer = typeof correctAnswer === 'number' ? [correctAnswer] : [];
       } else {
-        question.correctAnswer = Array.isArray(correctAnswer) && correctAnswer.length === 1 ?
+        item.correctAnswer = Array.isArray(correctAnswer) && correctAnswer.length === 1 ?
           correctAnswer[0] :
           undefined;
       }

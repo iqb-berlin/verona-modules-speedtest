@@ -36,16 +36,16 @@ import { LatexPipe } from 'common/latex.pipe';
             <h4 [style.grid-row-start]="1" [style.grid-column-start]="2">Antwort</h4>
             @for (answer of answers; let answerIndex = $index; track answer) {
                 @if (!unitService.unit.multipleSelection) {
-                    <mat-radio-button [name]="'radio_' + questionIndex + answerIndex"
+                    <mat-radio-button [name]="'radio_' + itemIndex + answerIndex"
                                       [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
-                                      [checked]="unitService.unit.questions[questionIndex]
+                                      [checked]="unitService.unit.questions[itemIndex]
                                                    .correctAnswer == answerIndex"
                                       (change)="onSelectCorrectAnswer(answerIndex)">
                     </mat-radio-button>
                 } @else {
                     <mat-checkbox [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="1"
-                                  [checked]="isArray(unitService.unit.questions[questionIndex].correctAnswer) &&
-                                                 $any(unitService.unit.questions[questionIndex].correctAnswer)
+                                  [checked]="isArray(unitService.unit.questions[itemIndex].correctAnswer) &&
+                                                 $any(unitService.unit.questions[itemIndex].correctAnswer)
                                                    .includes(answerIndex)"
                                   (change)="onSelectCorrectAnswer(answerIndex)">
                     </mat-checkbox>
@@ -54,7 +54,7 @@ import { LatexPipe } from 'common/latex.pipe';
                     <mat-form-field>
                         <mat-label>Frage</mat-label>
                         <input matInput [value]="answer.text"
-                               (change)="changeAnswerText(questionIndex, answerIndex, $event.target)">
+                               (change)="changeAnswerText(itemIndex, answerIndex, $event.target)">
                     </mat-form-field>
                     @if (unitService.unit.answerType !== 'image' && unitService.hasFormula(answer.text)) {
                         <p class="latex-preview" [innerHTML]="answer.text | latex: true"></p>
@@ -72,10 +72,10 @@ import { LatexPipe } from 'common/latex.pipe';
                             <mat-icon>image</mat-icon>
                         </button>
                         <input type="file" hidden accept="image/*" #imageUpload
-                               (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
+                               (change)="loadAnswerSrc(itemIndex, answerIndex, $event.target)">
                         <button mat-icon-button [matTooltip]="'Bild entfernen'"
                                 [disabled]="!answer.src"
-                                (click)="removeAnswerSrc(questionIndex, answerIndex);">
+                                (click)="removeAnswerSrc(itemIndex, answerIndex);">
                             <mat-icon>backspace</mat-icon>
                         </button>
                     </div>
@@ -91,10 +91,10 @@ import { LatexPipe } from 'common/latex.pipe';
                             <mat-icon>volume_up</mat-icon>
                         </button>
                         <input type="file" hidden accept="audio/*" #audioUpload
-                               (change)="loadAnswerSrc(questionIndex, answerIndex, $event.target)">
+                               (change)="loadAnswerSrc(itemIndex, answerIndex, $event.target)">
                         <button mat-icon-button [matTooltip]="'Audio entfernen'"
                                 [disabled]="!answer.src"
-                                (click)="removeAnswerSrc(questionIndex, answerIndex);">
+                                (click)="removeAnswerSrc(itemIndex, answerIndex);">
                             <mat-icon>backspace</mat-icon>
                         </button>
                     </div>
@@ -108,7 +108,7 @@ import { LatexPipe } from 'common/latex.pipe';
                 }
                 <button mat-mini-fab color="warn"
                         [style.grid-row-start]="answerIndex + 2" [style.grid-column-start]="4"
-                        [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(questionIndex, answerIndex)">
+                        [matTooltip]="'Antwort löschen'" (click)="deleteAnswer(itemIndex, answerIndex)">
                     <mat-icon>delete</mat-icon>
                 </button>
             }
@@ -124,7 +124,7 @@ import { LatexPipe } from 'common/latex.pipe';
                 Erwartete Antwortindizes, getrennt mit Komma
             </mat-label>
             <input matInput type="text" required
-                   [ngModel]="unitService.unit.questions[questionIndex].correctAnswer"
+                   [ngModel]="unitService.unit.questions[itemIndex].correctAnswer"
                    (change)="setCorrectAnswerWordSelect($any($event).target.value)">
         </mat-form-field>
     } @else {
@@ -133,7 +133,7 @@ import { LatexPipe } from 'common/latex.pipe';
                 Erwartete Antwort - Hierüber wird ebenfalls die Anzahl der dargestellten Felder gesteuert.
             </mat-label>
             <input matInput type="number" required
-                   [(ngModel)]="unitService.unit.questions[questionIndex].correctAnswer"
+                   [(ngModel)]="unitService.unit.questions[itemIndex].correctAnswer"
                    (ngModelChange)="unitService.calculateMissingCorrectAnswerPositions(); unitService.updateUnitDef()">
         </mat-form-field>
     }
@@ -186,7 +186,7 @@ import { LatexPipe } from 'common/latex.pipe';
 })
 export class AnswerPanelComponent {
   @Input() answers!: Answer[];
-  @Input() questionIndex!: number;
+  @Input() itemIndex!: number;
 
   constructor(public unitService: UnitService) { }
 
@@ -202,32 +202,32 @@ export class AnswerPanelComponent {
       default:
         answerText = `Antworttext ${this.answers.length + 1}`;
     }
-    this.unitService.addAnswer(this.questionIndex, answerText);
+    this.unitService.addAnswer(this.itemIndex, answerText);
   }
 
-  deleteAnswer(questionIndex: number, answerIndex: number) {
-    this.unitService.deleteAnswer(questionIndex, answerIndex);
+  deleteAnswer(itemIndex: number, answerIndex: number) {
+    this.unitService.deleteAnswer(itemIndex, answerIndex);
   }
 
-  changeAnswerText(questionIndex: number, answerIndex: number, eventTarget: EventTarget | null) {
-    this.unitService.unit.questions[questionIndex].answers[answerIndex].text = (eventTarget as HTMLInputElement).value;
+  changeAnswerText(itemIndex: number, answerIndex: number, eventTarget: EventTarget | null) {
+    this.unitService.unit.questions[itemIndex].answers[answerIndex].text = (eventTarget as HTMLInputElement).value;
     this.unitService.updateUnitDef();
   }
 
-  async loadAnswerSrc(questionIndex: number, answerIndex: number, eventTarget: EventTarget | null): Promise<void> {
-    this.unitService.unit.questions[questionIndex].answers[answerIndex].src =
+  async loadAnswerSrc(itemIndex: number, answerIndex: number, eventTarget: EventTarget | null): Promise<void> {
+    this.unitService.unit.questions[itemIndex].answers[answerIndex].src =
       await FileService.readFileAsText((eventTarget as HTMLInputElement).files?.[0] as File, true);
     this.unitService.updateUnitDef();
   }
 
-  removeAnswerSrc(questionIndex: number, answerIndex: number) {
-    this.unitService.unit.questions[questionIndex].answers[answerIndex].src = '';
+  removeAnswerSrc(itemIndex: number, answerIndex: number) {
+    this.unitService.unit.questions[itemIndex].answers[answerIndex].src = '';
     this.unitService.updateUnitDef();
   }
 
   onSelectCorrectAnswer(answerIndex: number) {
     if (this.unitService.unit.multipleSelection) {
-      const answers = this.unitService.unit.questions[this.questionIndex].correctAnswer as unknown[];
+      const answers = this.unitService.unit.questions[this.itemIndex].correctAnswer as unknown[];
       if (answers.includes(answerIndex)) {
         answers.splice(answers.indexOf(answerIndex), 1);
       } else {
@@ -235,14 +235,14 @@ export class AnswerPanelComponent {
       }
       answers.sort();
     } else {
-      this.unitService.unit.questions[this.questionIndex].correctAnswer = answerIndex;
+      this.unitService.unit.questions[this.itemIndex].correctAnswer = answerIndex;
     }
     this.unitService.calculateMissingCorrectAnswerPositions();
     this.unitService.updateUnitDef();
   }
 
   setCorrectAnswerWordSelect(value: string) {
-    this.unitService.unit.questions[this.questionIndex].correctAnswer =
+    this.unitService.unit.questions[this.itemIndex].correctAnswer =
       value.split(',').map(val => parseInt(val, 10));
     this.unitService.calculateMissingCorrectAnswerPositions();
     this.unitService.updateUnitDef();

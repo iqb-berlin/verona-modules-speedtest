@@ -1,11 +1,11 @@
 import {
-  Answer, Question, QuestionType
+  Answer, Item, QuestionType
 } from 'common/interfaces/unit';
 
 /* Cells are separated by semicolons, except for \; which is LaTeX's thick space inside a formula. */
 const CELL_SEPARATOR = /(?<!\\);/;
 
-export function parseQuestions(csv: string, questionType: QuestionType, multiSelect: boolean = false): Question[] {
+export function parseItems(csv: string, questionType: QuestionType, multiSelect: boolean = false): Item[] {
   const cleanedCsv = csv.replace(/\r/g, '');
   if (cleanedCsv.includes('\uFFFD')) {
     throw new Error('Datei ist nicht UTF-8 kodiert.');
@@ -23,21 +23,21 @@ export function parseQuestions(csv: string, questionType: QuestionType, multiSel
         throw Error(`Zeilenlänge passt nicht zur Kopfzeile!
                      Länge Kopfzeile: ${headerItems.length}; Zeilenlänge: ${cellValues.length}`);
       }
-      const question: Question = {
+      const item: Item = {
         text: cellValues[headerItems.indexOf('frage')].trim(),
         answers: generateAnswers(headerItems, cellValues)
       };
       if (headerItems.includes('loesung')) {
         if (multiSelect || questionType === 'word-select') {
-          question.correctAnswer = cellValues[headerItems.indexOf('loesung')].split(',').map(val => parseInt(val, 10));
+          item.correctAnswer = cellValues[headerItems.indexOf('loesung')].split(',').map(val => parseInt(val, 10));
         } else {
-          question.correctAnswer = parseInt(cellValues[headerItems.indexOf('loesung')].trim(), 10);
+          item.correctAnswer = parseInt(cellValues[headerItems.indexOf('loesung')].trim(), 10);
         }
       }
       if (headerItems.includes('antwortpositionsindex') && questionType === 'inline-answers') {
-        question.answerPosition = parseInt(cellValues[headerItems.indexOf('antwortpositionsindex')], 10);
+        item.answerPosition = parseInt(cellValues[headerItems.indexOf('antwortpositionsindex')], 10);
       }
-      return question;
+      return item;
     });
 }
 

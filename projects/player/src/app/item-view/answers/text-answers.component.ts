@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
 import { LatexPipe } from 'common/latex.pipe';
-import { SplitWordPipe } from '../split-word.pipe';
-import { AudioButtonComponent } from './audio-button.component';
+import { SplitWordPipe } from './split-word.pipe';
+import { AudioButtonComponent } from '../audio-button.component';
 
 /* Answer buttons that are all as wide as the widest one (#26): equal 1fr grid tracks, sized by the
    widest label. If that does not fit, the tracks shrink equally and the labels wrap. For audio answers,

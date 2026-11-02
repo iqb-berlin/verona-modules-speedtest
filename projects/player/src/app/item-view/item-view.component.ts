@@ -2,37 +2,38 @@ import {
   Component, EventEmitter, HostListener, Input, OnChanges, SimpleChanges, Output,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { Question, Unit } from 'common/interfaces/unit';
+import { Item, Unit } from 'common/interfaces/unit';
 import { defaultQuestionSpaceRatio } from 'common/constants';
-import { TextQuestionComponent } from './text-question.component';
-import { ImageQuestionComponent } from './image-question.component';
-import { AudioQuestionComponent } from './audio-question.component';
-import { WordSelectComponent } from './word-select.component';
-import { InlineAnswersComponent } from './inline-answers.component';
-import { TextAnswersComponent } from './text-answers.component';
-import { ImageAnswersComponent } from './image-answers.component';
-import { NumberBoxesComponent } from './number-boxes.component';
-import { KeypadComponent } from './keypad.component';
+import { TextQuestionComponent } from './question/text-question.component';
+import { ImageQuestionComponent } from './question/image-question.component';
+import { AudioQuestionComponent } from './question/audio-question.component';
+import { WordSelectComponent } from './question/word-select.component';
+import { InlineAnswersComponent } from './question/inline-answers.component';
+import { TextAnswersComponent } from './answers/text-answers.component';
+import { ImageAnswersComponent } from './answers/image-answers.component';
+import { NumberBoxesComponent } from './answers/number-entry/number-boxes.component';
+import { KeypadComponent } from './answers/number-entry/keypad.component';
+import { NumberEntry } from './answers/number-entry/number-entry';
 import { NextButtonComponent } from './next-button.component';
-import { NumberEntry } from './number-entry';
 
-/* Shows one question: instruction, then a stage with question and answer area and, if needed, keypad and next button.
+/* Shows one item, that is a question with its answers: instruction, then a stage with question and answer
+   area and, if needed, keypad and next button.
    Owns the selection and decides when an answer is submitted. Also owns whether an audio is playing:
    only one may play at a time, so every audio button is disabled meanwhile. With audioRequired, a question
    with audio locks every answer input until that audio has played to its end (#36); a locked input
    looks flat where it can without losing contrast, takes no answer, and wobbles the audio button instead. */
 @Component({
-  selector: 'speedtest-player-question-view',
+  selector: 'speedtest-player-item-view',
   imports: [
     TextQuestionComponent, ImageQuestionComponent, AudioQuestionComponent, WordSelectComponent, InlineAnswersComponent,
     TextAnswersComponent, ImageAnswersComponent, NumberBoxesComponent, KeypadComponent, NextButtonComponent
   ],
-  templateUrl: 'question-view.component.html',
+  templateUrl: 'item-view.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['question-view.component.scss']
+  styleUrls: ['item-view.component.scss']
 })
-export class QuestionViewComponent implements OnChanges {
-  @Input() question!: Question;
+export class ItemViewComponent implements OnChanges {
+  @Input() item!: Item;
   @Input() unit!: Unit;
   @Output() responseGiven = new EventEmitter<number | number[]>();
 
@@ -61,15 +62,15 @@ export class QuestionViewComponent implements OnChanges {
       // Beside the question, the keypad does not fit into the answer area; it spans the stage below both.
       this.keypadBelowStage = this.unit.answerType === 'number' && this.unit.layout === 'row';
       [this.stageRows, this.stageColumns] =
-        QuestionViewComponent.stageTracksFor(this.unit, this.answersInQuestion, this.keypadBelowStage,
-                                             this.needsNextButton);
+        ItemViewComponent.stageTracksFor(this.unit, this.answersInQuestion, this.keypadBelowStage,
+                                         this.needsNextButton);
     }
-    if (changes['question']) {
+    if (changes['item']) {
       this.selectedAnswers = [];
-      this.numberEntry = NumberEntry.forAnswer(this.question.correctAnswer);
+      this.numberEntry = NumberEntry.forAnswer(this.item.correctAnswer);
       // A new source stops the playing audio without an ended event.
       this.audioPlaying = false;
-      this.answersLocked = !!this.unit.audioRequired && !!this.question.src &&
+      this.answersLocked = !!this.unit.audioRequired && !!this.item.src &&
         ['audio', 'word-select', 'inline-answers'].includes(this.unit.questionType);
     }
   }

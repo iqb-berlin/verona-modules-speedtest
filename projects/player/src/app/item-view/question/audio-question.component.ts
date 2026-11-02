@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { LatexPipe } from 'common/latex.pipe';
-import { AudioButtonComponent } from './audio-button.component';
+import { AudioButtonComponent } from '../audio-button.component';
 
 /* A large audio button with the question text below it, centred together in the question area. The button
    shrinks with the area (down to 60px) rather than pushing the text out. The parent must let this component

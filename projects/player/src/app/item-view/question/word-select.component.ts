@@ -2,7 +2,7 @@ import {
   Component, EventEmitter, Input, OnChanges, Output,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { AudioButtonComponent } from './audio-button.component';
+import { AudioButtonComponent } from '../audio-button.component';
 
 interface TextPart {
   text: string;

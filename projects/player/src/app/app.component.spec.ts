@@ -181,14 +181,14 @@ describe('AppComponent', () => {
     it('starts at the first question when there is no previous state', () => {
       start(unitWithoutSolutions(4));
 
-      expect(component.activeQuestionIndex).toBe(0);
+      expect(component.activeItemIndex).toBe(0);
       expect(component.showOutroPage).toBe(false);
     });
 
     it('continues after the last answered question', () => {
       start(unitWithoutSolutions(6), dataPartsFor(2, 2, 1));
 
-      expect(component.activeQuestionIndex).toBe(3);
+      expect(component.activeItemIndex).toBe(3);
     });
 
     it('restores the running totals', () => {

@@ -124,13 +124,13 @@ function answersFor(answerType, answerCase) {
   }
 }
 
-function makeQuestion(questionCase, answerType, answerCase, multipleSelection) {
-  const question = { answers: answersFor(answerType, answerCase) };
-  if (questionCase.text !== undefined) question.text = questionCase.text;
-  if (questionCase.src !== undefined) question.src = questionCase.src;
-  if (answerType === 'number') question.correctAnswer = answerCase.correct;
-  else question.correctAnswer = multipleSelection ? [0, 1] : 0;
-  return question;
+function makeItem(questionCase, answerType, answerCase, multipleSelection) {
+  const item = { answers: answersFor(answerType, answerCase) };
+  if (questionCase.text !== undefined) item.text = questionCase.text;
+  if (questionCase.src !== undefined) item.src = questionCase.src;
+  if (answerType === 'number') item.correctAnswer = answerCase.correct;
+  else item.correctAnswer = multipleSelection ? [0, 1] : 0;
+  return item;
 }
 
 function itemsFor(questionType, answerType, multipleSelection) {
@@ -138,14 +138,14 @@ function itemsFor(questionType, answerType, multipleSelection) {
   const as = answerCases[answerType];
   const hardest = as[as.length - 1];
   return [
-    ...qs.map(q => makeQuestion(q, answerType, hardest, multipleSelection)),
-    ...as.slice(0, -1).map(a => makeQuestion(qs[0], answerType, a, multipleSelection))
+    ...qs.map(q => makeItem(q, answerType, hardest, multipleSelection)),
+    ...as.slice(0, -1).map(a => makeItem(qs[0], answerType, a, multipleSelection))
   ];
 }
 
 const INSTRUCTION = 'Tippe auf die richtige Antwort.';
 
-function unit(layout, questionType, answerType, questions, extra = {}) {
+function unit(layout, questionType, answerType, items, extra = {}) {
   return {
     type: 'speedtest-unit-definition',
     version,
@@ -154,7 +154,7 @@ function unit(layout, questionType, answerType, questions, extra = {}) {
     answerType,
     instructionText: INSTRUCTION,
     ...extra,
-    questions
+    questions: items
   };
 }
 
@@ -231,8 +231,8 @@ const latexTextItems = [
 const latexCaptionAudioItems = [
   { src: image(1200, 675, '#dec'), text: 'Die Fläche ist $A = \\frac{1}{2} \\cdot g \\cdot h$.' },
   { src: image(600, 600, '#cde'), text: 'Welche Zahl ist $\\sqrt{16}$?' }
-].map(question => ({
-  ...question,
+].map(item => ({
+  ...item,
   answers: ['$\\frac{3}{4}$', '$\\sum_{i=1}^{n} i$', '$4$', 'vier'].map(text => ({ text, src: audio })),
   correctAnswer: 0
 }));

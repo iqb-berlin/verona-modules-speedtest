@@ -53,12 +53,12 @@ export class UnitService {
     FileService.saveUnitToFile(UnitService.stringifyUnit(this.unit));
   }
 
-  /* Replaces the questions; every global setting of the current unit is kept. */
+  /* Replaces the items; every global setting of the current unit is kept. */
   loadUnitFromCSV(unitString: string) {
     this.unit = {
       ...this.unit,
       version: this.unitDefVersion,
-      questions: csvParser.parseQuestions(unitString, this.unit.questionType, this.unit.multipleSelection)
+      questions: csvParser.parseItems(unitString, this.unit.questionType, this.unit.multipleSelection)
     };
     this.updateUnitDef();
   }
@@ -136,22 +136,22 @@ export class UnitService {
     ];
   }
 
-  addAnswer(questionIndex: number, answerText: string) {
-    this.unit.questions[questionIndex].answers.push({ text: answerText });
+  addAnswer(itemIndex: number, answerText: string) {
+    this.unit.questions[itemIndex].answers.push({ text: answerText });
     this.updateUnitDef();
   }
 
-  deleteAnswer(questionIndex: number, answerIndex: number) {
-    this.unit.questions[questionIndex].answers.splice(answerIndex, 1);
+  deleteAnswer(itemIndex: number, answerIndex: number) {
+    this.unit.questions[itemIndex].answers.splice(answerIndex, 1);
     this.updateUnitDef();
     this.calculateMissingCorrectAnswerPositions();
   }
 
-  /* Gets the 1-based positions of all questions with missing correct answers. */
+  /* Gets the 1-based positions of all items with missing correct answers. */
   calculateMissingCorrectAnswerPositions(): void {
     this.missingCorrectAnswerPositions = this.unit.questions
-      .flatMap((question, index) => (question.correctAnswer === undefined ||
-        (Array.isArray(question.correctAnswer) && question.correctAnswer.length === 0) ?
+      .flatMap((item, index) => (item.correctAnswer === undefined ||
+        (Array.isArray(item.correctAnswer) && item.correctAnswer.length === 0) ?
         [index + 1] :
         []));
     if (this.missingCorrectAnswerPositions.length > 0) {
