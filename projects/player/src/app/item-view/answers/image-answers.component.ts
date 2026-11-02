@@ -4,10 +4,12 @@ import {
 } from '@angular/core';
 import { Answer } from 'common/interfaces/unit';
 
-/* Image answers in equal cells, side by side below the question or stacked beside it. Each image is scaled
-   down into its cell, never up, and the image itself is the button face, so the selection frame sits on
-   the image. Locked images look as usual and still report clicks; the parent decides what a click does. The
-   parent must let this component fill the area instead of placing it by margins. */
+/* Image answers close together in a centred line, side by side below the question or stacked beside it.
+   Each image is scaled down to the area, never up, and shrinks further if the line does not fit. The image
+   itself is the button face, so the selection frame sits on the image. Locked images look as usual and
+   still report clicks; the parent decides what a click does. The parent must let this component fill the
+   area instead of placing it by margins; --lean-x and --lean-y place the images across the line, centred if
+   not set. */
 @Component({
   selector: 'speedtest-player-image-answers',
   template: `
@@ -22,24 +24,24 @@ import { Answer } from 'common/interfaces/unit';
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
+    // A size container, so the images can be capped at the area's size (cqw, cqh): a percentage would not
+    // resolve while the line is sized by its images.
     :host {
       display: block;
       min-height: 0;
       min-width: 0;
+      container-type: size;
     }
     .cells {
       height: 100%;
-      display: grid;
+      display: flex;
       gap: 25px;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(0, 1fr);
-      grid-template-rows: minmax(0, 1fr);
+      justify-content: center;
+      align-items: var(--lean-y, center);
     }
     .cells.stacked {
-      grid-auto-flow: row;
-      grid-auto-rows: minmax(0, 1fr);
-      grid-template-rows: none;
-      grid-template-columns: minmax(0, 1fr);
+      flex-direction: column;
+      align-items: var(--lean-x, center);
     }
     button {
       min-height: 0;
@@ -47,8 +49,6 @@ import { Answer } from 'common/interfaces/unit';
       padding: 0;
       border: none;
       background: transparent;
-      display: grid;
-      place-items: center;
       cursor: pointer;
     }
     button.locked {
@@ -57,10 +57,12 @@ import { Answer } from 'common/interfaces/unit';
     img {
       display: block;
       max-width: 100%;
-      max-height: 100%;
-      min-height: 0;
-      min-width: 0;
+      max-height: 100cqh;
       object-fit: scale-down;
+    }
+    .stacked img {
+      max-width: 100cqw;
+      max-height: 100%;
     }
     // Drawn inside the image, so the cell does not clip it at its edges.
     img.selected {

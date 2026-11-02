@@ -1,9 +1,10 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { LatexPipe } from 'common/latex.pipe';
 
-/* Fills the question area and scales the image down into it, never up. Image and caption stay together
-   and are centred in the area: the image box is at most as big as the image, the caption centred below it.
-   The parent must let this component fill the area instead of placing it by margins. */
+/* Fills the question area and scales the image down into it, never up. Image and caption stay together:
+   the image box is at most as big as the image, the caption centred below it. The parent must let this
+   component fill the area instead of placing it by margins; --lean-x and --lean-y place both, centred if
+   not set. */
 @Component({
   selector: 'speedtest-player-image-question',
   imports: [LatexPipe],
@@ -27,8 +28,9 @@ import { LatexPipe } from 'common/latex.pipe';
       margin: 0;
       display: grid;
       grid-template-rows: minmax(0, auto) auto;
-      grid-template-columns: minmax(0, 1fr);
-      align-content: center;
+      grid-template-columns: minmax(0, max-content);
+      align-content: var(--lean-y, center);
+      justify-content: var(--lean-x, center);
       gap: 5px;
     }
     img {

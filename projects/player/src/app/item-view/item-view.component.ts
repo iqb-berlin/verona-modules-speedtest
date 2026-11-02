@@ -62,8 +62,7 @@ export class ItemViewComponent implements OnChanges {
       // Beside the question, the keypad does not fit into the answer area; it spans the stage below both.
       this.keypadBelowStage = this.unit.answerType === 'number' && this.unit.layout === 'row';
       [this.stageRows, this.stageColumns] =
-        ItemViewComponent.stageTracksFor(this.unit, this.answersInQuestion, this.keypadBelowStage,
-                                         this.needsNextButton);
+        ItemViewComponent.stageTracksFor(this.unit, this.answersInQuestion, this.needsNextButton);
     }
     if (changes['item']) {
       this.selectedAnswers = [];
@@ -75,22 +74,22 @@ export class ItemViewComponent implements OnChanges {
     }
   }
 
-  /* Grid rows and columns of the stage. Question first, answers second: each is as big as its content, at
-     most its share by the question space ratio (minus half the gap between them), so small content stays
-     together instead of being spread over the stage. Stacked text and audio answers always keep their own
-     height; the question only gets what is left. Image answers give way like an image question. Keypad and
-     next button follow in rows of their own, so they stay close to the content. Empty columns at both ends
-     centre the content, so the next button can end where the content ends; in row, the gap between question
-     and answers is a column of its own, so those empty columns do not add gaps. */
+  /* Grid rows and columns of the stage. The question takes its share by the question space ratio (minus half
+     the gap), whatever its content, so the answers beside or below it stay in place from item to item. The
+     answers take their share too, except in column, where only images need it: other answers are as tall as
+     their content, so the next button follows right below them. A keypad below the stage shares its row with
+     the next button. Empty columns at both ends centre the content in column, so the next button can end
+     where the content ends; in row, the gap between question and answers is a column of its own, so those
+     empty columns do not add gaps. */
   private static stageTracksFor(
-    unit: Unit, questionOnly: boolean, keypad: boolean, nextButton: boolean
+    unit: Unit, questionOnly: boolean, nextButton: boolean
   ): [string, string] {
     const ratio = unit.questionSpaceRatio ?? defaultQuestionSpaceRatio(unit.questionType, unit.answerType);
-    const question = `fit-content(calc(${ratio}% - 25px))`;
+    const question = `minmax(0, calc(${ratio}% - 25px))`;
     const answers = unit.layout === 'column' && unit.answerType !== 'image' ?
       'min-content' :
-      `fit-content(calc(${100 - ratio}% - 25px))`;
-    const below = `${keypad ? ' auto' : ''}${nextButton ? ' auto' : ''}`;
+      `minmax(0, calc(${100 - ratio}% - 25px))`;
+    const below = nextButton ? ' auto' : '';
     const columns = 'minmax(0, 1fr) minmax(0, max-content) minmax(0, 1fr)';
     if (questionOnly) return [`minmax(0, auto)${below}`, columns];
     return unit.layout === 'column' ?

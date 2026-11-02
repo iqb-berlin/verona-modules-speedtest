@@ -102,13 +102,15 @@
             </div>
         }
         @if (keypadBelowStage) {
-            <speedtest-player-keypad class="stage-keypad"
-                                     [locked]="answersLocked"
-                                     (digitClick)="onDigitClick($event)"
-                                     (deleteClick)="onDeleteClick()">
-            </speedtest-player-keypad>
-        }
-        @if (needsNextButton) {
+            <div class="stage-keypad">
+                <speedtest-player-keypad [locked]="answersLocked"
+                                         (digitClick)="onDigitClick($event)"
+                                         (deleteClick)="onDeleteClick()">
+                </speedtest-player-keypad>
+                <speedtest-player-next-button [locked]="answersLocked" (click)="onNext()">
+                </speedtest-player-next-button>
+            </div>
+        } @else if (needsNextButton) {
             <speedtest-player-next-button class="stage-next" [locked]="answersLocked" (click)="onNext()">
             </speedtest-player-next-button>
         }

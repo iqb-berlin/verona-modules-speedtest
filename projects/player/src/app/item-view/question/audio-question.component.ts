@@ -5,9 +5,9 @@ import {
 import { LatexPipe } from 'common/latex.pipe';
 import { AudioButtonComponent } from '../audio-button.component';
 
-/* A large audio button with the question text below it, centred together in the question area. The button
-   shrinks with the area (down to 60px) rather than pushing the text out. The parent must let this component
-   fill the area instead of placing it by margins. */
+/* A large audio button with the question text below it. The button shrinks with the area (down to 60px)
+   rather than pushing the text out. The parent must let this component fill the area instead of placing it
+   by margins; --lean-x and --lean-y place button and text, centred if not set. */
 @Component({
   selector: 'speedtest-player-audio-question',
   imports: [AudioButtonComponent, LatexPipe],
@@ -36,8 +36,8 @@ import { AudioButtonComponent } from '../audio-button.component';
       display: grid;
       grid-template-rows: minmax(60px, 180px) auto;
       grid-template-columns: minmax(0, 1fr);
-      align-content: center;
-      justify-items: center;
+      align-content: var(--lean-y, center);
+      justify-items: var(--lean-x, center);
       gap: 10px;
     }
     speedtest-player-audio-button {

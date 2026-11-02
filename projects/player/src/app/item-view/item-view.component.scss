@@ -23,8 +23,7 @@
   font-size: 24px;
 }
 
-/* The tracks are sized by their content (see stageTracksFor), and everything is centred together, so free
-   space goes around the content rather than between its parts. The gap is part of the track limits. */
+// The gap is part of the track limits (see stageTracksFor).
 .stage {
   grid-row: stage;
   display: grid;
@@ -33,6 +32,11 @@
   place-content: center;
   min-height: 0;
   min-width: 0;
+}
+
+// Below the question area, which is fixed, so the answers start at the same height on every item.
+.stage.column:has(> .answers) {
+  align-content: start;
 }
 
 // Content between the empty outer columns; in row, the gap between question and answers is a track of its
@@ -54,21 +58,27 @@
   }
 }
 
-// Keypad and next button below the content; the next button ends where the content ends.
+/* Keypad and next button below the content. The next button ends where the content ends in column; in row,
+   it starts where the answers start, or ends where the keys end. */
 .stage-keypad {
   grid-column: 2 / 5;
-}
+  justify-self: center;
+  display: grid;
+  row-gap: 50px;
 
-.stage-next {
-  justify-self: end;
+  speedtest-player-next-button {
+    justify-self: end;
+  }
 }
 
 .column .stage-next {
   grid-column: 2;
+  justify-self: end;
 }
 
 .row .stage-next {
-  grid-column: 2 / 5;
+  grid-column: 4;
+  justify-self: start;
 }
 
 .number-entry {
@@ -85,9 +95,37 @@
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
 }
 
-/* Centred by auto margins rather than alignment properties: they collapse to 0 when the content overflows,
-   so a scrolled area still starts at its beginning. Content marked .fill (an image) takes the whole area
-   instead and places itself within it. */
-.area > :not(.fill) {
-  margin: auto;
+/* Question and answers lean towards each other. Auto margins rather than alignment properties: they collapse
+   to 0 when the content overflows, so a scrolled area still starts at its beginning. Content marked .fill
+   (an image) takes the whole area instead and leans by --lean-x and --lean-y itself. */
+.column {
+  .answers {
+    --lean-y: start;
+  }
+
+  .question > :not(.fill) {
+    margin: auto auto 0;
+  }
+
+  .answers > :not(.fill) {
+    margin: 0 auto auto;
+  }
+}
+
+.row {
+  .question {
+    --lean-x: end;
+  }
+
+  .answers {
+    --lean-x: start;
+  }
+
+  .question > :not(.fill) {
+    margin: auto 0 auto auto;
+  }
+
+  .answers > :not(.fill) {
+    margin: auto auto auto 0;
+  }
 }

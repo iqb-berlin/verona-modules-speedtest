@@ -1,3 +1,13 @@
+# next
+## Player
+### Änderungen
+- Der Größenanteil Fragebereich gilt wieder immer, wie vor 3.5.0-beta. Frage und Antworten rücken zueinander, sodass die Antworten von Item zu Item an derselben Stelle stehen, unabhängig von der Länge der Frage.
+  - Vertikal folgen Text-, Audio- und Zahlenantworten direkt unter dem Fragebereich, der Weiter-Knopf direkt darunter; freier Platz bleibt unten. Bild- und Audiofragen stehen in der Mitte ihres Bereichs.
+  - Horizontal steht der Weiter-Knopf unter dem Anfang der Antworten bzw. unter dem Ende der Zifferntasten.
+### Fehlerbehebungen
+- Bildantworten stehen wieder eng beieinander, statt über die ganze Breite verteilt zu sein (#40).
+- Zahleneingabe horizontal: Gleichung und Ergebnisfeld stehen wieder nah beieinander (#40).
+
 # 3.5.0-beta
 ## Player
 ### Neue Funktionen
