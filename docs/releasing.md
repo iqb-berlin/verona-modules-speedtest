@@ -22,11 +22,13 @@ A version that is not considered ready for general use carries a `-beta` suffix,
 
 Entries are written as the changes are made, not at release time: every change adds its entry under the `# next` heading at the top of [changelog.md](changelog.md), in the same commit. German, grouped under `## Player` / `## Editor` and then `### Neue Funktionen` / `### Änderungen` / `### Fehlerbehebungen`. Releasing only swaps `# next` for the version number.
 
+The changelog is written for someone upgrading from the last stable release, so betas get no section of their own. `# next` keeps collecting through all betas of a version, and a change that corrects something from an earlier beta rewrites the existing entry instead of adding one. What changed from one beta to the next goes only into that beta's GitHub release notes.
+
 ## Steps
 
 1. Bump `player_version` or `editor_version` in `package.json`.
-2. Rename the `# next` heading at the top of [changelog.md](changelog.md) to the version being released. If the unit definition changed, add an entry to [changelog-unit-def.md](changelog-unit-def.md) as well.
+2. For a stable release, rename the `# next` heading at the top of [changelog.md](changelog.md) to the version being released; for a beta, leave it. If the unit definition changed, add an entry to [changelog-unit-def.md](changelog-unit-def.md) as well.
 3. `npm run build-player` (or `build-editor`). This writes the packed HTML to `dist/`.
 4. Commit, and tag the commit with the bare version number: `git tag 3.4.0 && git push --tags`.
-5. Create a GitHub release on that tag, with the new changelog section as its notes and the built file(s) from `dist/` attached. Mark it as a pre-release if the version has a `-beta` suffix.
+5. Create a GitHub release on that tag, with the built file(s) from `dist/` attached. A stable release takes the new changelog section as its notes. A beta is marked as a pre-release, and its notes list what changed since the previous beta, or since the last stable release for the first beta.
 6. Optionally upload the built file to IQB-Studio through the Studio UI.

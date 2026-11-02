@@ -1,32 +1,21 @@
 # next
 ## Player
-### Änderungen
-- Der Größenanteil Fragebereich gilt wieder immer, wie vor 3.5.0-beta. Frage und Antworten rücken zueinander, sodass die Antworten von Item zu Item an derselben Stelle stehen, unabhängig von der Länge der Frage.
-  - Vertikal folgen Text-, Audio- und Zahlenantworten direkt unter dem Fragebereich, der Weiter-Knopf direkt darunter; freier Platz bleibt unten. Bild- und Audiofragen stehen in der Mitte ihres Bereichs.
-  - Horizontal steht der Weiter-Knopf unter dem Anfang der Antworten bzw. unter dem Ende der Zifferntasten.
-- Ohne eigenen Größenanteil Fragebereich gelten wieder die Standardwerte von vor 3.5.0-beta, abhängig von Format und Ausrichtung. Sie weichen bei einigen Formaten von den zuvor im Editor angezeigten Werten ab: vertikal 70 bei Bildfrage mit Audio- oder Zahlenantworten, horizontal 70 bei Bildfragen und bei Textfrage mit Bildantworten, horizontal 45 bei Zahleneingabe.
-### Fehlerbehebungen
-- Bildantworten stehen wieder eng beieinander, statt über die ganze Breite verteilt zu sein (#40).
-- Zahleneingabe horizontal: Gleichung und Ergebnisfeld stehen wieder nah beieinander (#40).
-## Editor
-### Fehlerbehebungen
-- Der Standardwert für den Größenanteil Fragebereich hängt auch von der Ausrichtung ab und entspricht bei allen Formaten dem Wert, den der Player verwendet.
-
-# 3.5.0-beta
-## Player
 ### Neue Funktionen
 - LaTeX in Fragetexten (auch Bildunterschriften und Text unter Audiofragen) und Antworttexten (Text- und Audioantworten), wenn die Unit es einschaltet. Formeln stehen zwischen `$`-Zeichen. Ein Dollarzeichen, das nicht zu einer Formel gehört, wird als `\$` geschrieben, z. B. `5 \$`. Nicht im Instruktionstext, bei Wortauswahl und bei Antworten im Satz.
 - Der Text nach der letzten Frage kann in der Unit festgelegt werden. Ohne eigenen Text bleibt es bei "Keine weiteren Seiten. Weiterleitung zur nächsten Unit...".
 - Antworten erst nach Audio freigeben (#36): Wenn die Unit es einschaltet, nehmen Fragen mit Audio erst Antworten an, wenn das Audio vollständig abgespielt wurde. Ein Tippen auf eine Antwort lässt bis dahin den Audioknopf wackeln.
 ### Änderungen
-- Darstellung neu aufgebaut, für alle Formate. Frage- und Antwortbereich sind so groß wie ihr Inhalt, höchstens so groß wie ihr Größenanteil, und stehen gemeinsam in der Mitte, statt dass freier Platz zwischen ihnen entsteht. Bilder werden weiterhin in ihren Bereich verkleinert, aber nie vergrößert.
-  - Bestehende Units sehen dadurch teils anders aus; der Größenanteil Fragebereich wirkt nur noch, wenn der Inhalt den Platz braucht.
+- Darstellung intern neu aufgebaut; das Aussehen bleibt weitgehend gleich. Sichtbare Unterschiede:
+  - Der Weiter-Knopf steht direkt unter den Antworten bzw. unter dem Ende der Zifferntasten.
+  - Der Abstand zwischen Frage- und Antwortbereich beträgt fest 50px statt 3 % der Bildschirmbreite bzw. -höhe.
+  - Bildfragen nutzen die volle Höhe ihres Bereichs (bisher höchstens 85 %).
+  - Zahleneingabe vertikal: Frage und Antworten teilen sich den ganzen Bildschirm nach dem Größenanteil Fragebereich statt nur dessen Hälfte (bei Bildfragen 65 %).
 - Zahleneingabe: Die Rücktaste einer Hardware-Tastatur löscht wie die Löschtaste auf dem Bildschirm.
 - Unit-Definitionen werden vor dem Laden geprüft. Kann eine Unit nicht gelesen werden, erscheint ein Hinweis statt einer leeren oder fehlerhaft dargestellten Seite.
-- Der Instruktionstext steht im Zahleneingabeformat wieder oben (Rücknahme der Änderung aus 3.4.0-beta).
 - Die Einstellung Antwortknopfbreite wird nicht mehr ausgewertet. Sie wird durch Antwortknöpfe ersetzt, die innerhalb eines Items alle so breit sind wie der breiteste.
 ### Fehlerbehebungen
 - Inhalte, die nicht in ihren Bereich passen, werden scrollbar statt abgeschnitten, z. B. Antwortknöpfe mit viel Text.
+- Zahleneingabe horizontal: Die Abstände über und unter Frage und Antworten wachsen auf iPads nicht mehr mit jeder eingegebenen Ziffer an. Behoben durch den Neuaufbau der Darstellung.
 - Beim Fortsetzen einer Unit wird die Summe der falschen Antworten wieder korrekt gelesen. Zuvor wurde sie durch den Index der zuletzt beantworteten Frage ersetzt.
 ## Editor
 ### Neue Funktionen
@@ -38,18 +27,11 @@
 - Unit-Definitionen werden vor dem Laden geprüft. Fehlerhafte Dateien, Units anderer Module und Units ohne Version werden mit einer passenden Meldung abgelehnt, statt einen Fehler auszulösen.
 - Die Einstellung Antwortknopfbreite entfällt, auch die bisherige Standardbreite von 350px. Ältere Units lassen sich weiterhin laden; die Einstellung wird dabei entfernt. Units werden im Unit-Definitionsformat 2.4.0 gespeichert.
 ### Fehlerbehebungen
-- Der Platzhalter für den Größenanteil Fragebereich zeigt für jedes Format den Standardwert, den der Player verwendet. Zuvor blieb bei manchen Formatwechseln der Wert des vorherigen Formats stehen, und eine geladene Unit zeigte zunächst immer 50.
+- Der Platzhalter für den Größenanteil Fragebereich zeigt den Standardwert, den der Player für Format und Ausrichtung tatsächlich verwendet. Zuvor wich er bei einigen Formaten davon ab, blieb bei manchen Formatwechseln beim Wert des vorherigen Formats stehen, und eine geladene Unit zeigte zunächst immer 50.
 - Globale Einstellungen (Knopffarbe, Instruktionstext, Größenanteil Fragebereich) bleiben beim CSV-Import erhalten.
 - Das Verschieben von Fragen wird an das Hostsystem gemeldet. Zuvor blieb der Speichern-Knopf des Hostsystems inaktiv, sodass die neue Reihenfolge nicht gespeichert werden konnte.
 - Das Ausschalten der Mehrfachauswahl löst keinen Fehler mehr aus, wenn Fragen ohne hinterlegte Lösung vorhanden sind.
 - Die an das Hostsystem gemeldete Version des Unit-Definitionsformats ist nicht mehr fest auf 1.0.0, sondern entspricht der tatsächlichen Version.
-
-# 3.4.0-beta
-## Player
-### Änderungen
-- Automatische Abstände im Zahleneingabeformat entfernt.
-  - Diese Abstände sind auf iPads fehlerhaft und wachsen bei jeder eingegebenen Ziffer an.
-  - Dies ist eine temporäre Lösung für ein Format mit Bildern bestimmter Größe und nicht zum generellen Gebrauch gedacht. Die Version behält deswegen auch das Beta-Suffix.
 
 # 3.3.0
 ## Player
