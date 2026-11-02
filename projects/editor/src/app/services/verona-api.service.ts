@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { VariableInfo } from '@iqb/responses';
+import { LegacyVariableInfo } from '@iqb/responses';
 import packageInfo from 'packageInfo';
 
 export class VeronaAPIService {
@@ -25,7 +25,7 @@ export class VeronaAPIService {
     });
   }
 
-  static sendChange(unitDefinitionString: string, variableInfo: VariableInfo[]): void {
+  static sendChange(unitDefinitionString: string, variableInfo: LegacyVariableInfo[]): void {
     VeronaAPIService.sendMessage({
       type: 'voeDefinitionChangedNotification',
       sessionId: VeronaAPIService.sessionID as string,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { VariableInfo } from '@iqb/responses';
+import { LegacyVariableInfo } from '@iqb/responses';
 import packageInfo from 'packageInfo';
 import { Unit } from 'common/interfaces/unit';
 import { FileService } from 'common/services/file.service';
@@ -76,7 +76,7 @@ export class UnitService {
     });
   }
 
-  static getVariableInfo(useMultiSelect: boolean = false): VariableInfo[] {
+  static getVariableInfo(useMultiSelect: boolean = false): LegacyVariableInfo[] {
     return [
       {
         id: 'value',
