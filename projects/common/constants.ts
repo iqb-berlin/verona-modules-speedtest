@@ -1,14 +1,13 @@
-import { AnswerType, QuestionType } from 'common/interfaces/unit';
+import { AnswerType, QuestionType, Unit } from 'common/interfaces/unit';
 
-const textOnly = 50;
-const imageAndText = 70;
-const imageAndImage = 50;
-
-/* Share of the screen (in percent) the question area gets when a unit does not set questionSpaceRatio. */
-export function defaultQuestionSpaceRatio(questionType: QuestionType, answerType: AnswerType): number {
-  if (questionType === 'image' && answerType === 'text') return imageAndText;
-  if (questionType === 'image' && answerType === 'image') return imageAndImage;
-  return textOnly;
+/* Share of the screen (in percent) the question area gets when a unit does not set questionSpaceRatio. These
+   are the values the player used before the layout rework, so units relying on them keep their look. */
+export function defaultQuestionSpaceRatio(
+  layout: Unit['layout'], questionType: QuestionType, answerType: AnswerType
+): number {
+  if (layout === 'column') return questionType === 'image' && answerType !== 'image' ? 70 : 50;
+  if (answerType === 'number') return 45;
+  return questionType === 'image' || (questionType === 'text' && answerType === 'image') ? 70 : 50;
 }
 
 /* Shown after the last question when a unit does not set outroText. */

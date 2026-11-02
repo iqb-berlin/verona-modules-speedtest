@@ -131,7 +131,8 @@ export class UnitViewComponent implements OnChanges {
 
   // The player's default, shown as placeholder while the unit sets no ratio of its own.
   updateRatioDefault() {
-    this.activeRatioDefault = defaultQuestionSpaceRatio(this.unit.questionType, this.unit.answerType);
+    this.activeRatioDefault =
+      defaultQuestionSpaceRatio(this.unit.layout, this.unit.questionType, this.unit.answerType);
   }
 
   // Units without formulas leave the property out rather than storing false.

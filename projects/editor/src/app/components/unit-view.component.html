@@ -68,7 +68,7 @@
       <mat-card-content>
         <label>Ausrichtung Frage- Antwortbereich</label>
         <mat-radio-group [disabled]="unit.questionType === 'inline-answers' || unit.questionType === 'word-select'"
-                         [(ngModel)]="unit.layout" (ngModelChange)="unitService.updateUnitDef()">
+                         [(ngModel)]="unit.layout" (ngModelChange)="updateRatioDefault(); unitService.updateUnitDef()">
           <mat-radio-button value="column">Vertikal</mat-radio-button>
           <mat-radio-button value="row">Horizontal</mat-radio-button>
         </mat-radio-group>

@@ -84,7 +84,8 @@ export class ItemViewComponent implements OnChanges {
   private static stageTracksFor(
     unit: Unit, questionOnly: boolean, nextButton: boolean
   ): [string, string] {
-    const ratio = unit.questionSpaceRatio ?? defaultQuestionSpaceRatio(unit.questionType, unit.answerType);
+    const ratio = unit.questionSpaceRatio ??
+      defaultQuestionSpaceRatio(unit.layout, unit.questionType, unit.answerType);
     const question = `minmax(0, calc(${ratio}% - 25px))`;
     const answers = unit.layout === 'column' && unit.answerType !== 'image' ?
       'min-content' :
