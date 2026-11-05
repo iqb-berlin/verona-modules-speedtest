@@ -50,6 +50,8 @@ export class ItemViewComponent implements OnChanges {
   stageLayout: 'column' | 'row' = 'column';
   stageRows = '';
   stageColumns = '';
+  answerAreaWidth = '';
+  answerAreaHeight = '';
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['unit']) {
@@ -61,8 +63,12 @@ export class ItemViewComponent implements OnChanges {
       this.needsNextButton = this.togglesSelection || this.unit.answerType === 'number';
       // Beside the question, the keypad does not fit into the answer area; it spans the stage below both.
       this.keypadBelowStage = this.unit.answerType === 'number' && this.unit.layout === 'row';
+      const ratio = this.unit.questionSpaceRatio ??
+        defaultQuestionSpaceRatio(this.unit.layout, this.unit.questionType, this.unit.answerType);
       [this.stageRows, this.stageColumns] =
-        ItemViewComponent.stageTracksFor(this.unit, this.answersInQuestion, this.needsNextButton);
+        ItemViewComponent.stageTracksFor(this.unit.layout, ratio, this.unit.answerType === 'image',
+                                         this.answersInQuestion, this.needsNextButton);
+      [this.answerAreaWidth, this.answerAreaHeight] = ItemViewComponent.answerAreaFor(this.unit.layout, ratio);
     }
     if (changes['item']) {
       this.selectedAnswers = [];
@@ -82,20 +88,27 @@ export class ItemViewComponent implements OnChanges {
      where the content ends; in row, the gap between question and answers is a column of its own, so those
      empty columns do not add gaps. */
   private static stageTracksFor(
-    unit: Unit, questionOnly: boolean, nextButton: boolean
+    layout: Unit['layout'], ratio: number, imageAnswers: boolean, questionOnly: boolean, nextButton: boolean
   ): [string, string] {
-    const ratio = unit.questionSpaceRatio ??
-      defaultQuestionSpaceRatio(unit.layout, unit.questionType, unit.answerType);
     const question = `minmax(0, calc(${ratio}% - 25px))`;
-    const answers = unit.layout === 'column' && unit.answerType !== 'image' ?
+    const answers = layout === 'column' && !imageAnswers ?
       'min-content' :
       `minmax(0, calc(${100 - ratio}% - 25px))`;
     const below = nextButton ? ' auto' : '';
     const columns = 'minmax(0, 1fr) minmax(0, max-content) minmax(0, 1fr)';
     if (questionOnly) return [`minmax(0, auto)${below}`, columns];
-    return unit.layout === 'column' ?
+    return layout === 'column' ?
       [`${question} ${answers}${below}`, columns] :
       [`minmax(0, auto)${below}`, `minmax(0, 1fr) ${question} 50px ${answers} minmax(0, 1fr)`];
+  }
+
+  /* The largest size of the answer area, in units of the stage (a size container for image answers), so
+     that content can be capped at it while it also sizes the stage tracks: the area's own size is not known
+     while the tracks are sized by that content. Its share by the question space ratio in one direction, the
+     whole stage in the other. */
+  private static answerAreaFor(layout: Unit['layout'], ratio: number): [string, string] {
+    const share = `calc(${100 - ratio}cq${layout === 'column' ? 'h' : 'w'} - 25px)`;
+    return layout === 'column' ? ['100cqw', share] : [share, '100cqh'];
   }
 
   // Also when the audio cannot be played, so that a broken file does not lock the question for good.

@@ -4,7 +4,9 @@
     }
     <div class="stage" [class]="stageLayout"
          [style.grid-template-rows]="stageRows"
-         [style.grid-template-columns]="stageColumns">
+         [style.grid-template-columns]="stageColumns"
+         [style.--answer-area-width]="answerAreaWidth"
+         [style.--answer-area-height]="answerAreaHeight">
         <div class="area question">
             @switch (unit.questionType) {
                 @case ('image') {

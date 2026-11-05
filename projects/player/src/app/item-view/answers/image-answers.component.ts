@@ -8,8 +8,9 @@ import { Answer } from 'common/interfaces/unit';
    Each image is scaled down to the area, never up, and shrinks further if the line does not fit. The image
    itself is the button face, so the selection frame sits on the image. Locked images look as usual and
    still report clicks; the parent decides what a click does. The parent must let this component fill the
-   area instead of placing it by margins; --lean-x and --lean-y place the images across the line, centred if
-   not set. */
+   area instead of placing it by margins, and set the area's largest size as --answer-area-width and
+   --answer-area-height; --lean-y places the line below the question, --lean-x the images in the line beside
+   it, centred if not set. */
 @Component({
   selector: 'speedtest-player-image-answers',
   template: `
@@ -24,24 +25,28 @@ import { Answer } from 'common/interfaces/unit';
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
   styles: `
-    // A size container, so the images can be capped at the area's size (cqw, cqh): a percentage would not
-    // resolve while the line is sized by its images.
+    // The images size the line, and the line sizes the answer area; so the images are capped by the
+    // area's limits the parent sets, not by percentages, which would not resolve.
     :host {
-      display: block;
+      display: grid;
+      grid-template: minmax(0, 1fr) / minmax(0, 1fr);
       min-height: 0;
       min-width: 0;
-      container-type: size;
     }
+    // Side by side, the line is as tall as its tallest image and the images stand on its bottom edge.
     .cells {
-      height: 100%;
+      min-height: 0;
+      min-width: 0;
       display: flex;
       gap: 25px;
       justify-content: center;
-      align-items: var(--lean-y, center);
+      align-items: end;
+      align-self: var(--lean-y, center);
     }
     .cells.stacked {
       flex-direction: column;
       align-items: var(--lean-x, center);
+      align-self: stretch;
     }
     button {
       min-height: 0;
@@ -57,11 +62,11 @@ import { Answer } from 'common/interfaces/unit';
     img {
       display: block;
       max-width: 100%;
-      max-height: 100cqh;
+      max-height: var(--answer-area-height, none);
       object-fit: scale-down;
     }
     .stacked img {
-      max-width: 100cqw;
+      max-width: var(--answer-area-width, none);
       max-height: 100%;
     }
     // Drawn inside the image, so the cell does not clip it at its edges.
