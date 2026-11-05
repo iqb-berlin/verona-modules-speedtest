@@ -18,7 +18,7 @@ import { AudioButtonComponent } from '../audio-button.component';
                                        [disabled]="audioPlaying"
                                        [wobble]="wobble"
                                        (playingChange)="playingChange.emit($event)"
-                                       (finished)="audioFinished.emit()">
+                                       (played)="audioPlayed.emit()">
         </speedtest-player-audio-button>
       }
       <span>{{ before }}</span>
@@ -94,7 +94,7 @@ export class InlineAnswersComponent implements OnChanges {
   @Input() selectedAnswers: number[] = [];
   @Output() answerClick = new EventEmitter<number>();
   @Output() playingChange = new EventEmitter<boolean>();
-  @Output() audioFinished = new EventEmitter<void>();
+  @Output() audioPlayed = new EventEmitter<void>();
 
   before = '';
   after = '';

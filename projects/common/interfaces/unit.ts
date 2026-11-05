@@ -11,7 +11,7 @@ export interface Unit {
   questionSpaceRatio?: number; // Determines of much screen space is reserved for question part
   latex?: boolean; // Renders $…$ in question and answer texts as LaTeX
   outroText?: string; // Shown after the last item; without it, defaultOutroText
-  audioRequired?: boolean; // Answers are locked until the question audio has played to its end
+  audioRequired?: boolean; // Answers are locked until the question audio has been played
 }
 
 export type QuestionType = 'text' | 'image' | 'audio' | 'word-select' | 'inline-answers';

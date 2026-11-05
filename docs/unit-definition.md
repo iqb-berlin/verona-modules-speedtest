@@ -94,7 +94,7 @@ With `latex: true`, text between `$` signs in a question's `text` and in text an
 
 ## Required audio
 
-With `audioRequired: true`, a question with audio (`questionType` `audio`, `word-select` or `inline-answers`, with a `src`) locks all answer inputs until its audio has played to its end: answer buttons, words, keypad, number boxes, hardware keyboard and the next button. Locked inputs take no answer; tapping one wobbles the audio button instead. Where it can be shown without lowering the contrast of their content, they also look not pressable: answer buttons and the next button lose their shadow, keypad keys and number boxes get light borders. Images and words look as usual. Audio in the answers does not count and stays playable. If the audio cannot be played, the answers unlock, so a broken file does not block the question. Questions without audio, and the other question types, are not affected.
+With `audioRequired: true`, a question with audio (`questionType` `audio`, `word-select` or `inline-answers`, with a `src`) locks all answer inputs until its audio has started: answer buttons, words, keypad, number boxes, hardware keyboard and the next button. Locked inputs take no answer; tapping one wobbles the audio button instead. Where it can be shown without lowering the contrast of their content, they also look not pressable: answer buttons and the next button lose their shadow, keypad keys and number boxes get light borders. Images and words look as usual. Audio in the answers does not count and stays playable. If the audio cannot be played, the answers unlock, so a broken file does not block the question. Questions without audio, and the other question types, are not affected.
 
 ## CSV import
 

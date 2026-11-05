@@ -20,8 +20,8 @@ import { NextButtonComponent } from './next-button.component';
    area and, if needed, keypad and next button.
    Owns the selection and decides when an answer is submitted. Also owns whether an audio is playing:
    only one may play at a time, so every audio button is disabled meanwhile. With audioRequired, a question
-   with audio locks every answer input until that audio has played to its end (#36); a locked input
-   looks flat where it can without losing contrast, takes no answer, and wobbles the audio button instead. */
+   with audio locks every answer input until that audio has been played (#36); a locked input looks flat
+   where it can without losing contrast, takes no answer, and wobbles the audio button instead. */
 @Component({
   selector: 'speedtest-player-item-view',
   imports: [
@@ -111,8 +111,7 @@ export class ItemViewComponent implements OnChanges {
     return layout === 'column' ? ['100cqw', share] : [share, '100cqh'];
   }
 
-  // Also when the audio cannot be played, so that a broken file does not lock the question for good.
-  onQuestionAudioFinished(): void {
+  onQuestionAudioPlayed(): void {
     this.answersLocked = false;
   }
 

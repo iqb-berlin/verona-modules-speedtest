@@ -264,7 +264,7 @@ describe('ItemViewComponent', () => {
       return find('speedtest-player-audio-button button')!.classList.contains('wobbling');
     }
 
-    it('locks the answers until the question audio has ended, and wobbles the audio button instead', () => {
+    it('locks the answers until the question audio has started, and wobbles the audio button instead', () => {
       show(audioUnit());
       expect(answerButton(0).classList).toContain('locked');
       expect(audioButtonIsWobbling()).toBe(false);
@@ -273,10 +273,6 @@ describe('ItemViewComponent', () => {
       expect(responses).toEqual([]);
       expect(audioButtonIsWobbling()).toBe(true);
       questionAudio('play');
-      questionAudio('pause');
-      answerButton(0).click();
-      expect(responses).toEqual([]);
-      questionAudio('ended');
       expect(answerButton(0).classList).not.toContain('locked');
       answerButton(1).click();
       expect(responses).toEqual([1]);
@@ -285,7 +281,7 @@ describe('ItemViewComponent', () => {
     it('locks every item again', () => {
       const unit = audioUnit();
       show(unit, 0);
-      questionAudio('ended');
+      questionAudio('play');
       show(unit, 1);
       answerButton(0).click();
       expect(responses).toEqual([]);
@@ -312,7 +308,7 @@ describe('ItemViewComponent', () => {
         answerType: 'audio',
         questions: [{ text: 'Was hörst du?', src: 'data:audio/wav;base64,AAAA', answers }]
       }));
-      findAll('.answer audio')[0].dispatchEvent(new Event('ended'));
+      findAll('.answer audio')[0].dispatchEvent(new Event('play'));
       fixture.detectChanges();
       findAll('.answer > button')[0].click();
       expect(responses).toEqual([]);
@@ -333,7 +329,7 @@ describe('ItemViewComponent', () => {
       expect(responses).toEqual([]);
     });
 
-    it('locks word-select and inline answers until their audio has ended', () => {
+    it('locks word-select and inline answers until their audio has started', () => {
       show(audioUnit({
         questionType: 'word-select',
         questions: [{ text: 'Der Hund', src: 'data:audio/wav;base64,AAAA', answers: [] }]
@@ -341,7 +337,7 @@ describe('ItemViewComponent', () => {
       findAll('.word')[1].click();
       fixture.detectChanges();
       expect(audioButtonIsWobbling()).toBe(true);
-      questionAudio('ended');
+      questionAudio('play');
       findAll('.word')[1].click();
       nextButton()!.click();
       expect(responses).toEqual([[1]]);
@@ -354,7 +350,7 @@ describe('ItemViewComponent', () => {
       }));
       findAll('.sentence > .buttons button')[1].click();
       expect(responses).toEqual([[1]]);
-      questionAudio('ended');
+      questionAudio('play');
       findAll('.sentence > .buttons button')[1].click();
       expect(responses).toEqual([[1], 1]);
     });

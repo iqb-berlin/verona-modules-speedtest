@@ -24,7 +24,7 @@
                                                      [audioPlaying]="audioPlaying"
                                                      [wobble]="audioButtonWobbles"
                                                      (playingChange)="audioPlaying = $event"
-                                                     (audioFinished)="onQuestionAudioFinished()">
+                                                     (audioPlayed)="onQuestionAudioPlayed()">
                     </speedtest-player-audio-question>
                 }
                 @case ('word-select') {
@@ -36,7 +36,7 @@
                                                   [selectedWords]="selectedAnswers"
                                                   (wordClick)="onAnswerClick($event)"
                                                   (playingChange)="audioPlaying = $event"
-                                                  (audioFinished)="onQuestionAudioFinished()">
+                                                  (audioPlayed)="onQuestionAudioPlayed()">
                     </speedtest-player-word-select>
                 }
                 @case ('inline-answers') {
@@ -51,7 +51,7 @@
                                                      [selectedAnswers]="selectedAnswers"
                                                      (answerClick)="onAnswerClick($event)"
                                                      (playingChange)="audioPlaying = $event"
-                                                     (audioFinished)="onQuestionAudioFinished()">
+                                                     (audioPlayed)="onQuestionAudioPlayed()">
                     </speedtest-player-inline-answers>
                 }
                 @default {

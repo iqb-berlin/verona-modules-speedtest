@@ -17,7 +17,7 @@ import { AudioButtonComponent } from '../audio-button.component';
                                      [disabled]="audioPlaying"
                                      [wobble]="wobble"
                                      (playingChange)="playingChange.emit($event)"
-                                     (finished)="audioFinished.emit()">
+                                     (played)="audioPlayed.emit()">
       </speedtest-player-audio-button>
       @if (text) {
         <p class="latex-block" [innerHTML]="text | latex: latex"></p>
@@ -58,5 +58,5 @@ export class AudioQuestionComponent {
   @Input() audioPlaying = false;
   @Input() wobble = 0;
   @Output() playingChange = new EventEmitter<boolean>();
-  @Output() audioFinished = new EventEmitter<void>();
+  @Output() audioPlayed = new EventEmitter<void>();
 }

@@ -44,7 +44,7 @@
         <mat-checkbox [ngModel]="!!unit.audioRequired"
                       [disabled]="unit.questionType !== 'audio' && unit.questionType !== 'word-select' &&
                                   unit.questionType !== 'inline-answers'"
-                      [matTooltip]="'Antworten werden erst nach vollständigem Abspielen des Audios aktiv.'"
+                      [matTooltip]="'Antworten werden erst aktiv, wenn das Audio gestartet wurde.'"
                       (ngModelChange)="onToggleAudioRequired($event)">
             Antworten erst nach Audio freigeben
         </mat-checkbox>

@@ -4,18 +4,19 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-/* Plays one audio. Reports when playback starts and stops, and when the audio has played to its end or
-   cannot be played at all; the parent decides whether any audio may play (only one at a time) and
-   disables the buttons meanwhile. Each change of wobble (after the first) wobbles the button, to point
-   to it. The icon fills the host, so the parent sets the size. */
+/* Plays one audio. Reports when playback starts and stops, and when the audio counts as played: here, as
+   soon as it starts. It also counts as played when it cannot be played at all, so that nothing waits for it
+   for good. The parent decides whether any audio may play (only one at a time) and disables the buttons
+   meanwhile. Each change of wobble (after the first) wobbles the button, to point to it. The icon fills the
+   host, so the parent sets the size. */
 @Component({
   selector: 'speedtest-player-audio-button',
   template: `
     <audio #audio [src]="src"
-           (play)="playingChange.emit(true)"
-           (ended)="playingChange.emit(false); finished.emit()"
+           (play)="playingChange.emit(true); played.emit()"
+           (ended)="playingChange.emit(false)"
            (pause)="playingChange.emit(false)"
-           (error)="playingChange.emit(false); finished.emit()"></audio>
+           (error)="playingChange.emit(false); played.emit()"></audio>
     <button aria-label="anhören" [disabled]="disabled" [class.wobbling]="wobbling"
             (animationend)="wobbling = false" (click)="audio.play()">
       <svg viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +76,7 @@ export class AudioButtonComponent implements OnChanges {
   @Input() disabled = false;
   @Input() wobble = 0;
   @Output() playingChange = new EventEmitter<boolean>();
-  @Output() finished = new EventEmitter<void>();
+  @Output() played = new EventEmitter<void>();
 
   wobbling = false;
 

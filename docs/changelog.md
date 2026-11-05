@@ -3,7 +3,7 @@
 ### Neue Funktionen
 - LaTeX in Fragetexten (auch Bildunterschriften und Text unter Audiofragen) und Antworttexten (Text- und Audioantworten), wenn die Unit es einschaltet. Formeln stehen zwischen `$`-Zeichen. Ein Dollarzeichen, das nicht zu einer Formel gehört, wird als `\$` geschrieben, z. B. `5 \$`. Nicht im Instruktionstext, bei Wortauswahl und bei Antworten im Satz.
 - Der Text nach der letzten Frage kann in der Unit festgelegt werden. Ohne eigenen Text bleibt es bei "Keine weiteren Seiten. Weiterleitung zur nächsten Unit...".
-- Antworten erst nach Audio freigeben (#36): Wenn die Unit es einschaltet, nehmen Fragen mit Audio erst Antworten an, wenn das Audio vollständig abgespielt wurde. Ein Tippen auf eine Antwort lässt bis dahin den Audioknopf wackeln.
+- Antworten erst nach Audio freigeben (#36): Wenn die Unit es einschaltet, nehmen Fragen mit Audio erst Antworten an, wenn das Audio gestartet wurde. Ein Tippen auf eine Antwort lässt bis dahin den Audioknopf wackeln.
 ### Änderungen
 - Darstellung intern neu aufgebaut; das Aussehen bleibt weitgehend gleich. Sichtbare Unterschiede:
   - Der Weiter-Knopf steht direkt unter den Antworten bzw. unter dem Ende der Zifferntasten.
@@ -21,7 +21,7 @@
 ### Neue Funktionen
 - Einstellung LaTeX-Formeln: Formeln zwischen `$`-Zeichen in Frage- und Antworttexten werden im Player als LaTeX dargestellt. Unter Texten mit Formel zeigt der Editor eine Vorschau. Für Wortauswahl und Antworten im Satz nicht verfügbar.
 - Einstellung Abschlusstext: der Text, den der Player nach der letzten Frage zeigt. Leer bleibt es beim bisherigen Text.
-- Einstellung Antworten erst nach Audio freigeben (#36): Der Player nimmt bei Fragen mit Audio erst Antworten an, wenn das Audio vollständig abgespielt wurde. Nur für Audiofragen, Wortauswahl und Antworten im Satz verfügbar.
+- Einstellung Antworten erst nach Audio freigeben (#36): Der Player nimmt bei Fragen mit Audio erst Antworten an, wenn das Audio gestartet wurde. Nur für Audiofragen, Wortauswahl und Antworten im Satz verfügbar.
 - Beim CSV-Import trennt `\;` (Leerraum in LaTeX-Formeln) keine Spalten mehr.
 ### Änderungen
 - Unit-Definitionen werden vor dem Laden geprüft. Fehlerhafte Dateien, Units anderer Module und Units ohne Version werden mit einer passenden Meldung abgelehnt, statt einen Fehler auszulösen.

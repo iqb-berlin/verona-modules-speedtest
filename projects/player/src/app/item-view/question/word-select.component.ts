@@ -22,7 +22,7 @@ interface TextPart {
                                        [disabled]="audioPlaying"
                                        [wobble]="wobble"
                                        (playingChange)="playingChange.emit($event)"
-                                       (finished)="audioFinished.emit()">
+                                       (played)="audioPlayed.emit()">
         </speedtest-player-audio-button>
       }
       @for (part of parts; track $index) {
@@ -75,7 +75,7 @@ export class WordSelectComponent implements OnChanges {
   @Input() selectedWords: number[] = [];
   @Output() wordClick = new EventEmitter<number>();
   @Output() playingChange = new EventEmitter<boolean>();
-  @Output() audioFinished = new EventEmitter<void>();
+  @Output() audioPlayed = new EventEmitter<void>();
 
   parts: TextPart[] = [];
   isSelected: boolean[] = [];
